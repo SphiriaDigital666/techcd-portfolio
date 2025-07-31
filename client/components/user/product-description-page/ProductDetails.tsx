@@ -1,8 +1,11 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
 
 import ProductCarousel from "./ProductCarousel";
 import PrimaryButton from "../ui/PrimaryButton";
+import { cn } from "@/lib/utils";
 
 const mockProducts = Array.from({ length: 24 }, (_, i) => ({
   id: i + 1,
@@ -14,14 +17,21 @@ const mockProducts = Array.from({ length: 24 }, (_, i) => ({
     "/images/home-page/store/t-shirt.png",
   ],
   price: 23,
-  isNew: i < 3,
-  color: i % 2 === 0 ? "Black" : "White",
+  color: i % 2 === 0 ? "#000000" : "#FFFFFF",
   category: i % 3 === 0 ? "Men's" : i % 3 === 1 ? "Women's" : "Kids",
   subCategory: "T-Shirts",
 }));
 
 const ProductDetails = ({ productId }: { productId: number }) => {
   const product = mockProducts.find((p) => p.id === productId);
+
+  const [selectedSize, setSelectedSize] = useState<string>("S");
+  const [selectedColor, setSelectedColor] = useState<string>(
+    product?.color === "#000000" ? "#000000" : "#FFFFFF",
+  );
+  const [quantity, setQuantity] = useState<number>(1);
+  const sizes = ["S", "M", "L", "XL"];
+  const colors = ["#000000", "#FFFFFF"];
 
   if (!product) {
     return (
@@ -74,22 +84,82 @@ const ProductDetails = ({ productId }: { productId: number }) => {
             </p>
 
             <div className="via-foreground h-[2px] bg-gradient-to-r from-transparent to-transparent"></div>
-            <div className="text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]">
-              <p>Size</p>
+
+            {/* Size Filter */}
+            <div className="flex items-center gap-4 text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]">
+              <p className="min-w-[40px]">Size</p>
+              {sizes.map((size) => (
+                <button
+                  key={size}
+                  className={cn(
+                    "border-foreground/30 bg-foreground/10 size-[2em] rounded-[0.5em] border transition-colors duration-300",
+                    selectedSize === size && "bg-primary border-primary",
+                  )}
+                  onClick={() => setSelectedSize(size)}
+                >
+                  {size}
+                </button>
+              ))}
             </div>
-            <div className="text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]">
-              <p>Color</p>
+
+            {/* Color Filter */}
+            <div className="flex items-center gap-4 text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]">
+              <p className="min-w-[40px]">Color</p>
+              {colors.map((color) => (
+                <label
+                  key={color}
+                  htmlFor="color"
+                  className={cn(
+                    "size-[1.5em] rounded-full",
+                    selectedColor === color && "border-primary border",
+                  )}
+                  style={{ backgroundColor: color }}
+                >
+                  <input
+                    type="radio"
+                    id="color"
+                    name="color"
+                    value={color}
+                    checked={selectedColor === color}
+                    onChange={() => setSelectedColor(color)}
+                    className="hidden"
+                  />
+                </label>
+              ))}
             </div>
+
             <div className="via-foreground h-[2px] bg-gradient-to-r from-transparent to-transparent"></div>
 
-            <div className="text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]">
-              <p>Quantity</p>
+            {/* Quantity Filter */}
+            <div className="flex items-center gap-4 text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]">
+              <p className="min-w-[70px]">Quantity</p>
+              <div className="flex items-center gap-1">
+                <button
+                  className="border-foreground/30 bg-foreground/10 size-[2em] rounded-[0.5em] border transition-colors disabled:opacity-50"
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  disabled={quantity <= 1}
+                  aria-label="Decrease quantity"
+                >
+                  -
+                </button>
+                <span className="border-foreground/30 bg-foreground/10 flex size-[2em] items-center justify-center rounded-[0.5em] border transition-colors">
+                  {quantity}
+                </span>
+                <button
+                  className="border-foreground/30 bg-foreground/10 size-[2em] rounded-[0.5em] border transition-colors"
+                  onClick={() => setQuantity((q) => q + 1)}
+                  aria-label="Increase quantity"
+                >
+                  +
+                </button>
+              </div>
             </div>
 
             <PrimaryButton
               text="Buy Now"
               className="mt-[0.5em] w-fit gap-[2em] ps-[3em] text-[13px] sm:text-[14px] md:text-[15px] lg:text-[16px] xl:text-[17px] 2xl:text-[18px]"
               iconStyles="bg-foreground"
+              // Optionally, you can pass selectedSize, selectedColor, quantity as props or handle onClick
             />
           </div>
         </div>
