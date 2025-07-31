@@ -1,7 +1,10 @@
+"use client";
+
 import React from "react";
-import { Product } from "@/lib/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+
+import { Product } from "@/lib/types";
 
 const ProductGrid = ({ products }: { products: Product[] }) => {
   const router = useRouter();

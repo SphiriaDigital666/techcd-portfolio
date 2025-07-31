@@ -1,5 +1,9 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+
 import BrandCarousel from "../home-page/about/BrandCarousel";
 
 const mockProducts = Array.from({ length: 4 }, (_, i) => ({
@@ -14,6 +18,12 @@ const mockProducts = Array.from({ length: 4 }, (_, i) => ({
 }));
 
 const RecommendedProducts = () => {
+  const router = useRouter();
+
+  const handleBuyClick = (productId: number) => {
+    router.push(`/products/${productId}`);
+  };
+
   return (
     <section className="relative mt-[2em] mb-[3em]">
       <div className="from-primary absolute right-0 bottom-0 aspect-square w-2/5 translate-x-1/2 rounded-full bg-radial to-transparent blur-[5em]"></div>
@@ -47,7 +57,7 @@ const RecommendedProducts = () => {
                     className="bg-foreground text-background focus:bg-background focus:text-foreground hover:bg-background hover:text-foreground relative rounded-full px-[2.5em] py-[0.5em] text-[12px] transition-all duration-300 ease-in sm:text-[13px] md:text-[14px] lg:text-[15px] xl:text-[16px] 2xl:text-[18px]"
                     tabIndex={0}
                     aria-label={`Buy ${product.name}`}
-                    // onClick={() => handleBuyClick(product.id)}
+                    onClick={() => handleBuyClick(product.id)}
                   >
                     Buy
                   </button>
