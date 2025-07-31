@@ -105,27 +105,30 @@ const ProductDetails = ({ productId }: { productId: number }) => {
             {/* Color Filter */}
             <div className="flex items-center gap-4 text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]">
               <p className="min-w-[40px]">Color</p>
-              {colors.map((color) => (
-                <label
-                  key={color}
-                  htmlFor="color"
-                  className={cn(
-                    "size-[1.5em] rounded-full",
-                    selectedColor === color && "border-primary border",
-                  )}
-                  style={{ backgroundColor: color }}
-                >
-                  <input
-                    type="radio"
-                    id="color"
-                    name="color"
-                    value={color}
-                    checked={selectedColor === color}
-                    onChange={() => setSelectedColor(color)}
-                    className="hidden"
-                  />
-                </label>
-              ))}
+              {colors.map((color) => {
+                const colorId = `color-${color}`;
+                return (
+                  <label
+                    key={color}
+                    htmlFor={colorId}
+                    className={cn(
+                      "outline-foreground size-[1.5em] rounded-full outline-2 outline-offset-2 transition-all duration-300",
+                      selectedColor === color && "outline-primary",
+                    )}
+                    style={{ backgroundColor: color }}
+                  >
+                    <input
+                      type="radio"
+                      id={colorId}
+                      name="color"
+                      value={color}
+                      checked={selectedColor === color}
+                      onChange={() => setSelectedColor(color)}
+                      className="hidden"
+                    />
+                  </label>
+                );
+              })}
             </div>
 
             <div className="via-foreground h-[2px] bg-gradient-to-r from-transparent to-transparent"></div>
@@ -159,10 +162,42 @@ const ProductDetails = ({ productId }: { productId: number }) => {
               text="Buy Now"
               className="mt-[0.5em] w-fit gap-[2em] ps-[3em] text-[13px] sm:text-[14px] md:text-[15px] lg:text-[16px] xl:text-[17px] 2xl:text-[18px]"
               iconStyles="bg-foreground"
-              // Optionally, you can pass selectedSize, selectedColor, quantity as props or handle onClick
             />
           </div>
         </div>
+
+        <div className="via-foreground mt-[3em] mb-[2em] h-[2px] bg-gradient-to-r from-transparent to-transparent"></div>
+
+        <p className="text-[15px] font-medium sm:text-[18px] md:text-[22px] lg:text-[25px] xl:text-[28px] 2xl:text-[31px]">
+          Item Description
+        </p>
+
+        <p className="mt-[1.5em] text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]">
+          Phasellus eget fermentum mauris. Suspendisse nec dignissim nulla.
+          Integer non quam commodo, scelerisque felis id, eleifend turpis.
+          Phasellus in nulla quis erat tempor tristique eget vel purus. Nulla
+          pharetra pharetra pharetra. Praesent varius eget justo ut lacinia.
+          Phasellus pharetra, velit viverra lacinia consequat, ipsum odio mollis
+          dolor, nec facilisis arcu arcu ultricies sapien. Quisque ut dapibus
+          nunc. Vivamus sit amet efficitur velit. Phasellus eget fermentum
+          mauris. Suspendisse nec dignissim nulla. Integer non quam commodo,
+          scelerisque felis id, eleifend turpis. Phasellus in nulla quis erat
+          tempor tristique eget vel purus. Nulla pharetra pharetra pharetra.
+          Praesent varius eget justo ut lacinia. Phasellus pharetra, velit
+          viverra lacinia consequat, ipsum odio mollis dolor, nec facilisis arcu
+          arcu ultricies sapien. Quisque ut dapibus nunc. Vivamus sit amet
+          efficitur velit.
+          <br /> <br />
+          Phasellus eget fermentum mauris. Suspendisse nec dignissim nulla.
+          Integer non quam commodo, scelerisque felis id, eleifend turpis.
+          Phasellus in nulla quis erat tempor tristique eget vel purus. Nulla
+          pharetra pharetra pharetra. Praesent varius eget justo ut lacinia.
+          Phasellus pharetra, velit viverra lacinia consequat, ipsum odio mollis
+          dolor, nec facilisis arcu arcu ultricies sapien. Quisque ut dapibus
+          nunc. Vivamus sit amet efficitur velit. Phasellus eget fermentum
+          mauris. Suspendisse nec dignissim nulla. Integer non quam commodo,
+          scelerisque felis id, eleifend turpis
+        </p>
       </div>
     </section>
   );
