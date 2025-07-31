@@ -1,12 +1,17 @@
 import React from "react";
-import { Product } from "@/lib/types";
-import Image from "next/image";
 import Link from "next/link";
 
-const mockProducts: Product[] = Array.from({ length: 24 }, (_, i) => ({
+import ProductCarousel from "./ProductCarousel";
+
+const mockProducts = Array.from({ length: 24 }, (_, i) => ({
   id: i + 1,
   name: i % 2 === 0 ? "Black T-Shirt" : "White T-Shirt",
-  image: "/images/home-page/store/t-shirt.png",
+  images: [
+    "/images/home-page/store/t-shirt.png",
+    "/images/home-page/store/t-shirt.png",
+    "/images/home-page/store/t-shirt.png",
+    "/images/home-page/store/t-shirt.png",
+  ],
   price: 23,
   isNew: i < 3,
   color: i % 2 === 0 ? "Black" : "White",
@@ -40,7 +45,13 @@ const ProductDetails = ({ productId }: { productId: number }) => {
 
   return (
     <section className="mt-[2em]">
-      <div className="px-container container mx-auto"></div>
+      <div className="px-container container mx-auto">
+        <div className="grid grid-cols-1 gap-[1.5em] lg:grid-cols-10">
+          <div className="bg-foreground/10 border-foreground/30 relative h-[400px] rounded-[1em] border lg:col-span-4 lg:h-[500px]">
+            <ProductCarousel name={product.name} images={product.images} />
+          </div>
+        </div>
+      </div>
     </section>
   );
 };
