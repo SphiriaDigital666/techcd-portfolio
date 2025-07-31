@@ -1,7 +1,12 @@
 import React from "react";
 import Link from "next/link";
+
+import { LiaShoppingBagSolid } from "react-icons/lia";
+import { FaRegUser } from "react-icons/fa6";
+
 import { navLinks } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import ThemeToggle from "./ThemeToggle";
 
 type MobileNavProps = {
   getActiveLinkClasses: (href: string) => string;
@@ -58,16 +63,22 @@ const MobileNav: React.FC<MobileNavProps> = ({
             </li>
           ))}
 
-          {/* Sign in/up */}
-          <li className="dark:text-primary text-background flex justify-center gap-[0.5em] font-medium">
-            <Link href="/sign-up">
-              <button className="uppercase">Signup</button>
-            </Link>
-            <div className="via-background dark:via-foreground h-full w-[1px] bg-gradient-to-b from-transparent to-transparent"></div>
-            <Link href="/sign-in">
-              <button className="uppercase">Login</button>
-            </Link>
-          </li>
+          <div className="flex items-center justify-around">
+            <ThemeToggle />
+
+            {/* Sign in/up */}
+            <li className="dark:text-primary text-background flex justify-center gap-[1em]">
+              <Link href="/cart" className="hover:opacity-80 focus:opacity-80">
+                <LiaShoppingBagSolid className="text-[1.5em]" />
+              </Link>
+              <Link
+                href="/sign-in"
+                className="hover:opacity-80 focus:opacity-80"
+              >
+                <FaRegUser className="text-[1.2em]" />
+              </Link>
+            </li>
+          </div>
         </ul>
       </nav>
     </>

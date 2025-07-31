@@ -1,6 +1,9 @@
 import React from "react";
 import Link from "next/link";
 
+import { LiaShoppingBagSolid } from "react-icons/lia";
+import { FaRegUser } from "react-icons/fa6";
+
 import { navLinks } from "@/lib/constants";
 import ThemeToggle from "./ThemeToggle";
 
@@ -25,12 +28,11 @@ const DesktopNav: React.FC<{
         <ThemeToggle />
 
         <div className="text-foreground flex items-center justify-center gap-[0.5em] font-medium">
-          <Link href="/sign-up">
-            <button className="uppercase">Signup</button>
+          <Link href="/cart" className="hover:opacity-80 focus:opacity-80">
+            <LiaShoppingBagSolid className="text-[1.5em]" />
           </Link>
-          <div className="via-foreground h-full w-[1px] self-stretch bg-gradient-to-b from-transparent to-transparent"></div>
-          <Link href="/sign-in">
-            <button className="uppercase">Login</button>
+          <Link href="/sign-in" className="hover:opacity-80 focus:opacity-80">
+            <FaRegUser className="text-[1.2em]" />
           </Link>
         </div>
       </div>
