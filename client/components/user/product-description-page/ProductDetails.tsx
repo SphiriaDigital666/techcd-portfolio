@@ -58,7 +58,7 @@ const ProductDetails = ({ productId }: { productId: number }) => {
     <section className="mt-[2em]">
       <div className="px-container relative container mx-auto">
         <div className="grid grid-cols-1 gap-[1.5em] lg:grid-cols-10">
-          <div className="bg-foreground/10 border-foreground/30 relative h-[400px] rounded-[1em] border lg:col-span-4 lg:h-auto">
+          <div className="bg-foreground/10 border-foreground/30 relative h-[200px] rounded-[1em] border lg:col-span-4 lg:h-auto">
             <ProductCarousel name={product.name} images={product.images} />
           </div>
 

@@ -5,7 +5,7 @@ import { navLinks } from "@/lib/constants";
 
 const Footer = () => {
   return (
-    <section className="relative py-[3em]">
+    <section className="relative pb-[3em]">
       <hr className="mx-auto mb-[3em] w-4/5 border-t-[#4F4F4FCC]" />
       <div className="px-container container mx-auto">
         <div className="mb-[3em] grid grid-cols-1 gap-[2em] lg:grid-cols-10">

@@ -2,6 +2,7 @@ import React from "react";
 
 import TitleArea from "@/components/user/product-description-page/TitleArea";
 import ProductDetails from "@/components/user/product-description-page/ProductDetails";
+import RecommendedProducts from "@/components/user/product-description-page/RecommendedProducts";
 
 interface ProductDetailPageProps {
   params: {
@@ -16,6 +17,7 @@ const ProductDetailPage = ({ params }: ProductDetailPageProps) => {
     <>
       <TitleArea />
       <ProductDetails productId={productId} />
+      <RecommendedProducts />
     </>
   );
 };
