@@ -1,8 +1,15 @@
 import React from "react";
 import { Product } from "@/lib/types";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const ProductGrid = ({ products }: { products: Product[] }) => {
+  const router = useRouter();
+
+  const handleBuyClick = (productId: number) => {
+    router.push(`/products/${productId}`);
+  };
+
   return (
     <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {products.map((product) => (
@@ -25,9 +32,10 @@ const ProductGrid = ({ products }: { products: Product[] }) => {
           </div>
 
           <button
-            className="bg-foreground text-background relative rounded-full px-[2.5em] py-[0.5em]"
+            className="bg-foreground text-background hover:bg-background hover:text-foreground relative rounded-full px-[2.5em] py-[0.5em] transition-all duration-300 ease-in"
             tabIndex={0}
             aria-label={`Buy ${product.name}`}
+            onClick={() => handleBuyClick(product.id)}
           >
             Buy
           </button>
