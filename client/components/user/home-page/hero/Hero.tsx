@@ -5,7 +5,6 @@ import Image from "next/image";
 
 import Loader from "./Loader";
 import HeroBg from "./HeroBg";
-import ParticleBg from "./ParticleBg";
 import ImageContent from "./ImageContent";
 import TextContent from "./TextContent";
 import CTA from "./CTA";
@@ -25,8 +24,6 @@ const Hero = () => {
     <section className="relative overflow-x-clip">
       {/* Loading screen */}
       <Loader playAnimation={allImagesLoaded} />
-
-      <ParticleBg />
       <HeroBg />
 
       {/* Blur blur (for screens <=639px)*/}
