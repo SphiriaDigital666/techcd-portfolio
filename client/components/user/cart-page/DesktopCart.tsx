@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 type CartItem = {
   id: number;
@@ -122,9 +123,11 @@ const DesktopCart: React.FC<DesktopCartProps> = ({
             <span className="font-semibold">Rs {subtotal.toFixed(2)}</span>
           </div>
 
-          <button className="bg-foreground/20 border-foreground hover:bg-foreground/40 focus:bg-foreground/40 mt-[1em] w-full rounded-[0.6em] border px-[2em] py-[0.6em] text-[12px] transition-all duration-300 sm:text-[13px] md:text-[14px] lg:text-[15px] xl:text-[16px] 2xl:text-[18px]">
-            Proceed to checkout
-          </button>
+          <Link href="/payment">
+            <button className="bg-foreground/20 border-foreground hover:bg-foreground/40 focus:bg-foreground/40 mt-[1em] w-full rounded-[0.6em] border px-[2em] py-[0.6em] text-[12px] transition-all duration-300 sm:text-[13px] md:text-[14px] lg:text-[15px] xl:text-[16px] 2xl:text-[18px]">
+              Proceed to checkout
+            </button>
+          </Link>
         </div>
       </div>
     </div>
