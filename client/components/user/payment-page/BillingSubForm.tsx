@@ -8,14 +8,14 @@ const BillingSubForm = () => {
         Billing Address
       </p>
 
-      <RadioGroup defaultValue="onepay">
+      <RadioGroup defaultValue="a">
         <div className="not-last:border-b-foreground/15 flex items-center gap-[0.5em] p-[1em] not-last:border-b">
-          <RadioGroupItem value="onepay" id="onepay" />
-          <label htmlFor="onepay">Same as shipping address</label>
+          <RadioGroupItem value="a" id="a" />
+          <label htmlFor="a">Same as shipping address</label>
         </div>
         <div className="flex items-center gap-[0.5em] p-[1em]">
-          <RadioGroupItem value="card" id="card" />
-          <label htmlFor="card">Use a different billing address</label>
+          <RadioGroupItem value="b" id="b" />
+          <label htmlFor="b">Use a different billing address</label>
         </div>
       </RadioGroup>
     </>

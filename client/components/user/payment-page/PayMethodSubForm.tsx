@@ -1,6 +1,7 @@
 import React from "react";
-import { FaCcVisa } from "react-icons/fa";
 import { RadioGroup, RadioGroupItem } from "@/components/user/ui/RadioGroup";
+import VisaIcon from "../icons/VisaIcon";
+import MasterCardIcon from "../icons/MasterCardIcon";
 
 const PayMethodSubForm = () => {
   return (
@@ -13,13 +14,30 @@ const PayMethodSubForm = () => {
       </p>
 
       <RadioGroup defaultValue="onepay">
-        <div className="not-last:border-b-foreground/15 flex items-center gap-[0.5em] p-[1em] not-last:border-b">
-          <RadioGroupItem value="onepay" id="onepay" />
-          <label htmlFor="onepay">Credit / Debit Card Payments (onepay)</label>
+        <div className="not-last:border-b-foreground/15 flex items-center justify-between gap-[0.5em] p-[1em] not-last:border-b">
+          <div className="flex items-center gap-[0.5em]">
+            <RadioGroupItem value="onepay" id="onepay" />
+            <label htmlFor="onepay">
+              Credit / Debit Card Payments (onepay)
+            </label>
+          </div>
+
+          <div className="flex gap-[0.5em]">
+            <VisaIcon className="w-[2em]" />
+            <MasterCardIcon className="w-[2em]" />
+          </div>
         </div>
-        <div className="flex items-center gap-[0.5em] p-[1em]">
-          <RadioGroupItem value="card" id="card" />
-          <label htmlFor="card">Credit card</label>
+
+        <div className="not-last:border-b-foreground/15 flex items-center justify-between gap-[0.5em] p-[1em] not-last:border-b">
+          <div className="flex items-center gap-[0.5em]">
+            <RadioGroupItem value="card" id="card" />
+            <label htmlFor="card">Credit Card</label>
+          </div>
+
+          <div className="flex gap-[0.5em]">
+            <VisaIcon className="w-[2em]" />
+            <MasterCardIcon className="w-[2em]" />
+          </div>
         </div>
       </RadioGroup>
     </>
