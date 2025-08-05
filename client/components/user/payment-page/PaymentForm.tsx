@@ -16,6 +16,7 @@ import DeliverySubForm from "./DeliverySubForm";
 import ShippingSubForm from "./ShippingSubForm";
 import PayMethodSubForm from "./PayMethodSubForm";
 import BillingSubForm from "./BillingSubForm";
+import OrderSummary from "./OrderSummary";
 
 const PaymentForm = () => {
   const methods: UseFormReturn<ContactFormType> = useForm<ContactFormType>({
@@ -59,9 +60,7 @@ const PaymentForm = () => {
           Order Summary
         </p>
         <div className="bg-foreground/10 mt-[1.5em] rounded-[0.5em] p-[1.5em]">
-          <button className="border-foreground w-full rounded-[0.5em] border py-[0.5em]">
-            Pay Now
-          </button>
+          <OrderSummary />
         </div>
       </div>
     </form>
