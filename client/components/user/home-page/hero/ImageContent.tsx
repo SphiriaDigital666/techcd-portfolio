@@ -7,11 +7,7 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(useGSAP);
 
-import {
-  glitchOneClipPaths,
-  glitchOpacityKeyframes,
-  glitchTwoClipPaths,
-} from "@/lib/constants";
+import { glitchOneClipPaths, glitchOpacityKeyframes } from "@/lib/constants";
 import hero from "@/public/images/home-page/hero/hero.png";
 import bitcoin from "@/public/images/home-page/hero/bitcoin.svg";
 
@@ -31,23 +27,9 @@ const ImageContent: React.FC<{
             opacity: glitchOpacityKeyframes,
           },
           ease: "none",
-          duration: 15,
+          duration: 2,
           repeat: -1,
         })
-        .to(
-          ".hero-glitch-img-two",
-          {
-            keyframes: {
-              clipPath: glitchTwoClipPaths,
-              opacity: glitchOpacityKeyframes,
-            },
-            ease: "none",
-            duration: 2,
-            repeat: -1,
-            repeatDelay: Math.floor(Math.random() * 6 + 5),
-          },
-          "<",
-        )
         .to(".hero-bitcoin-img-one", { delay: 2, opacity: 1, y: 0 }, "<")
         .to(".hero-bitcoin-img-two", { opacity: 1, y: 0 }, "<");
 
@@ -77,7 +59,7 @@ const ImageContent: React.FC<{
         onLoad={onImageLoad}
       />
 
-      {/* 3 hero images */}
+      {/* 2 hero images */}
       <Image
         src={hero}
         alt="Hero"
@@ -88,14 +70,7 @@ const ImageContent: React.FC<{
       <Image
         src={hero}
         alt="Hero"
-        className="hero-glitch-img-one pointer-events-none absolute inset-0 left-1 w-full rotate-y-180 object-cover object-center opacity-0 drop-shadow-[-2px_0_red] select-none sm:h-full sm:w-auto"
-        priority
-        onLoad={onImageLoad}
-      />
-      <Image
-        src={hero}
-        alt="Hero"
-        className="hero-glitch-img-two pointer-events-none absolute inset-0 -left-1 w-full rotate-y-180 object-cover object-center opacity-0 drop-shadow-[-2px_0_blue] select-none sm:h-full sm:w-auto"
+        className="hero-glitch-img-one pointer-events-none absolute inset-0 left-[2%] w-full rotate-y-180 object-cover object-center opacity-0 drop-shadow-[-2px_0_red] select-none sm:h-full sm:w-auto"
         priority
         onLoad={onImageLoad}
       />
