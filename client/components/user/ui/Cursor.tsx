@@ -7,9 +7,6 @@ const Cursor = () => {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      console.log(e.clientX);
-      console.log(e.clientY);
-
       const cursor = cursorRef.current;
       if (!cursor) return;
 

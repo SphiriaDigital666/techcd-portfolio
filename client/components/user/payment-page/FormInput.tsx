@@ -11,14 +11,14 @@ const FormInput: React.FC<FormInputProps> = ({
   ...props
 }) => {
   return (
-    <div className="relative mb-[1.8em] flex flex-col">
+    <div className="relative mb-[2em]">
       <input
         placeholder={placeholder}
         {...props}
-        className="border-foreground/15 focus:border-foreground/20 placeholder:text-foreground/80 h-[2.5em] rounded-[0.5em] border px-[1em] transition-colors focus:outline-none"
+        className="border-foreground/15 focus:border-foreground/30 placeholder:text-foreground/80 h-[2.5em] w-full rounded-[0.5em] border px-[1em] transition-colors focus:outline-none"
       />
       {error && (
-        <p className="absolute top-full left-0 mt-[0.2em] text-[0.8em] text-[#FF8E72]">
+        <p className="absolute top-full left-0 mt-[0.2em] text-[0.8em] font-light text-[#FF8E72]">
           {error}
         </p>
       )}

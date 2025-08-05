@@ -3,10 +3,7 @@ import { useFormContext, useFormState } from "react-hook-form";
 import { ContactFormType } from "@/lib/validation";
 import FormInput from "./FormInput";
 
-let count = 0;
-
 const ContactSubForm = () => {
-  count++;
   const { register } = useFormContext<ContactFormType>();
 
   const { errors } = useFormState<ContactFormType>({
@@ -17,7 +14,7 @@ const ContactSubForm = () => {
   return (
     <>
       <p className="mb-[0.6em] text-[15px] font-medium sm:text-[18px] md:text-[22px] lg:text-[25px] xl:text-[28px] 2xl:text-[31px]">
-        Contact Render count: {count / 2}
+        Contact
       </p>
       <FormInput
         type="email"

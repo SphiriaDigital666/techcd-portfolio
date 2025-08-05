@@ -1,40 +1,55 @@
 import * as z from "zod";
 
 export const ContactFormSchema = z.object({
-  firstName: z.string({ message: "This field is required" }).min(1, {
-    message: "This field is required",
-  }),
-  lastName: z.string({ message: "This field is required" }).min(1, {
-    message: "This field is required",
-  }),
   email: z
+    .email({ error: "Invalid format (e.g. john@doe.com)" })
+    .min(1, "This field is required")
+    .max(32, "Too long"),
+  country: z
     .string({ message: "This field is required" })
-    .min(1, {
-      message: "This field is required",
-    })
-    .email({
-      message: "Invalid format",
-    }),
+    .min(1, "This field is required")
+    .min(2, "Too short")
+    .max(32, "Too long"),
+  firstName: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .min(2, "Too short")
+    .max(32, "Too long"),
+  lastName: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .min(2, "Too short")
+    .max(32, "Too long"),
+  address: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .min(10, "Too short")
+    .max(100, "Too long"),
+  apartment: z
+    .string({ message: "This field is required" })
+    .max(100, "Too long")
+    .optional()
+    .or(z.literal("")),
+  city: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .min(2, "Too short")
+    .max(32, "Too long"),
+  state: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .min(2, "Too short")
+    .max(32, "Too long"),
+  zip: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .regex(/^\d{5}(-\d{4})?$/, "Invalid format (e.g. 12345 or 12345-6789)"),
   tel: z
     .string({ message: "This field is required" })
-    .min(1, {
-      message: "This field is required",
-    })
-    .regex(/^\+?[1-9]\d{1,14}$/, {
-      message:
-        "Invalid format. Please enter a valid phone number in international format (e.g., +1234567890).",
-    }),
-  message: z
-    .string({ message: "This field is required" })
-    .min(1, {
-      message: "This field is required",
-    })
-    .min(20, {
-      message: "Message too short",
-    })
-    .max(400, {
-      message: "Message too long",
-    }),
+    .min(1, "This field is required")
+    .min(4, "Too short")
+    .max(14, "Too long")
+    .regex(/^\d+$/, "Invalid format (e.g. 790193748)"),
 });
 
 export type ContactFormType = z.infer<typeof ContactFormSchema>;
