@@ -6,13 +6,11 @@ import Navbar from "@/components/user/navbar/Navbar";
 const UserLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <>
-      <header className="font-primary leading-[1.1]">
+      <header className="leading-[1.1]">
         <Navbar />
       </header>
-      <main className="font-primary overflow-hidden leading-[1.1]">
-        {children}
-      </main>
-      <footer className="font-primary leading-[1.1]">
+      <main className="overflow-hidden leading-[1.1]">{children}</main>
+      <footer className="leading-[1.1]">
         <Footer />
       </footer>
     </>
