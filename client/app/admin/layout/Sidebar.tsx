@@ -130,7 +130,7 @@ const Sidebar: React.FC = () => {
                         }`}
                     >
                       <MdCategory className="h-[20px] w-[20px]" />
-                      <Link href="/admin/blog/add-blog" className="text-[16px] text-[#E5E5E5] font-semibold">Category</Link>
+                      <Link href="/admin/Product/Category" className="text-[16px] text-[#E5E5E5] font-semibold">Category</Link>
                     </li>
                     {/* <li className={`flex items-center space-x-3 px-6 py-2 rounded-3xl ${isActive("/admin/blog/blog-categories") ? "bg-[#2CAB6D] text-white" : ""}`}>
                       <FaTags className="text-[14px]" />

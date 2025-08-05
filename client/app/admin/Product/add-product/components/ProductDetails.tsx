@@ -1,7 +1,6 @@
 import React from 'react'
 import ProductGallery from './ProductGallery'
-import SizeVariations from './SizeVariations'
-import ColorVariations from './ColorVariations'
+
 
 const ProductDetails = () => {
   return (
@@ -69,11 +68,7 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      {/* Size Variations */}
-      <SizeVariations />
-
-      {/* Color Variations */}
-      <ColorVariations />
+    
     </div>
   )
 }

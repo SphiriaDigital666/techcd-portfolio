@@ -1,6 +1,7 @@
 import React from 'react'
 import ProductDetails from './ProductDetails'
 import PublishingMetadata from './PublishingMetadata'
+import Attributes from './Attributes'
 
 const ProductForm = () => {
   return (
@@ -21,11 +22,14 @@ const ProductForm = () => {
             <div className="relative rounded-3xl border border-[#172D6D] bg-black/30 backdrop-blur-[500px] p-6">
               <ProductDetails />
             </div>
-
+            <div className='mt-6'>
+              <Attributes />
+            </div>
           </div>
 
           {/* Right Column - Publishing & Metadata */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-6">
+
             <PublishingMetadata />
           </div>
         </div>
