@@ -88,7 +88,7 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(61.319% 0.18795 252.81);
+  --primary: oklch(62.781% 0.20411 254.635);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -123,6 +123,7 @@
 } */
 
 :root.dark {
+  --primary: oklch(61.319% 0.18795 252.81);
   --background: #050505;
   --foreground: #ffffff;
 

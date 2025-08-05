@@ -11,8 +11,9 @@ import CTA from "./CTA";
 import Banner from "./Banner";
 
 import blur from "@/public/images/home-page/hero/bg-blur.svg";
+import blurDark from "@/public/images/home-page/hero/bg-blur-dark.svg";
 
-const TOTAL_IMAGES = 5;
+const TOTAL_IMAGES = 6;
 
 const Hero = () => {
   const [imagesLoaded, setImagesLoaded] = useState(0);
@@ -32,8 +33,15 @@ const Hero = () => {
       {/* Blur blur (for screens >639px)*/}
       <Image
         src={blur}
-        alt="Vector"
-        className="absolute inset-0 hidden w-full object-cover object-center sm:block"
+        alt=""
+        className="absolute inset-0 hidden w-full object-cover object-center sm:block dark:sm:hidden"
+        priority
+        onLoad={handleImageLoad}
+      />
+      <Image
+        src={blurDark}
+        alt=""
+        className="absolute inset-0 hidden w-full object-cover object-center dark:sm:block"
         priority
         onLoad={handleImageLoad}
       />
