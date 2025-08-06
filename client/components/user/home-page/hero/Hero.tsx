@@ -13,7 +13,7 @@ import Banner from "./Banner";
 import blur from "@/public/images/home-page/hero/bg-blur.svg";
 import blurDark from "@/public/images/home-page/hero/bg-blur-dark.svg";
 
-const TOTAL_IMAGES = 6;
+const TOTAL_IMAGES = 9;
 
 const Hero = () => {
   const [imagesLoaded, setImagesLoaded] = useState(0);
