@@ -50,7 +50,7 @@
 @layer base {
   * {
     scrollbar-width: thin;
-    cursor: none;
+    /* cursor: none; */
   }
 
   ::selection {
@@ -65,6 +65,10 @@
   .swiper-pagination-bullet-active {
     width: 48px !important;
     border-radius: 12px !important;
+  }
+
+  button {
+    cursor: pointer;
   }
 }
 

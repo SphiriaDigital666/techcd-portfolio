@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Tomorrow, Tektur, Oswald } from "next/font/google";
 
-import Cursor from "@/components/user/ui/Cursor";
+// import Cursor from "@/components/user/ui/Cursor";
 import "./globals.css";
 
 const tomorrow = Tomorrow({
@@ -36,7 +36,7 @@ export default function RootLayout({
         className={`${tomorrow.variable} ${tektur.variable} ${oswald.variable} text-foreground font-primary bg-background text-[12px] antialiased transition-colors duration-500 sm:text-[14.4px] md:text-[16.8px] lg:text-[20.4px] xl:text-[24px] 2xl:text-[27.6px]`}
       >
         {children}
-        <Cursor />
+        {/* <Cursor /> */}
       </body>
     </html>
   );
