@@ -34,8 +34,56 @@ const ImageContent: React.FC<{
           duration: 2,
           repeat: -1,
         })
-        .to(".hero-logo-img", { delay: 2, opacity: 1, y: 0 }, "<");
-
+        .to(
+          ".hero-logo-img",
+          {
+            delay: 2,
+            opacity: 1,
+          },
+          "<",
+        )
+        .to(
+          ".hero-bitcoin-img, .hero-fiverr-img, .hero-usd-img",
+          {
+            yPercent: -20,
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: "top top",
+              end: "bottom top",
+              markers: true,
+              scrub: 1,
+            },
+          },
+          "<",
+        )
+        .to(
+          ".hero-shutterstock-img",
+          {
+            yPercent: -40,
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: "top top",
+              end: "bottom top",
+              markers: true,
+              scrub: 1,
+            },
+          },
+          "<",
+        )
+        .to(
+          ".hero-usdt-img",
+          {
+            yPercent: -30,
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: "top top",
+              end: "bottom top",
+              markers: true,
+              scrub: 1,
+            },
+          },
+          "<",
+        );
       if (playAnimation) tl.play();
     },
     { scope: containerRef, dependencies: [playAnimation] },
@@ -50,35 +98,35 @@ const ImageContent: React.FC<{
       <Image
         src={bitcoin}
         alt="Bitcoin Logo"
-        className="hero-bitcoin-img hero-logo-img absolute top-0 right-[20%] my-auto w-[42px] translate-y-[1em] opacity-0 select-none sm:w-[58.5px] md:w-[75px] lg:w-[101.5px] xl:w-[128px] 2xl:w-[154.5px]"
+        className="hero-bitcoin-img hero-logo-img absolute top-0 right-[20%] my-auto w-[42px] opacity-0 select-none sm:w-[58.5px] md:w-[75px] lg:w-[101.5px] xl:w-[128px] 2xl:w-[154.5px]"
         priority
         onLoad={onImageLoad}
       />
       <Image
         src={fiverr}
         alt="Fiverr Logo"
-        className="hero-fiverr-img hero-logo-img absolute top-[10%] right-[56%] w-[42px] translate-y-[1em] rotate-[10deg] opacity-0 select-none sm:w-[58.5px] md:w-[75px] lg:w-[101.5px] xl:w-[128px] 2xl:w-[154.5px]"
+        className="hero-fiverr-img hero-logo-img absolute top-[10%] right-[56%] w-[42px] rotate-[10deg] opacity-0 select-none sm:w-[58.5px] md:w-[75px] lg:w-[101.5px] xl:w-[128px] 2xl:w-[154.5px]"
         priority
         onLoad={onImageLoad}
       />
       <Image
         src={usd}
         alt="US Dollar Sign"
-        className="hero-usd-img hero-logo-img absolute top-[36%] right-[10%] my-auto w-[42px] translate-y-[1em] rotate-[10deg] opacity-0 select-none sm:w-[58.5px] md:w-[75px] lg:w-[101.5px] xl:w-[128px] 2xl:w-[154.5px]"
+        className="hero-usd-img hero-logo-img absolute top-[36%] right-[10%] my-auto w-[42px] rotate-[10deg] opacity-0 select-none sm:w-[58.5px] md:w-[75px] lg:w-[101.5px] xl:w-[128px] 2xl:w-[154.5px]"
         priority
         onLoad={onImageLoad}
       />
       <Image
         src={shutterstock}
         alt="Shutterstock Logo"
-        className="hero-shutterstock-img hero-logo-img absolute top-[40%] left-[10%] z-[1] my-auto w-[63px] translate-y-[1em] rotate-[10deg] opacity-0 select-none sm:w-[95.25px] md:w-[127.5px] lg:w-[159.75px] xl:w-[192px] 2xl:w-[224.25px]"
+        className="hero-shutterstock-img hero-logo-img absolute top-[40%] left-[10%] z-[1] my-auto w-[63px] rotate-[10deg] opacity-0 blur-[4px] select-none sm:w-[95.25px] md:w-[127.5px] lg:w-[159.75px] xl:w-[192px] 2xl:w-[224.25px]"
         priority
         onLoad={onImageLoad}
       />
       <Image
         src={usdt}
         alt="USDT Logo"
-        className="hero-usdt-img hero-logo-img absolute top-[65%] right-[25%] z-[1] my-auto w-[52.5px] translate-y-[1em] rotate-[10deg] opacity-0 select-none sm:w-[79.375px] md:w-[106.25px] lg:w-[133.125px] xl:w-[160px] 2xl:w-[186.875px]"
+        className="hero-usdt-img hero-logo-img absolute top-[65%] right-[25%] z-[1] my-auto w-[52.5px] rotate-[10deg] opacity-0 blur-[2px] select-none sm:w-[79.375px] md:w-[106.25px] lg:w-[133.125px] xl:w-[160px] 2xl:w-[186.875px]"
         priority
         onLoad={onImageLoad}
       />
