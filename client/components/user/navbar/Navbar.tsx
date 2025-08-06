@@ -2,6 +2,8 @@
 
 import React, { useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -9,6 +11,7 @@ import { useGSAP } from "@gsap/react";
 import NavMenuIcon from "../icons/NavMenuIcon";
 import MobileNav from "./MobileNav";
 import DesktopNav from "./DesktopNav";
+import logo from "@/public/images/logo.png";
 
 gsap.registerPlugin(useGSAP);
 
@@ -123,11 +126,14 @@ const Navbar = () => {
       ref={containerRef}
       className="absolute top-[1.5em] right-0 left-0 z-50"
     >
-      <div className="px-container container mx-auto flex items-center justify-between">
+      <div className="px-container container mx-auto flex items-start justify-between">
         {/* Logo */}
-        <p className="text-[20px] font-bold uppercase sm:text-[21px] md:text-[23px] lg:text-[24px] xl:text-[26px] 2xl:text-[27px]">
-          Techcd
-        </p>
+        <Link
+          href="/"
+          className="w-[40px] sm:w-[42px] md:w-[46px] lg:w-[48px] xl:w-[52px] 2xl:w-[54px]"
+        >
+          <Image src={logo} alt="" />
+        </Link>
 
         <DesktopNav getActiveLinkClasses={getActiveLinkClasses} />
 
