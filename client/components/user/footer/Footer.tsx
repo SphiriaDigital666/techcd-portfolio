@@ -23,9 +23,10 @@ const Footer = () => {
             </ul>
 
             <ul className="space-y-[1em] uppercase">
-              <li>LinkedIn</li>
-              <li>YouTube</li>
               <li>Facebook</li>
+              <li>YouTube</li>
+              <li>TikTok</li>
+              <li>Instagram</li>
             </ul>
 
             <ul className="space-y-[1em]">
