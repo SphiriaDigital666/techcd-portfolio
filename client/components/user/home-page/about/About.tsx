@@ -1,6 +1,5 @@
 import React from "react";
 
-import BrandCarousel from "./BrandCarousel";
 import about from "@/public/images/home-page/about/about.png";
 import Image from "next/image";
 import Title from "./Title";
@@ -41,8 +40,6 @@ const About = () => {
           </p>
         </div>
       </div>
-
-      <BrandCarousel />
     </section>
   );
 };

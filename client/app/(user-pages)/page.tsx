@@ -1,8 +1,9 @@
 import React from "react";
 import Image from "next/image";
 
-import About from "@/components/user/home-page/about/About";
 import Hero from "@/components/user/home-page/hero/Hero";
+import About from "@/components/user/home-page/about/About";
+import Clients from "@/components/user/home-page/clients/Clients";
 import Community from "@/components/user/home-page/community/Community";
 import Store from "@/components/user/home-page/store/Store";
 
@@ -13,6 +14,7 @@ const HomePage = () => {
     <>
       <Hero />
       <About />
+      <Clients />
       <Community />
       <Store />
       <div className="relative">
