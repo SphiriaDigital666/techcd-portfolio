@@ -12,8 +12,9 @@ import Banner from "./Banner";
 
 import blur from "@/public/images/home-page/hero/bg-blur.svg";
 import blurDark from "@/public/images/home-page/hero/bg-blur-dark.svg";
+// import LogoImages from "./LogoImages";
 
-const TOTAL_IMAGES = 9;
+const TOTAL_IMAGES = 4;
 
 const Hero = () => {
   const [imagesLoaded, setImagesLoaded] = useState(0);
@@ -53,6 +54,10 @@ const Hero = () => {
             onImageLoad={handleImageLoad}
             playAnimation={allImagesLoaded}
           />
+          {/* <LogoImages
+            onImageLoad={handleImageLoad}
+            playAnimation={allImagesLoaded}
+          /> */}
           <TextContent playAnimation={allImagesLoaded} />
           <CTA />
         </div>
