@@ -41,11 +41,13 @@ const Store = () => {
 
             {/* Carousel container */}
             <div className="relative mx-auto flex h-full w-56/100 items-end pb-[2em]">
+              <ProductCarousel />
+
               <svg
                 viewBox="0 0 180 322"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="absolute inset-0"
+                className="pointer-events-none absolute inset-0 z-[1]"
               >
                 <path
                   d="M11.0254 1.78613H118.045C123.419 1.78613 127.775 6.14285 127.775 11.5166V48.6123C127.775 54.8816 132.858 59.9638 139.127 59.9639H168.733C174.107 59.9641 178.463 64.3207 178.463 69.6943V311.121C178.463 316.495 174.107 320.85 168.733 320.851H11.0254C5.65177 320.851 1.29514 316.495 1.29492 311.121V11.5166C1.29492 6.14285 5.65164 1.78613 11.0254 1.78613Z"
@@ -53,8 +55,6 @@ const Store = () => {
                   className="dark:stroke-foreground stroke-[#dfdfdf]"
                 />
               </svg>
-
-              <ProductCarousel />
             </div>
           </div>
         </div>

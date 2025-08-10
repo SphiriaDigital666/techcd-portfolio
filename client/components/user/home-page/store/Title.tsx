@@ -42,7 +42,7 @@ const Title = () => {
     >
       <p
         ref={textRef}
-        className="font-secondary to-foreground dark:from-foreground bg-gradient-to-b from-[#999999] bg-clip-text font-semibold text-transparent dark:to-[#999999]"
+        className="font-secondary text-foreground dark:from-foreground font-semibold dark:bg-gradient-to-b dark:to-[#999999] dark:bg-clip-text dark:text-transparent"
       >
         Join The Exclusive Merch <span className="text-primary">Store</span>
       </p>

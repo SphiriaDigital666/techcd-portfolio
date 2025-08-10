@@ -42,7 +42,7 @@ const TitleLg = () => {
     >
       <p
         ref={textRef}
-        className="font-secondary section-title to-foreground dark:from-foreground relative z-[1] shrink-0 bg-gradient-to-b from-[#999999] bg-clip-text font-semibold text-transparent perspective-distant dark:to-[#999999]"
+        className="font-secondary text-foreground dark:from-foreground relative z-[1] shrink-0 font-semibold perspective-distant dark:bg-gradient-to-b dark:to-[#999999] dark:bg-clip-text dark:text-transparent"
       >
         About Me
       </p>

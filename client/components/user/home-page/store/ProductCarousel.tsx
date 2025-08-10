@@ -18,6 +18,7 @@ const ProductCarousel = () => {
         autoplay={{
           pauseOnMouseEnter: true,
         }}
+        speed={2000}
         modules={[Autoplay]}
       >
         {Array.from({ length: 5 }).map((_, i) => (
