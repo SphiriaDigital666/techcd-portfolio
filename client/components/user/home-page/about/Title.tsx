@@ -17,8 +17,8 @@ const Title = () => {
       const heading = headingRef.current;
       if (!heading) return;
 
-      const lineSplit = new SplitText(heading, { type: "lines" });
-      const tween = gsap.from(lineSplit.lines, {
+      const lineSplit = new SplitText(heading, { type: "chars" });
+      const tween = gsap.from(lineSplit.chars, {
         opacity: 0,
         y: "0.5em",
         stagger: 0.2,
