@@ -1,9 +1,11 @@
 import React from "react";
+import Image from "next/image";
 
 import { GoArrowUpRight } from "react-icons/go";
-import PrimaryButton from "../../ui/PrimaryButton";
-import Image from "next/image";
+
 import { cn } from "@/lib/utils";
+import Title from "./Title";
+import PrimaryButton from "../../ui/PrimaryButton";
 
 const data = [
   {
@@ -60,17 +62,7 @@ const Community = () => {
 
       <div className="px-container relative container mx-auto">
         {/* Title area */}
-        <div className="relative text-[25px] sm:text-[38.75px] md:text-[52.5px] lg:text-[66.25px] xl:text-[80px] 2xl:text-[93.75px]">
-          <p className="font-secondary font-semibold">
-            Join The <br /> Exclusive Fan Community
-          </p>
-
-          <div className="absolute top-0 left-[7ch] hidden h-[1.3em] sm:flex sm:items-center">
-            <button className="bg-primary text-background rounded-full px-[1em] py-[0.3em] font-medium sm:text-[12px] md:text-[14px] lg:text-[17px] xl:text-[20px] 2xl:text-[23px]">
-              View More
-            </button>
-          </div>
-        </div>
+        <Title />
 
         {/* Button area */}
         <div className="mt-[1em] flex flex-col gap-[1em] text-[16px] sm:flex-row sm:items-center sm:text-[20px] md:text-[24px] lg:text-[28px] xl:text-[32px] 2xl:text-[36px]">

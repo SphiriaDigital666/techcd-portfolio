@@ -1,6 +1,8 @@
 import React from "react";
 import Image from "next/image";
 
+import Title from "./Title";
+import TitleLg from "./TitleLg";
 import ProductCarousel from "./ProductCarousel";
 import PrimaryButton from "../../ui/PrimaryButton";
 
@@ -21,9 +23,7 @@ const Store = () => {
       <div className="px-container container mx-auto grid grid-cols-1 gap-[1em] lg:grid-cols-11">
         <div className="lg:col-span-6">
           {/* Title (for screens <640px) */}
-          <p className="font-secondary to-foreground dark:from-foreground w-[14ch] bg-gradient-to-b from-[#999999] bg-clip-text text-[25px] font-semibold text-transparent sm:w-[10ch] sm:text-[40.2px] md:text-[55.4px] lg:hidden lg:text-[68.2px] xl:text-[81px] 2xl:text-[93.8px] dark:to-[#999999]">
-            Join The Exclusive Merch <span className="text-primary">Store</span>
-          </p>
+          <Title />
 
           <div className="relative mt-[1.5em] aspect-square">
             {/* Leaklight */}
@@ -61,9 +61,7 @@ const Store = () => {
 
         <div className="relative grid grid-cols-11 items-end gap-[1em] lg:col-span-5">
           {/* Title (for screens >=640px) */}
-          <p className="font-secondary to-foreground dark:from-foreground col-span-full mt-[0.5em] hidden w-[14ch] bg-gradient-to-b from-[#999999] bg-clip-text text-[25px] font-semibold text-transparent sm:w-[10ch] sm:text-[40.2px] md:text-[55.4px] lg:block lg:text-[68.2px] xl:text-[81px] 2xl:text-[93.8px] dark:to-[#999999]">
-            Join The Exclusive Merch <span className="text-primary">Store</span>
-          </p>
+          <TitleLg />
 
           <div className="relative col-span-5 aspect-[10/13]">
             <svg
