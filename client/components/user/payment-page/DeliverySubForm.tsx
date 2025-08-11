@@ -5,6 +5,11 @@ import FormInput from "./FormInput";
 import FormSelect from "./FormSelect";
 import { countryData } from "@/lib/constants";
 
+const selectData = countryData.map(({ code, name }) => ({
+  value: code,
+  placeholder: name,
+}));
+
 const DeliverySubForm = () => {
   const { register, setValue } = useFormContext<ContactFormType>();
 
@@ -29,22 +34,19 @@ const DeliverySubForm = () => {
 
       <FormSelect
         id="country"
+        name="country"
         placeholder="Country/Region"
-        content={countryData.map(({ code, name }) => ({
-          value: code,
-          placeholder: name,
-        }))}
-        // content={[
-        //   { value: "AB", placeholder: "Sri Lanka" },
-        //   { value: "A", placeholder: "India" },
-        // ]}
-        onValueChange={(value) =>
+        content={selectData}
+        onValueChange={(value) => {
           setValue("country", value, {
+            shouldDirty: true,
             shouldValidate: true,
-          })
-        }
+            shouldTouch: true,
+          });
+        }}
         error={errors.country?.message}
       />
+
       <div className="col-span-full grid grid-cols-2 gap-[1.5em]">
         <FormInput
           type="text"

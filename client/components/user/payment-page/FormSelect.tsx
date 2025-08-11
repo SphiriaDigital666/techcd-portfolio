@@ -23,10 +23,11 @@ const FormSelect: React.FC<FormSelectProps> = ({
   placeholder,
   content,
   error,
+  ...props
 }) => {
   return (
     <div className="relative mb-[2em]">
-      <Select>
+      <Select {...props}>
         <SelectTrigger id={id}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>

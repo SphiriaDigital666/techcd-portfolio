@@ -16,15 +16,8 @@ const PayMethodSubForm = () => {
       <RadioGroup defaultValue="onepay">
         <div className="not-last:border-b-foreground/15 flex items-center justify-between gap-[0.5em] p-[1em] not-last:border-b">
           <div className="flex items-center gap-[0.5em]">
-            <RadioGroupItem value="onepay" id="onepay" />
-            <label htmlFor="onepay">
-              Credit / Debit Card Payments (onepay)
-            </label>
-          </div>
-
-          <div className="flex gap-[0.5em]">
-            <VisaIcon className="w-[2em]" />
-            <MasterCardIcon className="w-[2em]" />
+            <RadioGroupItem value="cod" id="cod" />
+            <label htmlFor="cod">Cash On Delivery</label>
           </div>
         </div>
 
@@ -37,6 +30,13 @@ const PayMethodSubForm = () => {
           <div className="flex gap-[0.5em]">
             <VisaIcon className="w-[2em]" />
             <MasterCardIcon className="w-[2em]" />
+          </div>
+        </div>
+
+        <div className="not-last:border-b-foreground/15 flex items-center justify-between gap-[0.5em] p-[1em] not-last:border-b">
+          <div className="flex items-center gap-[0.5em]">
+            <RadioGroupItem value="transfer" id="transfer" />
+            <label htmlFor="transfer">Bank Transfer</label>
           </div>
         </div>
       </RadioGroup>

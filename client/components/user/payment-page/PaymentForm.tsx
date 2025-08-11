@@ -21,6 +21,7 @@ import OrderSummary from "./OrderSummary";
 const PaymentForm = () => {
   const methods: UseFormReturn<ContactFormType> = useForm<ContactFormType>({
     mode: "onBlur",
+    reValidateMode: "onChange",
     resolver: zodResolver(ContactFormSchema),
   });
 
