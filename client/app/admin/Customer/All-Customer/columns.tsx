@@ -72,8 +72,7 @@ export const columns: ColumnDef<Customer>[] = [
             <RiEyeLine size={20} className="text-white" />
           </Button>
           <Button
-           
-           
+            onClick={() => router.push(`/admin/Customer/All-Customer/edit-customer/${row.original.id}`)}
             className="rounded p-2 bg-transparent hover:bg-transparent focus:bg-transparent"
             aria-label="Edit customer details"
           >
