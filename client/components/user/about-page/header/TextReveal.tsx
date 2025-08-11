@@ -8,25 +8,27 @@ import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-const SectionTitle = () => {
+const TextReveal = () => {
   const container = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLParagraphElement | null>(null);
 
   useGSAP(
     () => {
+      const trigger = document.querySelector("#about-page-header");
       const heading = headingRef.current;
-      if (!heading) return;
+      if (!trigger || !heading) return;
 
       const lineSplit = new SplitText(heading, { type: "words" });
       const tween = gsap.from(lineSplit.words, {
-        opacity: 0,
-        y: "0.5em",
-        stagger: 0.2,
+        opacity: 0.2,
+        filter: "blur(2px)",
+        stagger: 0.1,
         transformOrigin: "50% 50%",
         scrollTrigger: {
-          trigger: heading,
-          start: "top 80%",
-          once: true,
+          trigger: trigger,
+          start: "top top",
+          end: "bottom 20%",
+          scrub: 3,
         },
       });
 
@@ -37,14 +39,17 @@ const SectionTitle = () => {
 
   return (
     <div ref={container}>
-      <h2
+      <p
         ref={headingRef}
-        className="dark:from-foreground to-foreground my-[0.2em] bg-gradient-to-b from-[#999999] bg-clip-text text-[26px] font-semibold text-transparent uppercase sm:text-[34px] md:text-[43px] lg:text-[51px] xl:text-[60px] 2xl:text-[68px] dark:to-[#999999]"
+        className="mx-auto mt-[1.5em] mb-[2em] max-w-[40ch] text-center text-[14px] sm:text-[20px] md:text-[27px] lg:text-[33px] xl:text-[40px] 2xl:text-[46px]"
       >
-        Empowering creativity everywhere
-      </h2>
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+        industry. Lorem Ipsum has been the industry&apos;s standard dummy text
+        ever since the 1500s, when an unknown printer took a galley of type and
+        scrambled it to make a type specimen book.
+      </p>
     </div>
   );
 };
 
-export default SectionTitle;
+export default TextReveal;

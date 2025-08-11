@@ -6,7 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 
-gsap.registerPlugin(ScrollTrigger, SplitText);
+gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
 const Title = () => {
   const container = useRef<HTMLDivElement>(null);
@@ -32,7 +32,7 @@ const Title = () => {
 
       return () => tween.kill();
     },
-    { scope: headingRef },
+    { scope: container },
   );
 
   return (

@@ -1,33 +1,37 @@
 import React from "react";
 import Image from "next/image";
 
-import { BsArrowDown } from "react-icons/bs";
 import SectionTitle from "./SectionTitle";
+import TextReveal from "./TextReveal";
 
 import eclipse from "@/public/images/eclipse.svg";
-import img from "@/public/images/about-page/header/img.png";
+import ImageArea from "./ImageArea";
 
 const Header = () => {
   return (
-    <section className="pt-[8em]">
+    <section id="about-page-header" className="pt-[8em]">
       <Image src={eclipse} alt="" className="absolute inset-0 w-full" />
       <div className="px-container relative container mx-auto">
         <div className="grid grid-cols-1 gap-[1.5em] lg:grid-cols-10">
-          <SectionTitle />
-          <div className="relative flex h-[202px] items-end lg:col-span-4 lg:h-auto xl:col-span-3">
-            <div className="bg-foreground text-background absolute bottom-0 left-0 aspect-square h-[23%] rounded-full lg:h-auto lg:w-[15%]">
-              <BsArrowDown className="absolute inset-0 m-auto size-fit text-[18px] sm:text-[20px] md:text-[22px] lg:text-[24px] xl:text-[25px] 2xl:text-[26px]" />
-            </div>
-            <Image src={img} alt="" className="h-full w-fit lg:h-auto" />
+          <div className="lg:col-span-6 xl:col-span-7">
+            <p className="bg-primary text-foreground w-fit rounded-full px-[1em] py-[0.4em] text-[12px] sm:text-[13px] md:text-[14px] lg:text-[15px] xl:text-[16px] 2xl:text-[18px]">
+              About Us
+            </p>
+            <SectionTitle />
+            <p className="text-[12px] sm:text-[13px] md:text-[15px] lg:text-[16px] xl:text-[18px] 2xl:text-[20px]">
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry&apos;s standard dummy
+              text ever since the 1500s, when an unknown printer took a galley
+              of type and scrambled it to make a type specimen book. It has
+              survived not only five centuries, but also the leap into
+              electronic typesetting, remaining essentially unchanged.
+            </p>
           </div>
+
+          <ImageArea />
         </div>
 
-        <p className="mx-auto mt-[1.5em] mb-[2em] max-w-[40ch] text-center text-[14px] sm:text-[20px] md:text-[27px] lg:text-[33px] xl:text-[40px] 2xl:text-[46px]">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry&apos;s standard dummy text
-          ever since the 1500s, when an unknown printer took a galley of type
-          and scrambled it to make a type specimen book.
-        </p>
+        <TextReveal />
       </div>
     </section>
   );
