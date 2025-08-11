@@ -8,7 +8,8 @@ const About = () => {
   return (
     <section className="relative pt-[10vw] lg:pt-0 xl:-mt-[2vw]">
       {/* Gradient (for screens <1024px) */}
-      <div className="from-primary absolute inset-0 bg-gradient-to-br to-transparent lg:hidden"></div>
+      <div className="bg-primary absolute top-1/5 left-0 aspect-square w-3/5 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[50px] lg:hidden"></div>
+      <div className="bg-primary absolute top-3/5 right-0 aspect-square w-3/5 translate-x-1/2 rounded-full blur-[50px] lg:hidden"></div>
 
       <div className="px-container relative container mx-auto lg:mb-[1.5em] lg:grid lg:grid-cols-11 lg:items-end">
         {/* Title (for screens <1024px) */}

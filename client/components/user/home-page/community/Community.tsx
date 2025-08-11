@@ -8,7 +8,6 @@ const Community = () => {
   return (
     <section className="relative overflow-x-clip py-[3em]">
       {/* Leaklights (for screens <1024px) */}
-      <div className="bg-primary absolute top-0 left-0 aspect-square w-2/5 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[50px] lg:hidden"></div>
       <div className="absolute right-0 bottom-0 h-4/5 w-3/5 translate-x-1/2 translate-y-1/12 rounded-full bg-[#028EFC]/60 blur-[100px] lg:hidden"></div>
 
       {/* Leaklight (for screens >=1024px) */}
