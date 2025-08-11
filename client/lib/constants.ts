@@ -28,10 +28,6 @@ export const navLinks = [
     placeholder: "Blog",
     href: "/blog",
   },
-  {
-    placeholder: "Pricing",
-    href: "/pricing",
-  },
 ];
 
 // ----- ----- ----- BRAND CAROUSEL DATA ----- ----- -----
