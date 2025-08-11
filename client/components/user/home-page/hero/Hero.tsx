@@ -14,7 +14,7 @@ import blur from "@/public/images/home-page/hero/bg-blur.svg";
 import blurDark from "@/public/images/home-page/hero/bg-blur-dark.svg";
 // import LogoImages from "./LogoImages";
 
-const TOTAL_IMAGES = 4;
+const TOTAL_IMAGES = 9;
 
 const Hero = () => {
   const [imagesLoaded, setImagesLoaded] = useState(0);
