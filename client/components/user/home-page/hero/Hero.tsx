@@ -23,7 +23,7 @@ const Hero = () => {
   const allImagesLoaded = imagesLoaded === TOTAL_IMAGES;
 
   return (
-    <section className="relative overflow-x-clip">
+    <section className="relative overflow-x-clip pt-[100px]">
       {/* Loading screen */}
       <Loader playAnimation={allImagesLoaded} />
       <HeroBg />

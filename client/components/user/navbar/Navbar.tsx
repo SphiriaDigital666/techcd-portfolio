@@ -124,33 +124,35 @@ const Navbar = () => {
   return (
     <section
       ref={containerRef}
-      className="absolute top-[1.5em] right-0 left-0 z-50"
+      className="fixed top-[1.5em] right-0 left-0 z-50"
     >
-      <div className="px-container container mx-auto flex items-start justify-between">
-        {/* Logo */}
-        <Link
-          href="/"
-          className="w-[40px] sm:w-[42px] md:w-[46px] lg:w-[48px] xl:w-[52px] 2xl:w-[54px]"
-        >
-          <Image src={logo} alt="" />
-        </Link>
+      <div className="px-container container mx-auto">
+        <div className="bg-foreground/10 border-foreground/20 flex items-center justify-between rounded-full border px-[1.5em] py-[0.5em] backdrop-blur-sm">
+          {/* Logo */}
+          <Link
+            href="/"
+            className="w-[25px] sm:w-[27.5px] md:w-[30px] lg:w-[32.5px] xl:w-[33.75px] 2xl:w-[35px]"
+          >
+            <Image src={logo} alt="" />
+          </Link>
 
-        <DesktopNav getActiveLinkClasses={getActiveLinkClasses} />
+          <DesktopNav getActiveLinkClasses={getActiveLinkClasses} />
 
-        {/* Mobile nav toggle */}
-        <button onClick={toggleMobileNav} className="lg:hidden">
-          <NavMenuIcon className="w-[30px]" />
-        </button>
+          {/* Mobile nav toggle */}
+          <button onClick={toggleMobileNav} className="lg:hidden">
+            <NavMenuIcon className="w-[25px] sm:w-[27.5px] md:w-[30px]" />
+          </button>
+        </div>
+
+        <MobileNav
+          getActiveLinkClasses={getActiveLinkClasses}
+          handleCloseMobileNav={closeMobileNav}
+          mobileNavBgRef={mobileNavBgRef}
+          mobileNavListRef={mobileNavListRef}
+          mobileNavOverlayRef={mobileNavOverlayRef}
+          mobileNavRef={mobileNavRef}
+        />
       </div>
-
-      <MobileNav
-        getActiveLinkClasses={getActiveLinkClasses}
-        handleCloseMobileNav={closeMobileNav}
-        mobileNavBgRef={mobileNavBgRef}
-        mobileNavListRef={mobileNavListRef}
-        mobileNavOverlayRef={mobileNavOverlayRef}
-        mobileNavRef={mobileNavRef}
-      />
     </section>
   );
 };
