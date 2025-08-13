@@ -50,7 +50,6 @@
 @layer base {
   * {
     scrollbar-width: thin;
-    /* cursor: none; */
   }
 
   ::selection {
@@ -69,6 +68,10 @@
 
   button {
     cursor: pointer;
+  }
+
+  .gradient-text {
+    @apply text-foreground dark:from-foreground dark:bg-gradient-to-b dark:to-[#999999] dark:bg-clip-text dark:text-transparent;
   }
 }
 

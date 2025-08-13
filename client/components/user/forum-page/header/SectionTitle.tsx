@@ -17,8 +17,11 @@ const SectionTitle: React.FC<{ className: string }> = ({ ...props }) => {
       const heading = headingRef.current;
       if (!heading) return;
 
-      const lineSplit = new SplitText(heading, { type: "words" });
-      const tween = gsap.from(lineSplit.words, {
+      const split = new SplitText(heading, { type: "words" });
+      split.words.forEach((e) => {
+        e.classList.add("gradient-text");
+      });
+      const tween = gsap.from(split.words, {
         opacity: 0,
         y: "0.5em",
         stagger: 0.2,

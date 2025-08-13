@@ -18,6 +18,9 @@ const TitleLg = () => {
       if (!heading) return;
 
       const split = new SplitText(heading, { type: "words" });
+      split.words.forEach((e) => {
+        e.classList.add("gradient-text");
+      });
       const tween = gsap.from(split.words, {
         opacity: 0,
         y: "0.5em",
