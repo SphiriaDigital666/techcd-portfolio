@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 
 import gsap from "gsap";
@@ -78,51 +78,16 @@ const Messages = () => {
     { scope: containerRef },
   );
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const gradientDivs: NodeListOf<HTMLDivElement> =
-      container.querySelectorAll(".gradient-div");
-    if (!gradientDivs) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const x = e.clientX;
-      const y = e.clientY;
-
-      gradientDivs.forEach((e) => {
-        const divX = e.getBoundingClientRect().x;
-        const divY = e.getBoundingClientRect().y;
-
-        const mouseX = Math.floor(x - divX);
-        const mouseY = Math.floor(y - divY);
-
-        e.style.clipPath = `circle(100px at ${mouseX}px ${mouseY}px)`;
-      });
-    };
-
-    container.addEventListener("mousemove", handleMouseMove);
-
-    return () => container.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
   return (
     <ul
       ref={containerRef}
-      className="group mt-[2em] space-y-[1em] text-[14px] sm:text-[16.5px] md:text-[19px] lg:text-[21.5px] xl:text-[24px] 2xl:text-[26.5px]"
+      className="mt-[2em] space-y-[1em] text-[14px] sm:text-[16.5px] md:text-[19px] lg:text-[21.5px] xl:text-[24px] 2xl:text-[26.5px]"
     >
       {data.map(({ id, avatar, message, elapsedTime, username }, i) => (
-        <li key={id} className="forum-message relative">
-          <div
-            className="gradient-div bg-foreground/10 absolute inset-0 origin-center rounded-[1.3em] via-transparent opacity-0 transition-opacity duration-300 ease-linear group-hover:opacity-100"
-            style={{
-              clipPath: "circle(0px at 0 0)",
-            }}
-          ></div>
-
+        <li key={id} className="forum-message">
           <article
             className={cn(
-              "relative grid grid-cols-1 gap-[1.5em] rounded-[1em] px-[2em] py-[1.5em] backdrop-blur-[30px] lg:grid-cols-11 lg:rounded-[1.3em] lg:px-[1.5em] lg:py-[1em]",
+              "grid grid-cols-1 gap-[1.5em] rounded-[1em] px-[2em] py-[1.5em] lg:grid-cols-11 lg:rounded-[1.3em] lg:px-[1.5em] lg:py-[1em]",
               i % 2 === 0 && "border-foreground/30 bg-foreground/8 border",
             )}
           >
