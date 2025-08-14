@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import Header from "@/components/user/profile-page/header/Header";
 import eclipse from "@/public/images/eclipse.svg";
+import FormTabs from "@/components/user/profile-page/form-tabs/FormTabs";
 
 const ProfilePage = () => {
   return (
@@ -12,6 +13,7 @@ const ProfilePage = () => {
 
       <div className="px-container relative container mx-auto">
         <Header />
+        <FormTabs />
       </div>
     </section>
   );
