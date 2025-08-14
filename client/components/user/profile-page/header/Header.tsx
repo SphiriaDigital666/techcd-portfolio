@@ -4,11 +4,11 @@ import { FaRegEdit } from "react-icons/fa";
 
 const Header = () => {
   return (
-    <div className="flex items-center gap-[1em] text-[16px] sm:text-[20px] md:text-[24px] lg:h-[2.2em] lg:text-[28px] xl:text-[32px] 2xl:text-[36px]">
-      <div className="relative">
-        <div className="bg-foreground/20 outline-primary size-[3.5em] rounded-full outline-2 outline-offset-4"></div>
+    <div className="flex items-center gap-[1.2em] text-[16px] sm:text-[20px] md:text-[24px] lg:h-[2.2em] lg:text-[28px] xl:text-[32px] 2xl:text-[36px]">
+      <div className="border-primary relative rounded-full border-2 p-[4px]">
+        <div className="bg-foreground/20 size-[3.5em] rounded-full"></div>
 
-        <button className="absolute right-0 bottom-0 translate-x-1/2 opacity-70 hover:opacity-100">
+        <button className="absolute bottom-0 left-full text-[0.8em] opacity-70 hover:opacity-100">
           <FaRegEdit />
         </button>
       </div>

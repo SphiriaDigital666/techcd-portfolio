@@ -23,6 +23,27 @@ const data = [
     username: "James",
     totalPrice: "2500",
   },
+  {
+    id: "004",
+    orderCode: "#546FGd1",
+    orderDate: "2045/12/23",
+    username: "James",
+    totalPrice: "2500",
+  },
+  {
+    id: "005",
+    orderCode: "#546FGd1",
+    orderDate: "2045/12/23",
+    username: "James",
+    totalPrice: "2500",
+  },
+  {
+    id: "006",
+    orderCode: "#546FGd1",
+    orderDate: "2045/12/23",
+    username: "James",
+    totalPrice: "2500",
+  },
 ];
 
 const OrderTable = () => {
@@ -43,7 +64,7 @@ const OrderTable = () => {
           <div>{orderDate}</div>
           <div>{username}</div>
           <div>{totalPrice}</div>
-          <button>
+          <button className="opacity-70 hover:opacity-100">
             <MdRemoveRedEye />
           </button>
         </div>
