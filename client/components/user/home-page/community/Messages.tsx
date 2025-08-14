@@ -81,7 +81,7 @@ const Messages = () => {
   return (
     <ul
       ref={containerRef}
-      className="mt-[2em] space-y-[1em] text-[14px] sm:text-[16.5px] md:text-[19px] lg:text-[21.5px] xl:text-[24px] 2xl:text-[26.5px]"
+      className="group home-page-community mt-[2em] space-y-[1em] text-[14px] sm:text-[16.5px] md:text-[19px] lg:text-[21.5px] xl:text-[24px] 2xl:text-[26.5px]"
     >
       {data.map((e, i) => (
         <Message key={e.id} i={i} {...e} />
