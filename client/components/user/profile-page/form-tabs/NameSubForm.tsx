@@ -76,7 +76,7 @@ const NameSubForm: React.FC<{ setActiveSubForm: (name: string) => void }> = ({
         <FormInput
           id="rd-username"
           label="Username"
-          value="john-doe"
+          value="john_doe"
           readOnly
           className="cursor-not-allowed"
         />
