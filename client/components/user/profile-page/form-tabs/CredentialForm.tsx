@@ -7,6 +7,7 @@ import NameSubForm from "./NameSubForm";
 import EmailSubForm from "./EmailSubForm";
 import UsernameSubForm from "./UsernameSubForm";
 import PasswordSubForm from "./PasswordSubForm";
+import AuthSubForm from "./AuthSubForm";
 
 const CredentialForm = () => {
   const [activeSubForm, setActiveSubForm] = useState("name");
@@ -27,6 +28,9 @@ const CredentialForm = () => {
       )}
       {activeSubForm === "phone" && (
         <TelSubForm handleClose={() => setActiveSubForm("name")} />
+      )}
+      {activeSubForm === "auth" && (
+        <AuthSubForm handleClose={() => setActiveSubForm("name")} />
       )}
     </>
   );
