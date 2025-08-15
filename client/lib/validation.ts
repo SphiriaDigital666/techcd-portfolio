@@ -68,3 +68,22 @@ export const CredentialNameFormSchema = z.object({
 });
 
 export type CredentialNameType = z.infer<typeof CredentialNameFormSchema>;
+
+export const CredentialTelFormSchema = z.object({
+  tel: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .min(4, "Too short")
+    .max(14, "Too long")
+    .regex(/^\d+$/, "Invalid format (e.g. 790193748)"),
+  password: z
+    .string({ message: "This field is required" })
+    .min(8, "Too short")
+    .max(32, "Too long")
+    .regex(/[A-Z]/, "Must contain at least one uppercase letter")
+    .regex(/[a-z]/, "Must contain at least one lowercase letter")
+    .regex(/\d/, "Must contain at least one number")
+    .regex(/[^A-Za-z0-9]/, "Must contain at least one special character"),
+});
+
+export type CredentialTelType = z.infer<typeof CredentialTelFormSchema>;
