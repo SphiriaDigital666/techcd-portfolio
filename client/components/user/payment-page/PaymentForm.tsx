@@ -10,7 +10,7 @@ import {
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { ContactFormSchema, ContactFormType } from "@/lib/validation";
+import { PaymentFormSchema, PaymentFormType } from "@/lib/validation";
 import ContactSubForm from "./ContactSubForm";
 import DeliverySubForm from "./DeliverySubForm";
 import ShippingSubForm from "./ShippingSubForm";
@@ -19,15 +19,15 @@ import BillingSubForm from "./BillingSubForm";
 import OrderSummary from "./OrderSummary";
 
 const PaymentForm = () => {
-  const methods: UseFormReturn<ContactFormType> = useForm<ContactFormType>({
+  const methods: UseFormReturn<PaymentFormType> = useForm<PaymentFormType>({
     mode: "onBlur",
     reValidateMode: "onChange",
-    resolver: zodResolver(ContactFormSchema),
+    resolver: zodResolver(PaymentFormSchema),
   });
 
   const { handleSubmit } = methods;
 
-  async function onSubmit(data: ContactFormType) {
+  async function onSubmit(data: PaymentFormType) {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     console.log("Form Data", data);
   }

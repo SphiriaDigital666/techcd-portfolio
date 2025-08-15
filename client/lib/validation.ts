@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const ContactFormSchema = z.object({
+export const PaymentFormSchema = z.object({
   email: z
     .email({ error: "Invalid format (e.g. john@doe.com)" })
     .min(1, "This field is required")
@@ -52,4 +52,4 @@ export const ContactFormSchema = z.object({
     .regex(/^\d+$/, "Invalid format (e.g. 790193748)"),
 });
 
-export type ContactFormType = z.infer<typeof ContactFormSchema>;
+export type PaymentFormType = z.infer<typeof PaymentFormSchema>;
