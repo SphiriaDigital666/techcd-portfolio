@@ -17,7 +17,7 @@ const FormTabs = () => {
 
   return (
     <div className="bg-foreground/10 mt-[3em] grid grid-cols-1 rounded-[1em] p-[1em] lg:grid-cols-10">
-      <div className="border-r-foreground/30 relative border-r p-[1em] lg:col-span-3">
+      <div className="lg:border-r-foreground/30 relative p-[1em] lg:col-span-3 lg:border-r">
         <ul className="space-y-[1em]">
           {tabs.map((tab) => (
             <li key={tab.id}>
