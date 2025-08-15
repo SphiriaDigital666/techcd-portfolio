@@ -87,3 +87,39 @@ export const CredentialTelFormSchema = z.object({
 });
 
 export type CredentialTelType = z.infer<typeof CredentialTelFormSchema>;
+
+export const CredentialPasswordFormSchema = z
+  .object({
+    password: z
+      .string({ message: "This field is required" })
+      .min(8, "Too short")
+      .max(32, "Too long")
+      .regex(/[A-Z]/, "Must contain at least one uppercase letter")
+      .regex(/[a-z]/, "Must contain at least one lowercase letter")
+      .regex(/\d/, "Must contain at least one number")
+      .regex(/[^A-Za-z0-9]/, "Must contain at least one special character"),
+    newPassword: z
+      .string({ message: "This field is required" })
+      .min(8, "Too short")
+      .max(32, "Too long")
+      .regex(/[A-Z]/, "Must contain at least one uppercase letter")
+      .regex(/[a-z]/, "Must contain at least one lowercase letter")
+      .regex(/\d/, "Must contain at least one number")
+      .regex(/[^A-Za-z0-9]/, "Must contain at least one special character"),
+    confirmPassword: z
+      .string({ message: "This field is required" })
+      .min(8, "Too short")
+      .max(32, "Too long")
+      .regex(/[A-Z]/, "Must contain at least one uppercase letter")
+      .regex(/[a-z]/, "Must contain at least one lowercase letter")
+      .regex(/\d/, "Must contain at least one number")
+      .regex(/[^A-Za-z0-9]/, "Must contain at least one special character"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords must match",
+  });
+
+export type CredentialPasswordType = z.infer<
+  typeof CredentialPasswordFormSchema
+>;

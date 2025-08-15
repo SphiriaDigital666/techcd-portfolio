@@ -8,22 +8,26 @@ import { GoArrowUpRight } from "react-icons/go";
 import { MdArrowBackIosNew } from "react-icons/md";
 
 import { cn } from "@/lib/utils";
-import { CredentialTelFormSchema, CredentialTelType } from "@/lib/validation";
-import FormInput from "./FormInput";
+import {
+  CredentialPasswordFormSchema,
+  CredentialPasswordType,
+} from "@/lib/validation";
+import PasswordInput from "./PasswordInput";
 
-const TelSubForm: React.FC<{ handleClose: () => void }> = ({ handleClose }) => {
+const PasswordSubForm: React.FC<{ handleClose: () => void }> = ({
+  handleClose,
+}) => {
   const {
     register,
     handleSubmit,
-    formState: { isDirty, isSubmitting, errors },
-  } = useForm<CredentialTelType>({
+    formState: { isSubmitting, errors },
+  } = useForm<CredentialPasswordType>({
     mode: "onBlur",
     reValidateMode: "onChange",
-    resolver: zodResolver(CredentialTelFormSchema),
-    defaultValues: { tel: "789387463", password: "" },
+    resolver: zodResolver(CredentialPasswordFormSchema),
   });
 
-  const onSubmit = async (data: CredentialTelType) => {
+  const onSubmit = async (data: CredentialPasswordType) => {
     console.log(data);
   };
 
@@ -41,26 +45,27 @@ const TelSubForm: React.FC<{ handleClose: () => void }> = ({ handleClose }) => {
           "text-[12px] sm:text-[13px] md:text-[15px] lg:text-[16px] xl:text-[18px] 2xl:text-[20px]",
         )}
       >
-        <FormInput
-          type="tel"
-          id="tel"
-          label="Phone number"
-          {...register("tel")}
-          error={errors.tel?.message}
-        />
-        <FormInput
-          type="password"
+        <PasswordInput
           id="password"
-          label="Password"
+          label="Current Password"
           {...register("password")}
           error={errors.password?.message}
         />
+        <PasswordInput
+          id="new-password"
+          label="New Password"
+          {...register("newPassword")}
+          error={errors.newPassword?.message}
+        />
+        <PasswordInput
+          id="confirm-password"
+          label="Confirm New Password"
+          {...register("confirmPassword")}
+          error={errors.confirmPassword?.message}
+        />
 
         <button
-          className={cn(
-            "bg-primary pointer-events-none ms-auto flex w-fit items-center gap-[0.5em] rounded-[0.5em] px-[1em] py-[0.5em] opacity-0 transition-opacity",
-            isDirty && "pointer-events-auto opacity-100",
-          )}
+          className="bg-primary pointer-events-none ms-auto flex w-fit items-center gap-[0.5em] rounded-[0.5em] px-[1em] py-[0.5em]"
           disabled={isSubmitting}
         >
           <span>{isSubmitting ? "Saving" : "Save Changes"}</span>
@@ -71,4 +76,4 @@ const TelSubForm: React.FC<{ handleClose: () => void }> = ({ handleClose }) => {
   );
 };
 
-export default TelSubForm;
+export default PasswordSubForm;
