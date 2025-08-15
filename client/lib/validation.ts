@@ -53,3 +53,18 @@ export const PaymentFormSchema = z.object({
 });
 
 export type PaymentFormType = z.infer<typeof PaymentFormSchema>;
+
+export const CredentialNameFormSchema = z.object({
+  firstName: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .min(2, "Too short")
+    .max(32, "Too long"),
+  lastName: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .min(2, "Too short")
+    .max(32, "Too long"),
+});
+
+export type CredentialNameType = z.infer<typeof CredentialNameFormSchema>;
