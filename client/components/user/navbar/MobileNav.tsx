@@ -72,7 +72,7 @@ const MobileNav: React.FC<MobileNavProps> = ({
                 <LiaShoppingBagSolid className="text-[1.5em]" />
               </Link>
               <Link
-                href="/sign-in"
+                href="/profile"
                 className="hover:opacity-80 focus:opacity-80"
               >
                 <FaRegUser className="text-[1.2em]" />

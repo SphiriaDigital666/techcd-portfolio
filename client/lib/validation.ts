@@ -168,6 +168,55 @@ export const CredentialEmailFormSchema = z.object({
 export type CredentialEmailType = z.infer<typeof CredentialEmailFormSchema>;
 
 // ----- ----- ----- START ----- ----- -----
+export const ShippingFormSchema = z.object({
+  firstName: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .min(2, "Too short")
+    .max(32, "Too long"),
+  lastName: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .min(2, "Too short")
+    .max(32, "Too long"),
+  email: z
+    .email({ error: "Invalid format (e.g. john@doe.com)" })
+    .min(1, "This field is required")
+    .max(32, "Too long"),
+  tel: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .min(4, "Too short")
+    .max(14, "Too long")
+    .regex(/^\d+$/, "Invalid format (e.g. 790193748)"),
+  address: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .min(10, "Too short")
+    .max(100, "Too long"),
+  apartment: z
+    .string({ message: "This field is required" })
+    .max(100, "Too long")
+    .optional()
+    .or(z.literal("")),
+  city: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .min(2, "Too short")
+    .max(32, "Too long"),
+  state: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .min(2, "Too short")
+    .max(32, "Too long"),
+  zip: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .regex(/^\d{5}(-\d{4})?$/, "Invalid format (e.g. 12345 or 12345-6789)"),
+});
+export type ShippingType = z.infer<typeof ShippingFormSchema>;
+
+// ----- ----- ----- START ----- ----- -----
 export const ContactFormSchema = z.object({
   name: z
     .string({ message: "This field is required" })

@@ -31,7 +31,7 @@ const DesktopNav: React.FC<{
           <Link href="/cart" className="hover:opacity-80 focus:opacity-80">
             <LiaShoppingBagSolid className="text-[1.5em]" />
           </Link>
-          <Link href="/sign-in" className="hover:opacity-80 focus:opacity-80">
+          <Link href="/profile" className="hover:opacity-80 focus:opacity-80">
             <FaRegUser className="text-[1.2em]" />
           </Link>
         </div>
