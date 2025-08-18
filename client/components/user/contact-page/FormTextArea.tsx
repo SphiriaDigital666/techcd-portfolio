@@ -23,7 +23,7 @@ const FormTextArea: React.FC<FormTextAreaProps> = ({
         id={id}
         {...props}
         className={cn(
-          "border-foreground/15 focus:border-foreground/30 placeholder:text-foreground/80 mt-[0.4em] w-full rounded-[0.5em] border px-[1em] transition-colors focus:outline-none",
+          "border-foreground/15 focus:border-foreground/30 placeholder:text-foreground/80 mt-[0.4em] w-full rounded-[0.5em] border p-[1em] transition-colors focus:outline-none",
           className,
         )}
       />
