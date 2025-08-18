@@ -8,28 +8,31 @@ import { GoArrowUpRight } from "react-icons/go";
 import { MdArrowBackIosNew } from "react-icons/md";
 
 import { cn } from "@/lib/utils";
-import {
-  CredentialEmailFormSchema,
-  CredentialEmailType,
-} from "@/lib/validation";
-import { RadioGroup, RadioGroupItem } from "@/components/user/ui/RadioGroup";
+import { CredentialAuthFormSchema, CredentialAuthType } from "@/lib/validation";
 import FormInput from "./FormInput";
+import FormRadioGroup from "./FormRadioGroup";
+
+const options = [
+  { value: "auth-none", placeholder: "None" },
+  { value: "auth-email", placeholder: "Email Verification" },
+];
 
 const AuthSubForm: React.FC<{ handleClose: () => void }> = ({
   handleClose,
 }) => {
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<CredentialEmailType>({
+  } = useForm<CredentialAuthType>({
     mode: "onBlur",
     reValidateMode: "onChange",
-    resolver: zodResolver(CredentialEmailFormSchema),
-    defaultValues: { email: "john@doe.com", password: "" },
+    resolver: zodResolver(CredentialAuthFormSchema),
+    defaultValues: { authType: "auth-none", password: "" },
   });
 
-  const onSubmit = async (data: CredentialEmailType) => {
+  const onSubmit = async (data: CredentialAuthType) => {
     console.log(data);
   };
 
@@ -47,19 +50,16 @@ const AuthSubForm: React.FC<{ handleClose: () => void }> = ({
           "text-[12px] sm:text-[13px] md:text-[15px] lg:text-[16px] xl:text-[18px] 2xl:text-[20px]",
         )}
       >
-        <RadioGroup
-          defaultValue="auth-none"
-          className="flex items-center gap-[1em] border-none"
-        >
-          <div className="flex items-center gap-[0.3em]">
-            <RadioGroupItem value="auth-none" id="auth-none" />
-            <label htmlFor="auth-none">None</label>
-          </div>
-          <div className="flex items-center gap-[0.3em]">
-            <RadioGroupItem value="auth-email" id="auth-email" />
-            <label htmlFor="auth-email">Email Verification</label>
-          </div>
-        </RadioGroup>
+        <FormRadioGroup
+          options={options}
+          defaultValue={options[0].value}
+          onValueChange={(v) =>
+            setValue("authType", v, { shouldValidate: true })
+          }
+          {...register("authType")}
+          error={errors.authType?.message}
+        />
+
         <FormInput
           type="password"
           id="password"
