@@ -29,19 +29,19 @@ const Header = () => {
         </div>
 
         <div className="flex gap-[1em]">
-          <button className="rounded-full border p-[0.5em]">
+          <button className="rounded-full border p-[0.5em] opacity-80 hover:opacity-100">
             <FaFacebookF />
           </button>
 
-          <button className="rounded-full border p-[0.5em]">
+          <button className="rounded-full border p-[0.5em] opacity-80 hover:opacity-100">
             <FaYoutube />
           </button>
 
-          <button className="rounded-full border p-[0.5em]">
+          <button className="rounded-full border p-[0.5em] opacity-80 hover:opacity-100">
             <FaTiktok />
           </button>
 
-          <button className="rounded-full border p-[0.5em]">
+          <button className="rounded-full border p-[0.5em] opacity-80 hover:opacity-100">
             <FaInstagram />
           </button>
         </div>
