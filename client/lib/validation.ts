@@ -166,3 +166,22 @@ export const CredentialEmailFormSchema = z.object({
     .regex(/[^A-Za-z0-9]/, "Must contain at least one special character"),
 });
 export type CredentialEmailType = z.infer<typeof CredentialEmailFormSchema>;
+
+// ----- ----- ----- START ----- ----- -----
+export const ContactFormSchema = z.object({
+  name: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .min(2, "Too short")
+    .max(32, "Too long"),
+  email: z
+    .email({ error: "Invalid format (e.g. john@doe.com)" })
+    .min(1, "This field is required")
+    .max(32, "Too long"),
+  message: z
+    .string({ message: "This field is required" })
+    .min(1, "This field is required")
+    .min(2, "Too short")
+    .max(150, "Too long"),
+});
+export type ContactType = z.infer<typeof ContactFormSchema>;
