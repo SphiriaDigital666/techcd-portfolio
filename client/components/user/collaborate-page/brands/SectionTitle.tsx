@@ -24,7 +24,7 @@ const SectionTitle = () => {
       const tween = gsap.from(split.chars, {
         opacity: 0,
         y: "0.5em",
-        stagger: 0.2,
+        stagger: 0.1,
         transformOrigin: "50% 50%",
         scrollTrigger: {
           trigger: heading,
