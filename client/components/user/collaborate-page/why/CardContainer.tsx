@@ -78,13 +78,13 @@ const CardContainer = () => {
       {data.map(({ img, desc, id, title }) => (
         <div
           key={id}
-          className="why-collaborate-card relative flex flex-col items-center gap-[2em] rounded-[1em] p-[1.5em] text-center text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]"
+          className="why-collaborate-card relative mx-auto flex w-fit flex-col items-center gap-[2em] rounded-[1em] p-[1.5em] text-center text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="absolute inset-0 size-full"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
+            className="absolute inset-0"
+            viewBox="0 0 288 350"
+            // preserveAspectRatio="none"
           >
             <defs>
               <linearGradient id="strokeGradient" x1="0" y1="0" x2="0" y2="1">
@@ -102,16 +102,17 @@ const CardContainer = () => {
             </defs>
 
             <rect
-              width="100"
-              height="100"
+              width="287"
+              height="349"
               x="0"
               y="0"
-              rx="6"
-              ry="6"
+              rx="12"
+              ry="12"
               fill="var(--foreground)"
               fillOpacity={0.05}
               stroke="url(#strokeGradient)"
-              strokeWidth={0.4}
+              strokeWidth={1.5}
+              strokeOpacity={0.8}
             />
           </svg>
 

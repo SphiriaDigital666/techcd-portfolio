@@ -67,13 +67,16 @@ const MobileNav: React.FC<MobileNavProps> = ({
             <ThemeToggle />
 
             {/* Sign in/up */}
-            <li className="dark:text-primary text-background flex justify-center gap-[1em]">
-              <Link href="/cart" className="hover:opacity-80 focus:opacity-80">
+            <li className="dark:text-primary text-background flex items-center justify-center gap-[1em]">
+              <Link
+                href="/cart"
+                className="h-fit opacity-80 hover:opacity-100 focus:opacity-100"
+              >
                 <LiaShoppingBagSolid className="text-[1.5em]" />
               </Link>
               <Link
                 href="/profile"
-                className="hover:opacity-80 focus:opacity-80"
+                className="h-fit opacity-80 hover:opacity-100 focus:opacity-100"
               >
                 <FaRegUser className="text-[1.2em]" />
               </Link>
