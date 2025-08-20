@@ -28,10 +28,16 @@ const DesktopNav: React.FC<{
         <ThemeToggle />
 
         <div className="text-foreground flex items-center justify-center gap-[0.5em] font-medium">
-          <Link href="/cart" className="hover:opacity-80 focus:opacity-80">
+          <Link
+            href="/cart"
+            className="h-fit opacity-80 hover:opacity-100 focus:opacity-100"
+          >
             <LiaShoppingBagSolid className="text-[1.5em]" />
           </Link>
-          <Link href="/profile" className="hover:opacity-80 focus:opacity-80">
+          <Link
+            href="/profile"
+            className="h-fit opacity-80 hover:opacity-100 focus:opacity-100"
+          >
             <FaRegUser className="text-[1.2em]" />
           </Link>
         </div>
