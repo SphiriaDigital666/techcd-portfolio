@@ -6,7 +6,7 @@ import ImageArea from "./ImageArea";
 const Story = () => {
   return (
     <section>
-      <div className="px-container relative container mx-auto mt-[3em]">
+      <div className="px-container relative container mx-auto mt-[6em]">
         <div className="from-primary absolute right-0 bottom-0 aspect-square w-2/5 translate-x-1/2 translate-y-1/2 rounded-full bg-radial to-transparent blur-[5em]"></div>
         <SectionTitle className="lg:hidden" />
 

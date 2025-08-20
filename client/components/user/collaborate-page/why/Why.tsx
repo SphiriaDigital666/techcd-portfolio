@@ -1,34 +1,35 @@
 import React from "react";
-
-import { LuMonitorCog } from "react-icons/lu";
-import { IoGlobeOutline } from "react-icons/io5";
-import { GrAnnounce } from "react-icons/gr";
-import { FaRegHandshake } from "react-icons/fa";
+import Image from "next/image";
 
 import SectionTitle from "./SectionTitle";
+
+import one from "@/public/images/collaborate-page/why/1.png";
+import two from "@/public/images/collaborate-page/why/2.png";
+import three from "@/public/images/collaborate-page/why/3.png";
+import four from "@/public/images/collaborate-page/why/4.png";
 
 const data = [
   {
     id: "001",
-    Icon: LuMonitorCog,
+    img: one,
     title: "Tech Expertise",
     desc: "Software, web & IT solutions",
   },
   {
     id: "002",
-    Icon: IoGlobeOutline,
+    img: two,
     title: "Global Influence",
     desc: "Worked with Binance, Redbull, AliExpress, XM.com",
   },
   {
     id: "003",
-    Icon: GrAnnounce,
+    img: three,
     title: "Marketing Power",
     desc: "Social media campaigns reaching millions",
   },
   {
     id: "004",
-    Icon: FaRegHandshake,
+    img: four,
     title: "Long-Term Partnerships",
     desc: "Focus on relationships & measurable success",
   },
@@ -37,13 +38,13 @@ const data = [
 const Why = () => {
   return (
     <section>
-      <div className="px-container container mx-auto mt-[3em]">
+      <div className="px-container container mx-auto mt-[6em]">
         <SectionTitle />
         <div className="mt-[2em] grid grid-cols-1 gap-[1.5em] sm:grid-cols-2 lg:grid-cols-4">
-          {data.map(({ Icon, desc, id, title }) => (
+          {data.map(({ img, desc, id, title }) => (
             <div
               key={id}
-              className="relative flex flex-col items-center gap-[2em] rounded-[1em] p-[1em] text-center text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]"
+              className="relative flex flex-col items-center gap-[2em] rounded-[1em] p-[1.5em] text-center text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -82,11 +83,15 @@ const Why = () => {
                   fill="var(--foreground)"
                   fillOpacity={0.05}
                   stroke="url(#strokeGradient)"
-                  strokeWidth={0.2}
+                  strokeWidth={0.4}
                 />
               </svg>
 
-              <Icon className="text-primary relative text-[4.5em]" />
+              <Image
+                src={img}
+                alt=""
+                className="text-primary relative size-[60px] sm:size-[66.25px] md:size-[72.5px] lg:size-[78.75px] xl:size-[81.875px] 2xl:size-[85px]"
+              />
               <p className="dark:from-foreground to-foreground relative h-[2.2em] max-w-[13ch] bg-gradient-to-b from-[#999999] bg-clip-text font-semibold text-transparent uppercase dark:to-[#999999]">
                 {title}
               </p>
