@@ -37,8 +37,10 @@ const data = [
 
 const Why = () => {
   return (
-    <section>
-      <div className="px-container container mx-auto mt-[6em]">
+    <section className="relative">
+      <div className="from-primary absolute right-0 bottom-0 aspect-square w-2/5 translate-x-1/2 translate-y-1/2 rounded-full bg-radial to-transparent blur-[5em]"></div>
+
+      <div className="px-container relative container mx-auto mt-[6em]">
         <SectionTitle />
         <div className="mt-[2em] grid grid-cols-1 gap-[1.5em] sm:grid-cols-2 lg:grid-cols-4">
           {data.map(({ img, desc, id, title }) => (
