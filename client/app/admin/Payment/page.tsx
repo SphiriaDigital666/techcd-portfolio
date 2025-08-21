@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Savebutton from './Savebutton';
 function PaymentPage() {
+  const router = useRouter();
   const [paymentSettings, setPaymentSettings] = useState({
     directBankTransfer: false,
     cashOnDelivery: false,
@@ -70,7 +72,10 @@ function PaymentPage() {
 
                 {/* Manage Button Column */}
                 <div className="flex justify-center sm:justify-end">
-                  <button className="bg-[#028EFC] text-white px-4 py-1 rounded-lg transition-colors">
+                  <button
+                    onClick={() => router.push('/admin/Payment/direct-bank-transfer')}
+                    className="bg-[#028EFC] text-white px-4 py-1 rounded-lg transition-colors "
+                  >
                     Manage
                   </button>
                 </div>
@@ -102,7 +107,10 @@ function PaymentPage() {
 
                  {/* Manage Button Column */}
                  <div className="flex justify-center sm:justify-end">
-                   <button className="bg-[#028EFC] text-white px-4 py-1 rounded-lg transition-colors">
+                   <button 
+                     onClick={() => router.push('/admin/Payment/cash-on-delivery')}
+                     className="bg-[#028EFC] text-white px-4 py-1 rounded-lg transition-colors "
+                   >
                      Manage
                    </button>
                  </div>
