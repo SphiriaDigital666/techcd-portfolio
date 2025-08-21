@@ -6,7 +6,12 @@ import Savebutton from "../Savebutton";
 import AccountForm from "./components/AccountForm";
 import MobileAccountList from "./components/MobileAccountList";
 import DesktopAccountTable from "./components/DesktopAccountTable";
-import { BankAccount } from "./types";
+
+type BankAccount = {
+  accountName: string;
+  accountNumber: string;
+  bankName: string;
+};
 
 export default function DirectBankTransferPage() {
   const router = useRouter();

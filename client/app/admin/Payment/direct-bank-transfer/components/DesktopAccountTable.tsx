@@ -2,7 +2,12 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { BankAccount } from "../types";
+
+type BankAccount = {
+  accountName: string;
+  accountNumber: string;
+  bankName: string;
+};
 
 interface DesktopAccountTableProps {
   accounts: BankAccount[];
