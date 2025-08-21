@@ -12,7 +12,7 @@ const Navbar = () => {
     <div className=" ">
       <div className="md:flex sm:px-0 px-5 container mx-auto md:justify-between xl:mb-6 grid sm:mt-0 md:gap-0 gap-3  xl:space-y-0">
         <div>
-          <h1 className="2xl:text-3xl xl:text-[26px] text-xl font-bold">
+          <h1 className="2xl:text-3xl xl:text-[26px] text-xl text-[#E5E5E5]">
             Welcome Back Techcd 👋🏼
           </h1>
         </div>
