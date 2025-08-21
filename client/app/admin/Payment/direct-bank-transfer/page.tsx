@@ -1,21 +1,40 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Savebutton from "../Savebutton";
-import { Button } from "@/components/ui/button";
-
-type BankAccount = {
-  accountName: string;
-  accountNumber: string;
-  bankName: string;
-};
+import AccountForm from "./components/AccountForm";
+import MobileAccountList from "./components/MobileAccountList";
+import DesktopAccountTable from "./components/DesktopAccountTable";
+import { BankAccount } from "./types";
 
 export default function DirectBankTransferPage() {
   const router = useRouter();
 
   const [title, setTitle] = useState<string>("Direct bank transfer");
-  const [accounts, setAccounts] = useState<BankAccount[]>([]);
+  const [accounts, setAccounts] = useState<BankAccount[]>([
+    {
+      accountName: "John Doe",
+      accountNumber: "1234567890",
+      bankName: "ABC Bank"
+    },
+    {
+      accountName: "Jane Smith",
+      accountNumber: "0987654321",
+      bankName: "XYZ Bank"
+    },
+    {
+      accountName: "Business Account",
+      accountNumber: "55556666",
+      bankName: "Corporate Bank"
+    }
+  ]);
+
+  // Log the accounts data when component mounts
+  useEffect(() => {
+    console.log("Accounts loaded:", accounts);
+    console.log("Number of accounts:", accounts.length);
+  }, [accounts]);
 
   const addAccount = () => {
     setAccounts((prev) => [
@@ -67,17 +86,8 @@ export default function DirectBankTransferPage() {
             <h2 className="text-xl sm:text-2xl font-semibold text-white">Direct bank transfer</h2>
           </div>
 
-          {/* Title input */}
-          <div className="mb-8">
-            <label className="block text-white text-sm font-medium mb-2">Title</label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-3 border border-[#028EFC] rounded-lg text-sm bg-transparent text-white placeholder:text-[#AEB9E1]"
-              placeholder="Direct bank transfer"
-            />
-          </div>
+          {/* Title Form Component */}
+          <AccountForm title={title} onTitleChange={setTitle} />
 
           {/* Account details */}
           <div className="mb-8">
@@ -86,143 +96,21 @@ export default function DirectBankTransferPage() {
               Configure your bank account details.
             </p>
 
-            {/* Mobile/Tablet Layout - Vertical columns */}
-            <div className="block lg:hidden space-y-4">
-              {accounts.length === 0 && (
-                <div className="px-4 py-6 text-[#AEB9E1] text-sm text-center border border-[#172D6D] rounded-lg">
-                  No accounts added yet.
-                </div>
-              )}
-              {accounts.map((acc, idx) => (
-                <div
-                  key={idx}
-                  className="border border-[#172D6D] rounded-lg p-4 space-y-4"
-                >
-                  <div>
-                    <input
-                      className="w-full px-3 py-2 bg-transparent border border-[#028EFC] rounded-md text-sm text-white placeholder:text-[#AEB9E1]/50"
-                      placeholder="e.g. John Doe"
-                      value={acc.accountName}
-                      onChange={(e) =>
-                        updateAccount(idx, "accountName", e.target.value)
-                      }
-                    />
-                    <label className="block text-[#AEB9E1] text-xs mt-1">Account Name</label>
-                  </div>
-                  <div>
-                    <input
-                      className="w-full px-3 py-2 bg-transparent border border-[#028EFC] rounded-md text-sm text-white placeholder:text-[#AEB9E1]/50"
-                      placeholder="e.g. 0123456789"
-                      value={acc.accountNumber}
-                      onChange={(e) =>
-                        updateAccount(idx, "accountNumber", e.target.value)
-                      }
-                    />
-                    <label className="block text-[#AEB9E1] text-xs mt-1">Account Number</label>
-                  </div>
-                  <div>
-                    <input
-                      className="w-full px-3 py-2 bg-transparent border border-[#028EFC] rounded-md text-sm text-white placeholder:text-[#AEB9E1]/50"
-                      placeholder="e.g. ABC Bank"
-                      value={acc.bankName}
-                      onChange={(e) =>
-                        updateAccount(idx, "bankName", e.target.value)
-                      }
-                    />
-                    <label className="block text-[#AEB9E1] text-xs mt-1">Bank Name</label>
-                  </div>
-                  <div className="flex justify-end pt-2">
-                    <Button
-                      type="button"
-                      onClick={() => removeAccount(idx)}
-                      className="bg-transparent text-[#FF6B6B] hover:bg-[#1b1f3c] border border-[#FF6B6B]/30 text-sm px-3 py-1"
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                </div>
-              ))}
-              
-              {/* Add Account Button for mobile/tablet */}
-              <div className="flex justify-center pt-4">
-                <Button
-                  type="button"
-                  onClick={addAccount}
-                  className="bg-[#028EFC] text-white px-6 py-2 rounded-lg hover:bg-[#5FA3B6] text-sm"
-                >
-                  Add account
-                </Button>
-              </div>
-            </div>
+            {/* Mobile/Tablet Layout Component */}
+            <MobileAccountList
+              accounts={accounts}
+              onUpdateAccount={updateAccount}
+              onRemoveAccount={removeAccount}
+              onAddAccount={addAccount}
+            />
 
-            {/* Desktop Layout - Table based */}
-            <div className="hidden lg:block border border-[#172D6D] rounded-xl overflow-hidden">
-              {/* Table header */}
-              <div className="grid grid-cols-4 gap-3 px-4 py-3 text-[#AEB9E1] text-sm border-b border-[#172D6D]">
-                <div className="text-left">Account Name</div>
-                <div className="text-left">Account Number</div>
-                <div className="text-left">Bank Name</div>
-                <div className="text-left">Actions</div>
-              </div>
-
-              {/* Rows */}
-              <div className="divide-y divide-[#172D6D]">
-                {accounts.length === 0 && (
-                  <div className="px-4 py-6 text-[#AEB9E1] text-sm text-center">
-                    No accounts added yet.
-                    <div className="mt-4 flex justify-end">
-                      <Button
-                        type="button"
-                        onClick={addAccount}
-                        className="bg-[#028EFC] text-white px-4 py-2 rounded-lg hover:bg-[#5FA3B6] text-sm"
-                      >
-                        Add account
-                      </Button>
-                    </div>
-                  </div>
-                )}
-                {accounts.map((acc, idx) => (
-                  <div
-                    key={idx}
-                    className="grid grid-cols-4 gap-3 px-4 py-4 items-center"
-                  >
-                    <input
-                      className="px-3 py-2 bg-transparent border border-[#028EFC] rounded-md text-sm text-white placeholder:text-[#AEB9E1]/50"
-                      placeholder="e.g. John Doe"
-                      value={acc.accountName}
-                      onChange={(e) =>
-                        updateAccount(idx, "accountName", e.target.value)
-                      }
-                    />
-                    <input
-                      className="px-3 py-2 bg-transparent border border-[#028EFC] rounded-md text-sm text-white placeholder:text-[#AEB9E1]/50"
-                      placeholder="e.g. 0123456789"
-                      value={acc.accountNumber}
-                      onChange={(e) =>
-                        updateAccount(idx, "accountNumber", e.target.value)
-                      }
-                    />
-                    <input
-                      className="px-3 py-2 bg-transparent border border-[#028EFC] rounded-md text-sm text-white placeholder:text-[#AEB9E1]/50"
-                      placeholder="e.g. ABC Bank"
-                      value={acc.bankName}
-                      onChange={(e) =>
-                        updateAccount(idx, "bankName", e.target.value)
-                      }
-                    />
-                    <div className="flex justify-end">
-                      <Button
-                        type="button"
-                        onClick={() => removeAccount(idx)}
-                        className="bg-transparent text-[#FF6B6B] hover:bg-[#1b1f3c] border border-[#FF6B6B]/30 text-sm px-3 py-1"
-                      >
-                        Remove
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            {/* Desktop Layout Component */}
+            <DesktopAccountTable
+              accounts={accounts}
+              onUpdateAccount={updateAccount}
+              onRemoveAccount={removeAccount}
+              onAddAccount={addAccount}
+            />
           </div>
 
           {/* Save */}
