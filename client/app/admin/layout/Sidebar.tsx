@@ -14,6 +14,7 @@ import {
   FaTicketAlt,
   FaUserCircle,
   FaBoxes,
+  FaCreditCard,
 } from "react-icons/fa";
 import { MdCategory } from "react-icons/md";
 import { BiCustomize } from "react-icons/bi";
@@ -234,6 +235,13 @@ const Sidebar: React.FC = () => {
               >
                 <FaTicketAlt className="h-[20px] w-[20px]" />
                 <Link href="/admin/Coupons" className="text-[16px] text-[#E5E5E5] font-semibold">Coupons</Link>
+              </li>
+              <li
+                className={`flex items-center space-x-4 px-6 py-2 rounded-md ${isActive("/admin/Payment") ? "bg-gradient-to-r from-[#43A8F7] to-[#028EFC] text-white" : ""
+                  }`}
+              >
+                <FaCreditCard className="h-[20px] w-[20px]" />
+                <Link href="/admin/Payment" className="text-[16px] text-[#E5E5E5] font-semibold">Payment Settings</Link>
               </li>
               <li
                 className={`flex items-center space-x-4 px-6 py-2 rounded-md ${isActive("/admin/Profile") ? "bg-gradient-to-r from-[#43A8F7] to-[#028EFC] text-white" : ""
