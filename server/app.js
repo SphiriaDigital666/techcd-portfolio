@@ -10,9 +10,11 @@ app.use(cors({ origin: process.env.CLIENT_ORIGIN }));
 
 const userRoleRoutes = require("./routes/user-role");
 const userRoutes = require("./routes/user");
+const customerRoutes = require("./routes/customer");
 
 app.use("/user-roles", userRoleRoutes);
 app.use("/user", userRoutes);
+app.use("/customer", customerRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not Found!" });
