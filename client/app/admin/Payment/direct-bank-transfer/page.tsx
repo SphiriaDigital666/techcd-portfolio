@@ -11,6 +11,8 @@ type BankAccount = {
   accountName: string;
   accountNumber: string;
   bankName: string;
+  country?: string;
+  branch?: string;
 };
 
 export default function DirectBankTransferPage() {
@@ -22,16 +24,6 @@ export default function DirectBankTransferPage() {
       accountName: "John Doe",
       accountNumber: "1234567890",
       bankName: "ABC Bank"
-    },
-    {
-      accountName: "Jane Smith",
-      accountNumber: "0987654321",
-      bankName: "XYZ Bank"
-    },
-    {
-      accountName: "Business Account",
-      accountNumber: "55556666",
-      bankName: "Corporate Bank"
     }
   ]);
 
@@ -41,11 +33,15 @@ export default function DirectBankTransferPage() {
     console.log("Number of accounts:", accounts.length);
   }, [accounts]);
 
-  const addAccount = () => {
-    setAccounts((prev) => [
-      ...prev,
-      { accountName: "", accountNumber: "", bankName: "" },
-    ]);
+  const addAccount = (account?: BankAccount) => {
+    if (account) {
+      setAccounts((prev) => [...prev, account]);
+    } else {
+      setAccounts((prev) => [
+        ...prev,
+        { accountName: "", accountNumber: "", bankName: "" },
+      ]);
+    }
   };
 
   const updateAccount = (

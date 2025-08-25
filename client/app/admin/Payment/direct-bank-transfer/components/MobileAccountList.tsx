@@ -1,19 +1,22 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+import AddBankAccountModal from "./AddBankAccountModal";
 
 type BankAccount = {
   accountName: string;
   accountNumber: string;
   bankName: string;
+  country?: string;
+  branch?: string;
 };
 
 interface MobileAccountListProps {
   accounts: BankAccount[];
   onUpdateAccount: (index: number, field: keyof BankAccount, value: string) => void;
   onRemoveAccount: (index: number) => void;
-  onAddAccount: () => void;
+  onAddAccount: (account: BankAccount) => void;
 }
 
 export default function MobileAccountList({
@@ -22,8 +25,24 @@ export default function MobileAccountList({
   onRemoveAccount,
   onAddAccount,
 }: MobileAccountListProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleAddAccount = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSaveAccount = (account: BankAccount) => {
+    onAddAccount(account);
+    setIsModalOpen(false);
+  };
+
   return (
-    <div className="block lg:hidden space-y-4">
+    <>
+      <div className="block lg:hidden space-y-4">
       {accounts.length === 0 && (
         <div className="px-4 py-6 text-[#AEB9E1] text-sm text-center border border-[#172D6D] rounded-lg">
           No accounts added yet.
@@ -109,12 +128,20 @@ export default function MobileAccountList({
       <div className="flex justify-center pt-4">
         <Button
           type="button"
-          onClick={onAddAccount}
+          onClick={handleAddAccount}
           className="bg-[#028EFC] text-white px-6 py-2 rounded-lg hover:bg-[#5FA3B6] text-sm"
         >
           Add account
         </Button>
       </div>
     </div>
+
+    {/* Modal */}
+    <AddBankAccountModal
+      isOpen={isModalOpen}
+      onClose={handleCloseModal}
+      onSave={handleSaveAccount}
+    />
+  </>
   );
 }
