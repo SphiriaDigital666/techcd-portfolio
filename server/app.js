@@ -9,7 +9,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: process.env.CLIENT_ORIGIN }));
 
 const userRoleRoutes = require("./routes/user-role");
+const userRoutes = require("./routes/user");
+
 app.use("/user-roles", userRoleRoutes);
+app.use("/user", userRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not Found!" });

@@ -1,42 +1,42 @@
 const express = require("express");
 const router = express.Router();
-const userRoleController = require("../controllers/user-role");
+const userRoleController = require("../controllers/user");
 const {
-  validateCreateUserRole,
-  validateUpdateUserRole,
+  validateCreateUser,
+  validateUpdateUser,
   validateIdParam,
-} = require("../validators/user-role-validator");
+} = require("../validators/user-validator");
 const { runValidation } = require("../middleware/validate");
 
 router.post(
   "/",
-  validateCreateUserRole,
+  validateCreateUser,
   runValidation,
-  userRoleController.createUserRole
+  userRoleController.createUser
 );
 
-router.get("/", userRoleController.getUserRoles);
+router.get("/", userRoleController.getUsers);
 
 router.get(
   "/:id",
   validateIdParam,
   runValidation,
-  userRoleController.getUserRoleById
+  userRoleController.getUserById
 );
 
 router.patch(
   "/:id",
   validateIdParam,
-  validateUpdateUserRole,
+  validateUpdateUser,
   runValidation,
-  userRoleController.updateUserRole
+  userRoleController.updateUser
 );
 
 router.delete(
   "/:id",
   validateIdParam,
   runValidation,
-  userRoleController.deleteUserRole
+  userRoleController.deleteUser
 );
 
 module.exports = router;

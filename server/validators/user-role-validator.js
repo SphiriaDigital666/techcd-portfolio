@@ -10,7 +10,6 @@ exports.validateCreateUserRole = [
 ];
 
 exports.validateUpdateUserRole = [
-  param("id").isMongoId().withMessage("Invalid role ID"),
   body("name")
     .optional()
     .trim()
