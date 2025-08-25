@@ -76,5 +76,5 @@ exports.validateUpdateUser = [
 ];
 
 exports.validateIdParam = [
-  param("id").isMongoId().withMessage("Invalid role ID"),
+  param("id").isMongoId().withMessage("Invalid user ID"),
 ];
