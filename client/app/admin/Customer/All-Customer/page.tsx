@@ -31,6 +31,7 @@ const AllCustomersTable = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   // Fetch customers from backend
   const fetchCustomers = async () => {
@@ -76,11 +77,19 @@ const AllCustomersTable = () => {
       fetchCustomers();
     };
 
+    const handleCustomerDeleted = () => {
+      fetchCustomers();
+      setSuccessMessage('Customer deleted successfully!');
+      setTimeout(() => setSuccessMessage(null), 3000); // Auto-hide after 3 seconds
+    };
+
     window.addEventListener('customerAdded', handleCustomerAdded);
+    window.addEventListener('customerDeleted', handleCustomerDeleted);
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('customerAdded', handleCustomerAdded);
+      window.removeEventListener('customerDeleted', handleCustomerDeleted);
     };
   }, []);
 
@@ -179,6 +188,13 @@ const AllCustomersTable = () => {
              
             </div>
           </div>
+
+          {/* Success Message */}
+          {successMessage && (
+            <div className="mb-4 p-4 rounded-md bg-green-500/20 border border-green-500 text-green-300">
+              {successMessage}
+            </div>
+          )}
 
           <div className="mt-[10px] sm:mt-0">
             <DataTable columns={columns} data={transformedCustomers} />
