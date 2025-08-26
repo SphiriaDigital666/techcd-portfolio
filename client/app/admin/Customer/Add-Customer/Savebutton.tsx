@@ -31,7 +31,9 @@ const PrimaryButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (!isLoading) {
+      console.log('Savebutton clicked, isLoading:', isLoading);
+      if (!isLoading && onSubmit) {
+        console.log('Calling onSubmit function');
         onSubmit();
       }
     };
@@ -47,6 +49,7 @@ const PrimaryButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         onMouseEnter={calSpanPosition}
         onClick={handleClick}
+        type="button"
         {...props}
       >
         <span className="flex-1 text-center pr-6">

@@ -8,7 +8,7 @@ interface CredentialProps {
     lastName: string;
     email: string;
     username: string;
-    phoneNumber: string;
+    phoneNo: string;
     password: string;
   };
   onInputChange: (field: string, value: string) => void;
@@ -63,9 +63,11 @@ const Credential: React.FC<CredentialProps> = ({ formData, onInputChange }) => {
           <label className="block text-[#FFFFFF] text-[17px] mb-2">Phone number</label>
           <input
             type="tel"
-            value={formData.phoneNumber}
-            onChange={(e) => onInputChange('phoneNumber', e.target.value)}
+            value={formData.phoneNo}
+            onChange={(e) => onInputChange('phoneNo', e.target.value)}
             className="w-full px-4 xl:py-1 py-2 border border-[#172D6D] rounded-md text-white focus:border-[#028EFC] focus:outline-none"
+            placeholder="e.g., +1234567890 (no spaces)"
+            required
           />
         </div>
         <div>

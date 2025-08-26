@@ -1,126 +1,150 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DataTable } from "./DataTable";
 import { columns } from "./columns";
 import { FaSearch } from "react-icons/fa";
 
+// Define Customer type to match backend
+type Customer = {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNo: string;
+  username: string;
+  shippingInfo: {
+    firstName: string;
+    lastName: string;
+    phoneNo: string;
+    email: string;
+    address: string;
+    city: string;
+    zipCode: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+};
 
 const AllCustomersTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock customer data
-  const customers = [
-    {
-      id: "1",
-      customerImage: "/images/sample-img.jpg",
-      customerName: "John Smith",
-      phone: "+1 (555) 123-4567",
-      email: "john.smith@email.com",
+  // Fetch customers from backend
+  const fetchCustomers = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('http://localhost:8080/customer');
       
-    },
-    {
-      id: "2",
-      customerImage: "/images/sample-img.jpg",
-      customerName: "Sarah Johnson",
-      phone: "+1 (555) 234-5678",
-      email: "sarah.johnson@email.com",
-      
-    },
-    {
-      id: "3",
-      customerImage: "/images/sample-img.jpg",
-      customerName: "Michael Brown",
-      phone: "+1 (555) 345-6789",
-      email: "michael.brown@email.com",
-     
-    },
-    {
-      id: "4",
-      customerImage: "/images/sample-img.jpg",
-      customerName: "Emily Davis",
-      phone: "+1 (555) 456-7890",
-      email: "emily.davis@email.com",
-      
-    },
-    {
-      id: "5",
-      customerImage: "/images/sample-img.jpg",
-      customerName: "David Wilson",
-      phone: "+1 (555) 567-8901",
-      email: "david.wilson@email.com",
-     
-    },
-    {
-      id: "6",
-      customerImage: "/images/sample-img.jpg",
-      customerName: "Lisa Anderson",
-      phone: "+1 (555) 678-9012",
-      email: "lisa.anderson@email.com",
-     
-    },
-    {
-      id: "7",
-      customerImage: "/images/sample-img.jpg",
-      customerName: "Robert Taylor",
-      phone: "+1 (555) 789-0123",
-      email: "robert.taylor@email.com",
-  
-    },
-    {
-      id: "8",
-      customerImage: "/images/sample-img.jpg",
-      customerName: "Jennifer Martinez",
-      phone: "+1 (555) 890-1234",
-      email: "jennifer.martinez@email.com",
-   
-    },
-    {
-      id: "9",
-      customerImage: "/images/sample-img.jpg",
-      customerName: "Christopher Garcia",
-      phone: "+1 (555) 901-2345",
-      email: "christopher.garcia@email.com",
-      
-    },
-    {
-      id: "10",
-      customerImage: "/images/sample-img.jpg",
-      customerName: "Amanda Rodriguez",
-      phone: "+1 (555) 012-3456",
-      email: "amanda.rodriguez@email.com",
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success && result.data) {
+          setCustomers(result.data);
+        } else {
+          setError('Failed to fetch customers');
+        }
+      } else {
+        setError('Failed to fetch customers');
+      }
+    } catch (error) {
+      console.error('Error fetching customers:', error);
+      setError('Network error while fetching customers');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch customers on component mount
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
+
+  // Listen for storage events to refresh when new customer is added
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'customerAdded') {
+        fetchCustomers();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
     
-    },
-  ];
+    // Also listen for custom events
+    const handleCustomerAdded = () => {
+      fetchCustomers();
+    };
+
+    window.addEventListener('customerAdded', handleCustomerAdded);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('customerAdded', handleCustomerAdded);
+    };
+  }, []);
 
   // Enhanced filtering logic
   const filteredCustomers = customers.filter((customer) => {
+    const fullName = `${customer.firstName} ${customer.lastName}`;
+    
     // Customer name search
     const nameMatches =
       searchTerm === "" ||
-      (customer.customerName &&
-        customer.customerName
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()));
+      fullName.toLowerCase().includes(searchTerm.toLowerCase());
 
     // Email search
     const emailMatches =
       searchTerm === "" ||
       (customer.email &&
-        customer.email
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()));
+        customer.email.toLowerCase().includes(searchTerm.toLowerCase()));
 
     // Phone search
     const phoneMatches =
       searchTerm === "" ||
-      (customer.phone &&
-        customer.phone
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()));
+      (customer.phoneNo &&
+        customer.phoneNo.toLowerCase().includes(searchTerm.toLowerCase()));
 
     return nameMatches || emailMatches || phoneMatches;
   });
+
+  // Transform data for DataTable
+  const transformedCustomers = filteredCustomers.map(customer => ({
+    id: customer._id,
+    customerImage: "/images/sample-img.jpg", // Default image
+    customerName: `${customer.firstName} ${customer.lastName}`,
+    phone: customer.phoneNo,
+    email: customer.email,
+    firstName: customer.firstName,
+    lastName: customer.lastName,
+    username: customer.username,
+    shippingInfo: customer.shippingInfo,
+    createdAt: customer.createdAt,
+    updatedAt: customer.updatedAt
+  }));
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-white text-lg">Loading customers...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-red-500 text-lg">{error}</div>
+        <button 
+          onClick={fetchCustomers}
+          className="ml-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="container mx-auto">
@@ -133,7 +157,7 @@ const AllCustomersTable = () => {
                    Customers
                  </h1>
                  <span className="text-[17px] text-[#E5E5E5] font-semibold sm:text-[18px] md:text-[19px] lg:text-[20px] xl:text-[20px] mt-2">
-                   All customers
+                   All customers ({customers.length})
                  </span>
               </div>
             </div>
@@ -151,59 +175,13 @@ const AllCustomersTable = () => {
                                  <FaSearch className="absolute top-1/2 left-3 xl:-translate-y-1 -translate-y-1/2 transform text-[#AEB9E1] text-[14px]" />
               </div>
 
-              {/* Status Filter */}
-              {/* <div className="relative mt-[7px] mr-[50px] rounded-2xl bg-[#F9FBFF]">
-                <label className="text-[12px]">Status:</label>
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="items-center bg-[#F9FBFF] px-3 py-1 text-[12px]"
-                >
-                  <option value="all">All</option>
-                  <option
-                    value="Pending"
-                    className="font-poppins text-[#0F5FC2]"
-                  >
-                    Pending
-                  </option>
-                  <option
-                    value="Accepted"
-                    className="font-poppins text-[#00AC4F]"
-                  >
-                    Accepted
-                  </option>
-                  <option
-                    value="Declined"
-                    className="font-poppins text-[#D0004B]"
-                  >
-                    Declined
-                  </option>
-                </select>
-              </div> */}
-
-              {/* Class Filter */}
-              {/* <div className="relative mt-[7px] mr-[50px] rounded-2xl bg-[#F9FBFF]">
-                <label className="text-[12px]">Class:</label>
-                <select
-                  value={classFilter}
-                  onChange={(e) => setClassFilter(e.target.value)}
-                  className="font-poppins items-center bg-[#F9FBFF] px-2 py-1 text-[12px]"
-                >
-                  <option value="all" className="font-poppins">
-                    All Classes
-                  </option>
-                  <option value="18_24_MONTHS">Month(18-24)</option>
-                  <option value="TODDLER">Toddler(2-3)</option>
-                  <option value="PRE_K1">Pre K1(3-4)</option>
-                  <option value="SECOND_YEAR">2nd Year(4-5)</option>
-                  <option value="THIRD_YEAR">Kindergarten(5-6)</option>
-                </select>
-              </div> */}
+              {/* Refresh Button */}
+             
             </div>
           </div>
 
           <div className="mt-[10px] sm:mt-0">
-            <DataTable columns={columns} data={filteredCustomers} />
+            <DataTable columns={columns} data={transformedCustomers} />
           </div>
         </div>
       </div>
