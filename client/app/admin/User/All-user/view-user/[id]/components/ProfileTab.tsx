@@ -1,8 +1,13 @@
 "use client";
 
 import React from 'react';
+import { User } from '../../../../../../../lib/api/userApi';
 
-const ProfileTab = () => {
+interface ProfileTabProps {
+  user: User;
+}
+
+const ProfileTab: React.FC<ProfileTabProps> = ({ user }) => {
   return (
     <div className="space-y-6">
       {/* Profile Avatar Section */}
@@ -10,12 +15,14 @@ const ProfileTab = () => {
         <div className="relative">
           <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 p-1">
             <div className="w-full h-full rounded-full bg-gray-300 flex items-center justify-center">
-              <span className="text-2xl font-bold text-gray-600">JB</span>
+              <span className="text-2xl font-bold text-gray-600">
+                {user.firstName.charAt(0)}{user.lastName.charAt(0)}
+              </span>
             </div>
           </div>
 
         </div>
-        <h2 className="text-xl font-bold text-white">James Bond</h2>
+        <h2 className="text-xl font-bold text-white">{user.firstName} {user.lastName}</h2>
       </div>
 
       {/* Form Fields */}
@@ -27,8 +34,9 @@ const ProfileTab = () => {
           </label>
           <input
             type="text"
-            className="w-full px-4 py-1  placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
-        
+            value={user.firstName}
+            readOnly
+            className="w-full px-4 py-1  placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors bg-[#1a2a5a]"
           />
         </div>
 
@@ -39,25 +47,21 @@ const ProfileTab = () => {
           </label>
           <input
             type="text"
-            className="w-full px-4 py-1 border placeholder:text-xl  border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
-          
+            value={user.lastName}
+            readOnly
+            className="w-full px-4 py-1 border placeholder:text-xl  border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors bg-[#1a2a5a]"
           />
         </div>
         <div>
           <label className="block text-[17px] font-medium text-[#FFFFFF] mb-2">
             Role
           </label>
-          <select
-            
-            className="w-full px-4 xl:py-1 py-2 border border-[#172D6D] rounded-md text-white focus:border-[#028EFC] focus:outline-none bg-transparent"
-            required
-          >
-            <option value="" className="bg-[#172D6D] text-white">Select Role</option>
-            <option value="admin" className="bg-[#172D6D] text-white">Admin</option>
-            <option value="user" className="bg-[#172D6D] text-white">User</option>
-            <option value="moderator" className="bg-[#172D6D] text-white">Moderator</option>
-            <option value="editor" className="bg-[#172D6D] text-white">Editor</option>
-          </select>
+          <input
+            type="text"
+            value={user.role?.name || 'Unknown'}
+            readOnly
+            className="w-full px-4 py-1 border placeholder:text-xl  border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors bg-[#1a2a5a]"
+          />
         </div>
 
         

@@ -1,8 +1,13 @@
 "use client";
 
 import React from 'react';
+import { User } from '../../../../../../../lib/api/userApi';
 
-const CredentialTab = () => {
+interface CredentialTabProps {
+  user: User;
+}
+
+const CredentialTab: React.FC<CredentialTabProps> = ({ user }) => {
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Email Section */}
@@ -14,7 +19,9 @@ const CredentialTab = () => {
         </div>
         <input
           type="email"
-          className="w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
+          value={user.email}
+          readOnly
+          className="w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors bg-[#1a2a5a]"
         />
       </div>
 
@@ -27,7 +34,9 @@ const CredentialTab = () => {
         </div>
         <input
           type="text"
-          className="w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
+          value={user.username}
+          readOnly
+          className="w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors bg-[#1a2a5a]"
         />
       </div>
 
@@ -40,7 +49,9 @@ const CredentialTab = () => {
         </div>
         <input
           type="password"
-          className="w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
+          value="••••••••"
+          readOnly
+          className="w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors bg-[#1a2a5a]"
         />
       </div>
 
@@ -53,9 +64,9 @@ const CredentialTab = () => {
         </div>
         <input
           type="tel"
-          className="w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
-          placeholder="No phone number added"
-          disabled
+          value={user.phoneNo || 'No phone number added'}
+          readOnly
+          className="w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors bg-[#1a2a5a]"
         />
       </div>
 
