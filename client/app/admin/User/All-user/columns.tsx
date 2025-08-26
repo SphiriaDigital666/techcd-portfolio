@@ -6,6 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import DeleteUserModal from "./DeleteUserModal";
 
 // Define User type
 type User = {
@@ -57,34 +58,69 @@ export const columns: ColumnDef<User>[] = [
     header: "Action",
     cell: ({ row }) => {
       const router = useRouter();
+      const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+      const [isDeleting, setIsDeleting] = useState(false);
 
-     
+      const handleDelete = async () => {
+        try {
+          setIsDeleting(true);
+          const response = await fetch(`http://localhost:8080/user/${row.original.id}`, {
+            method: 'DELETE',
+          });
+
+          if (response.ok) {
+            // Close modal
+            setIsDeleteModalOpen(false);
+            // Trigger refresh of user table
+            window.dispatchEvent(new CustomEvent('userDeleted'));
+            // Show success message (you can add a toast notification here)
+          } else {
+            console.error('Failed to delete user');
+            // Show error message
+          }
+        } catch (error) {
+          console.error('Error deleting user:', error);
+          // Show error message
+        } finally {
+          setIsDeleting(false);
+        }
+      };
 
       return (
-        <div className="ml-[-25px] flex space-x-0">
-          <Button
-            onClick={() => router.push(`/admin/User/All-user/view-user/${row.original.id}`)}
-            className="rounded p-2 bg-transparent hover:bg-transparent focus:bg-transparent"
-            aria-label="View user details"
-          >
-            <RiEyeLine size={20} className="text-white" />
-          </Button>
-          <Button
-            onClick={() => router.push(`/admin/User/All-user/edit-user/${row.original.id}`)}
-            className="rounded p-2 bg-transparent hover:bg-transparent focus:bg-transparent"
-            aria-label="Edit user details"
-          >
-            <FiEdit size={20} className="text-white" />
-          </Button>
-          <Button
-           
-          
-            className="rounded p-2 bg-transparent hover:bg-transparent focus:bg-transparent"
-            aria-label="Delete customer"
-          >
-            <FiTrash2 size={20} className="text-white" />
-          </Button>
-        </div>
+        <>
+          <div className="ml-[-25px] flex space-x-0">
+            <Button
+              onClick={() => router.push(`/admin/User/All-user/view-user/${row.original.id}`)}
+              className="rounded p-2 bg-transparent hover:bg-transparent focus:bg-transparent"
+              aria-label="View user details"
+            >
+              <RiEyeLine size={20} className="text-white" />
+            </Button>
+            <Button
+              onClick={() => router.push(`/admin/User/All-user/edit-user/${row.original.id}`)}
+              className="rounded p-2 bg-transparent hover:bg-transparent focus:bg-transparent"
+              aria-label="Edit user details"
+            >
+              <FiEdit size={20} className="text-white" />
+            </Button>
+            <Button
+              onClick={() => setIsDeleteModalOpen(true)}
+              className="rounded p-2 bg-transparent hover:bg-transparent focus:bg-transparent"
+              aria-label="Delete user"
+            >
+              <FiTrash2 size={20} className="text-white" />
+            </Button>
+          </div>
+
+          {/* Delete Confirmation Modal */}
+          <DeleteUserModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={handleDelete}
+            userName={row.original.userName}
+            isLoading={isDeleting}
+          />
+        </>
       );
     },
   },
