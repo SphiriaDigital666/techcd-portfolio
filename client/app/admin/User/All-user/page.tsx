@@ -93,12 +93,12 @@ const AllUsersTable = () => {
           <div className="grid flex-wrap gap-4 sm:mb-6 sm:items-center sm:justify-between sm:gap-2 md:flex">
             <div>
               <div className="flex items-center gap-4">
-                                 <h1 className="text-[28px] font-bold sm:text-[24px] md:text-[26px] lg:text-[28px] xl:text-[30px] text-[#E5E5E5]">
-                   Users
-                 </h1>
-                 <span className="text-[17px] text-[#E5E5E5] font-semibold sm:text-[18px] md:text-[19px] lg:text-[20px] xl:text-[20px] mt-2">
-                   All User
-                 </span>
+                <h1 className="text-[28px] font-bold sm:text-[24px] md:text-[26px] lg:text-[28px] xl:text-[30px] text-[#E5E5E5]">
+                  Users
+                </h1>
+                <span className="text-[17px] text-[#E5E5E5] font-semibold sm:text-[18px] md:text-[19px] lg:text-[20px] xl:text-[20px] mt-2">
+                  All User
+                </span>
               </div>
             </div>
 
@@ -116,14 +116,14 @@ const AllUsersTable = () => {
               </div>
 
               {/* Refresh Button */}
-              <button
+              {/* <button
                 onClick={fetchUsers}
                 disabled={loading}
                 className="px-4 py-3 rounded-3xl bg-[#0B1739] border-[#FFFFFF33]/20 text-[#E5E5E5] hover:bg-[#1a2a5a] transition-colors disabled:opacity-50"
                 title="Refresh users"
               >
                 <FiRefreshCw className={`text-[14px] ${loading ? 'animate-spin' : ''}`} />
-              </button>
+              </button> */}
 
               {/* Status Filter */}
               {/* <div className="relative mt-[7px] mr-[50px] rounded-2xl bg-[#F9FBFF]">
