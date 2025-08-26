@@ -2,7 +2,31 @@
 
 import React from 'react';
 
-const ProfileTab = () => {
+interface ProfileTabProps {
+  customer: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNo: string;
+    shippingInfo: {
+      city: string;
+    };
+  };
+  editData: any;
+  setEditData: (data: any) => void;
+  isEditing: boolean;
+}
+
+const ProfileTab: React.FC<ProfileTabProps> = ({ customer, editData, setEditData, isEditing }) => {
+  const handleInputChange = (field: string, value: string) => {
+    if (isEditing) {
+      setEditData((prev: any) => ({
+        ...prev,
+        [field]: value
+      }));
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Profile Avatar Section */}
@@ -10,12 +34,13 @@ const ProfileTab = () => {
         <div className="relative">
           <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 p-1">
             <div className="w-full h-full rounded-full bg-gray-300 flex items-center justify-center">
-              <span className="text-2xl font-bold text-gray-600">JB</span>
+              <span className="text-2xl font-bold text-gray-600">
+                {customer.firstName.charAt(0)}{customer.lastName.charAt(0)}
+              </span>
             </div>
           </div>
-
         </div>
-        <h2 className="text-xl font-bold text-white">James Bond</h2>
+        <h2 className="text-xl font-bold text-white">{customer.firstName} {customer.lastName}</h2>
       </div>
 
       {/* Form Fields */}
@@ -27,8 +52,12 @@ const ProfileTab = () => {
           </label>
           <input
             type="text"
-            className="w-full px-4 py-1  placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
-            readOnly
+            value={editData.firstName || customer.firstName}
+            onChange={(e) => handleInputChange('firstName', e.target.value)}
+            className={`w-full px-4 py-1 placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors ${
+              isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
+            }`}
+            readOnly={!isEditing}
           />
         </div>
 
@@ -39,8 +68,12 @@ const ProfileTab = () => {
           </label>
           <input
             type="text"
-            className="w-full px-4 py-1 border placeholder:text-xl  border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
-            readOnly
+            value={editData.lastName || customer.lastName}
+            onChange={(e) => handleInputChange('lastName', e.target.value)}
+            className={`w-full px-4 py-1 border placeholder:text-xl border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors ${
+              isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
+            }`}
+            readOnly={!isEditing}
           />
         </div>
 
@@ -49,8 +82,15 @@ const ProfileTab = () => {
             Location
           </label>
           <div className="relative">
-            <select className="w-full px-4 py-1  border border-[#172D6D] rounded-xl  appearance-none focus:outline-none focus:border-[#3B82F6] transition-colors" disabled>
-            
+            <select 
+              value={editData.shippingInfo?.city || customer.shippingInfo?.city || ''}
+              onChange={(e) => handleInputChange('shippingInfo.city', e.target.value)}
+              className={`w-full px-4 py-1 border border-[#172D6D] rounded-xl appearance-none focus:outline-none focus:border-[#3B82F6] transition-colors ${
+                isEditing ? 'bg-[#1a2a5a] text-white' : 'bg-transparent text-gray-400'
+              }`}
+              disabled={!isEditing}
+            >
+              <option value="">Select City</option>
               <option value="new-york">New York</option>
               <option value="london">London</option>
               <option value="tokyo">Tokyo</option>
@@ -70,13 +110,14 @@ const ProfileTab = () => {
           </label>
           <textarea
             rows={4}
-            className="w-full px-4 py-1 border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors resize-none"
-            readOnly
+            placeholder="No biography added"
+            className={`w-full px-4 py-1 border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors resize-none ${
+              isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
+            }`}
+            readOnly={!isEditing}
           />
         </div>
       </div>
-
-
     </div>
   );
 };

@@ -2,7 +2,27 @@
 
 import React from 'react';
 
-const CredentialTab = () => {
+interface CredentialTabProps {
+  customer: {
+    email: string;
+    username: string;
+    phoneNo: string;
+  };
+  editData: any;
+  setEditData: (data: any) => void;
+  isEditing: boolean;
+}
+
+const CredentialTab: React.FC<CredentialTabProps> = ({ customer, editData, setEditData, isEditing }) => {
+  const handleInputChange = (field: string, value: string) => {
+    if (isEditing) {
+      setEditData((prev: any) => ({
+        ...prev,
+        [field]: value
+      }));
+    }
+  };
+
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Email Section */}
@@ -14,8 +34,12 @@ const CredentialTab = () => {
         </div>
         <input
           type="email"
-          className="w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
-          readOnly
+          value={editData.email || customer.email}
+          onChange={(e) => handleInputChange('email', e.target.value)}
+          className={`w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors ${
+            isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
+          }`}
+          readOnly={!isEditing}
         />
       </div>
 
@@ -28,8 +52,12 @@ const CredentialTab = () => {
         </div>
         <input
           type="text"
-          className="w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
-          readOnly
+          value={editData.username || customer.username}
+          onChange={(e) => handleInputChange('username', e.target.value)}
+          className={`w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors ${
+            isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
+          }`}
+          readOnly={!isEditing}
         />
       </div>
 
@@ -42,8 +70,12 @@ const CredentialTab = () => {
         </div>
         <input
           type="password"
-          className="w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
-          readOnly
+          value="••••••••"
+          className={`w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors ${
+            isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
+          }`}
+          readOnly={!isEditing}
+          disabled={!isEditing}
         />
       </div>
 
@@ -56,9 +88,14 @@ const CredentialTab = () => {
         </div>
         <input
           type="tel"
-          className="w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
+          value={editData.phoneNo || customer.phoneNo || ''}
+          onChange={(e) => handleInputChange('phoneNo', e.target.value)}
           placeholder="No phone number added"
-          disabled
+          className={`w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors ${
+            isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
+          }`}
+          readOnly={!isEditing}
+          disabled={!isEditing}
         />
       </div>
 
@@ -71,9 +108,12 @@ const CredentialTab = () => {
         </div>
         <input
           type="text"
-          className="w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
+          value="None"
+          className={`w-full px-3 sm:px-4 py-2 sm:py-2 text-sm sm:text-base placeholder:text-lg sm:placeholder:text-xl border border-[#172D6D] rounded-xl text-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors ${
+            isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
+          }`}
           placeholder="None"
-          disabled
+          disabled={true}
         />
       </div>
     </div>
