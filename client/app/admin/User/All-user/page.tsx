@@ -1,90 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DataTable } from "./DataTable";
 import { columns } from "./columns";
 import { FaSearch } from "react-icons/fa";
+import { FiRefreshCw } from "react-icons/fi";
+import { getUsers, User } from "../../../../lib/api/userApi";
 
 
 const AllUsersTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock user data
-  const users = [
-    {
-      id: "1",
-      userImage: "/images/sample-img.jpg",
-      userName: "John Smith",
-      email: "john.smith@email.com",
-      role: "Admin"
-    },
-    {
-      id: "2",
-      userImage: "/images/sample-img.jpg",
-      userName: "Sarah Johnson",
-      email: "sarah.johnson@email.com",
-      role: "User"
-    },
-    {
-      id: "3",
-      userImage: "/images/sample-img.jpg",
-      userName: "Michael Brown",
-      email: "michael.brown@email.com",
-      role: "Moderator"
-    },
-    {
-      id: "4",
-      userImage: "/images/sample-img.jpg",
-      userName: "Emily Davis",
-      email: "emily.davis@email.com",
-      role: "User"
-    },
-    {
-      id: "5",
-      userImage: "/images/sample-img.jpg",
-      userName: "David Wilson",
-      email: "david.wilson@email.com",
-      role: "Admin"
-    },
-    {
-      id: "6",
-      userImage: "/images/sample-img.jpg",
-      userName: "Lisa Anderson",
-      email: "lisa.anderson@email.com",
-      role: "User"
-    },
-    {
-      id: "7",
-      userImage: "/images/sample-img.jpg",
-      userName: "Robert Taylor",
-      email: "robert.taylor@email.com",
-      role: "Moderator"
-    },
-    {
-      id: "8",
-      userImage: "/images/sample-img.jpg",
-      userName: "Jennifer Martinez",
-      email: "jennifer.martinez@email.com",
-      role: "User"
-    },
-    {
-      id: "9",
-      userImage: "/images/sample-img.jpg",
-      userName: "Christopher Garcia",
-      email: "christopher.garcia@email.com",
-      role: "Admin"
-    },
-    {
-      id: "10",
-      userImage: "/images/sample-img.jpg",
-      userName: "Amanda Rodriguez",
-      email: "amanda.rodriguez@email.com",
-      role: "User"
-    },
-  ];
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const fetchedUsers = await getUsers();
+      setUsers(fetchedUsers);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch users');
+      console.error('Error fetching users:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  // Transform API data to match table structure
+  const transformedUsers = users.map((user) => ({
+    id: user._id,
+    userImage: "/images/sample-img.jpg", // Default image since API doesn't provide one
+    userName: `${user.firstName} ${user.lastName}`,
+    email: user.email,
+    role: user.role?.name || "Unknown",
+  }));
 
   // Enhanced filtering logic
-  const filteredUsers = users.filter((user) => {
+  const filteredUsers = transformedUsers.filter((user) => {
     // User name search
     const nameMatches =
       searchTerm === "" ||
@@ -138,8 +96,18 @@ const AllUsersTable = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-[220px] rounded-3xl bg-[#0B1739]  px-3 pl-10 py-3 md:w-[250px] lg:w-[280px] xl:w-[285px] 2xl:w-[285px] border-[#FFFFFF33]/20 text-[14px]"
                 />
-                                 <FaSearch className="absolute top-1/2 left-3 xl:-translate-y-1 -translate-y-1/2 transform text-[#AEB9E1] text-[14px]" />
+                <FaSearch className="absolute top-1/2 left-3 xl:-translate-y-1 -translate-y-1/2 transform text-[#AEB9E1] text-[14px]" />
               </div>
+
+              {/* Refresh Button */}
+              <button
+                onClick={fetchUsers}
+                disabled={loading}
+                className="px-4 py-3 rounded-3xl bg-[#0B1739] border-[#FFFFFF33]/20 text-[#E5E5E5] hover:bg-[#1a2a5a] transition-colors disabled:opacity-50"
+                title="Refresh users"
+              >
+                <FiRefreshCw className={`text-[14px] ${loading ? 'animate-spin' : ''}`} />
+              </button>
 
               {/* Status Filter */}
               {/* <div className="relative mt-[7px] mr-[50px] rounded-2xl bg-[#F9FBFF]">
@@ -192,9 +160,24 @@ const AllUsersTable = () => {
             </div>
           </div>
 
-          <div className="mt-[10px] sm:mt-0">
-            <DataTable columns={columns} data={filteredUsers} />
-          </div>
+          {/* Loading and Error States */}
+          {loading && (
+            <div className="mt-4 text-center text-[#E5E5E5]">
+              Loading users...
+            </div>
+          )}
+
+          {error && (
+            <div className="mt-4 p-3 rounded-md bg-red-500/20 border border-red-500 text-red-400">
+              {error}
+            </div>
+          )}
+
+          {!loading && !error && (
+            <div className="mt-[10px] sm:mt-0">
+              <DataTable columns={columns} data={filteredUsers} />
+            </div>
+          )}
         </div>
       </div>
     </div>

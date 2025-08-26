@@ -1,25 +1,76 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import ProfileTab from './components/ProfileTab';
 import CredentialTab from './components/CredentialTab';
+import { getUserById, User } from '../../../../../../lib/api/userApi';
 
 function AddCustomerPage() {
   const [activeTab, setActiveTab] = useState('profile');
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const params = useParams();
+  const userId = params.id as string;
 
   const tabs = [
     { id: 'profile', label: 'Profile' },
     { id: 'credential', label: 'Credential' }
   ];
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        setLoading(true);
+        const userData = await getUserById(userId);
+        setUser(userData);
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch user');
+        console.error('Error fetching user:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (userId) {
+      fetchUser();
+    }
+  }, [userId]);
+
   const renderContent = () => {
+    if (loading) {
+      return (
+        <div className="text-center text-[#E5E5E5] py-8">
+          Loading user data...
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="text-center text-red-400 py-8">
+          {error}
+        </div>
+      );
+    }
+
+    if (!user) {
+      return (
+        <div className="text-center text-[#E5E5E5] py-8">
+          User not found
+        </div>
+      );
+    }
+
     switch (activeTab) {
       case 'profile':
-        return <ProfileTab />;
+        return <ProfileTab user={user} />;
       case 'credential':
-        return <CredentialTab />;
+        return <CredentialTab user={user} />;
       default:
-        return <ProfileTab />;
+        return <ProfileTab user={user} />;
     }
   };
 

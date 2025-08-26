@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import Credential from './Credential'
 import Savebutton from './Savebutton'
+import { createUser, CreateUserData } from '../../../../lib/api/userApi'
 
 function Page() {
   const [formData, setFormData] = useState({
@@ -14,9 +15,10 @@ function Page() {
     phoneNumber: '',
     password: '',
     role: '',
-    // Shipping fields
-   
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -25,9 +27,54 @@ function Page() {
     }));
   };
 
-  const handleSubmit = () => {
-    // Handle form submission here
-    console.log('Form data:', formData);
+  const handleSubmit = async () => {
+    // Validate required fields
+    if (!formData.firstName || !formData.lastName || !formData.email || 
+        !formData.username || !formData.phoneNumber || !formData.password || !formData.role) {
+      setSubmitMessage({ type: 'error', message: 'Please fill in all required fields' });
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitMessage(null);
+
+    try {
+      // Transform form data to match API structure
+      const userData: CreateUserData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        username: formData.username,
+        phoneNo: formData.phoneNumber, // Note: API expects phoneNo, not phoneNumber
+        password: formData.password,
+        role: formData.role,
+      };
+
+      const result = await createUser(userData);
+      
+      if (result.success) {
+        setSubmitMessage({ type: 'success', message: 'User created successfully!' });
+        // Reset form
+        setFormData({
+          firstName: '',
+          lastName: '',
+          email: '',
+          username: '',
+          phoneNumber: '',
+          password: '',
+          role: '',
+        });
+      } else {
+        setSubmitMessage({ type: 'error', message: result.message || 'Failed to create user' });
+      }
+    } catch (error) {
+      setSubmitMessage({ 
+        type: 'error', 
+        message: error instanceof Error ? error.message : 'An error occurred while creating user' 
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -73,15 +120,26 @@ function Page() {
 
          
 
-           {/* Save Button */}
-        <div className="flex justify-end mt-6">
-        <Savebutton 
-          identifier="add-product-btn" 
-          buttonText="Save Changes" 
-          onSubmit={handleSubmit}
-          isLoading={false}
-        />
-        </div>
+           {/* Submit Message */}
+          {submitMessage && (
+            <div className={`mt-4 p-3 rounded-md ${
+              submitMessage.type === 'success' 
+                ? 'bg-green-500/20 border border-green-500 text-green-400' 
+                : 'bg-red-500/20 border border-red-500 text-red-400'
+            }`}>
+              {submitMessage.message}
+            </div>
+          )}
+
+          {/* Save Button */}
+          <div className="flex justify-end mt-6">
+            <Savebutton 
+              identifier="add-user-btn" 
+              buttonText="Save Changes" 
+              onSubmit={handleSubmit}
+              isLoading={isSubmitting}
+            />
+          </div>
         </div>
 
        
