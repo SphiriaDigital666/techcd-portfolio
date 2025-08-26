@@ -13,6 +13,7 @@ const AllUsersTable = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const fetchUsers = async () => {
     try {
@@ -30,6 +31,21 @@ const AllUsersTable = () => {
 
   useEffect(() => {
     fetchUsers();
+  }, []);
+
+  // Listen for user delete events to refresh the table
+  useEffect(() => {
+    const handleUserDeleted = () => {
+      fetchUsers();
+      setSuccessMessage('User deleted successfully!');
+      setTimeout(() => setSuccessMessage(null), 3000); // Auto-hide after 3 seconds
+    };
+
+    window.addEventListener('userDeleted', handleUserDeleted);
+
+    return () => {
+      window.removeEventListener('userDeleted', handleUserDeleted);
+    };
   }, []);
 
   // Transform API data to match table structure
@@ -170,6 +186,13 @@ const AllUsersTable = () => {
           {error && (
             <div className="mt-4 p-3 rounded-md bg-red-500/20 border border-red-500 text-red-400">
               {error}
+            </div>
+          )}
+
+          {/* Success Message */}
+          {successMessage && (
+            <div className="mt-4 p-3 rounded-md bg-green-500/20 border border-green-500 text-green-400">
+              {successMessage}
             </div>
           )}
 
