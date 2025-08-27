@@ -12,21 +12,9 @@ interface ProfileTabProps {
       city: string;
     };
   };
-  editData: any;
-  setEditData: (data: any) => void;
-  isEditing: boolean;
 }
 
-const ProfileTab: React.FC<ProfileTabProps> = ({ customer, editData, setEditData, isEditing }) => {
-  const handleInputChange = (field: string, value: string) => {
-    if (isEditing) {
-      setEditData((prev: any) => ({
-        ...prev,
-        [field]: value
-      }));
-    }
-  };
-
+const ProfileTab: React.FC<ProfileTabProps> = ({ customer }) => {
   return (
     <div className="space-y-6">
       {/* Profile Avatar Section */}
@@ -52,12 +40,9 @@ const ProfileTab: React.FC<ProfileTabProps> = ({ customer, editData, setEditData
           </label>
           <input
             type="text"
-            value={editData.firstName || customer.firstName}
-            onChange={(e) => handleInputChange('firstName', e.target.value)}
-            className={`w-full px-4 py-1 placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors ${
-              isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
-            }`}
-            readOnly={!isEditing}
+            value={customer.firstName}
+            className="w-full px-4 py-1 placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors bg-transparent"
+            readOnly
           />
         </div>
 
@@ -68,12 +53,9 @@ const ProfileTab: React.FC<ProfileTabProps> = ({ customer, editData, setEditData
           </label>
           <input
             type="text"
-            value={editData.lastName || customer.lastName}
-            onChange={(e) => handleInputChange('lastName', e.target.value)}
-            className={`w-full px-4 py-1 border placeholder:text-xl border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors ${
-              isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
-            }`}
-            readOnly={!isEditing}
+            value={customer.lastName}
+            className="w-full px-4 py-1 border placeholder:text-xl border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors bg-transparent"
+            readOnly
           />
         </div>
 
@@ -83,12 +65,9 @@ const ProfileTab: React.FC<ProfileTabProps> = ({ customer, editData, setEditData
           </label>
           <div className="relative">
             <select 
-              value={editData.shippingInfo?.city || customer.shippingInfo?.city || ''}
-              onChange={(e) => handleInputChange('shippingInfo.city', e.target.value)}
-              className={`w-full px-4 py-1 border border-[#172D6D] rounded-xl appearance-none focus:outline-none focus:border-[#3B82F6] transition-colors ${
-                isEditing ? 'bg-[#1a2a5a] text-white' : 'bg-transparent text-gray-400'
-              }`}
-              disabled={!isEditing}
+              value={customer.shippingInfo?.city || ''}
+              className="w-full px-4 py-1 border border-[#172D6D] rounded-xl appearance-none focus:outline-none focus:border-[#3B82F6] transition-colors bg-transparent text-gray-400"
+              disabled
             >
               <option value="">Select City</option>
               <option value="new-york">New York</option>
@@ -111,10 +90,8 @@ const ProfileTab: React.FC<ProfileTabProps> = ({ customer, editData, setEditData
           <textarea
             rows={4}
             placeholder="No biography added"
-            className={`w-full px-4 py-1 border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors resize-none ${
-              isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
-            }`}
-            readOnly={!isEditing}
+            className="w-full px-4 py-1 border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors resize-none bg-transparent"
+            readOnly
           />
         </div>
       </div>

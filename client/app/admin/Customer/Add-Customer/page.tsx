@@ -21,6 +21,7 @@ function Page() {
     shippingLastName: '',
     shippingPhone: '',
     shippingEmail: '',
+    state: '',
     address: '',
     city: '',
     zipCode: ''
@@ -61,7 +62,7 @@ function Page() {
     // Validate required fields
     const requiredFields = [
       'firstName', 'lastName', 'email', 'username', 'phoneNo', 'password',
-      'shippingFirstName', 'shippingLastName', 'shippingPhone', 'shippingEmail', 'address', 'city', 'zipCode'
+      'shippingFirstName', 'shippingLastName', 'shippingPhone', 'shippingEmail', 'state', 'address', 'city', 'zipCode'
     ];
     const missingFields = requiredFields.filter(field => !formData[field as keyof typeof formData]);
     
@@ -123,6 +124,7 @@ function Page() {
           lastName: formData.shippingLastName,
           phoneNo: formData.shippingPhone,
           email: formData.shippingEmail,
+          state: formData.state,
           address: formData.address,
           city: formData.city,
           zipCode: formData.zipCode
@@ -175,6 +177,7 @@ function Page() {
           shippingLastName: '',
           shippingPhone: '',
           shippingEmail: '',
+          state: '',
           address: '',
           city: '',
           zipCode: ''
@@ -284,6 +287,7 @@ function Page() {
               shippingLastName: formData.shippingLastName,
               shippingPhone: formData.shippingPhone,
               shippingEmail: formData.shippingEmail,
+              state: formData.state,
               address: formData.address,
               city: formData.city,
               zipCode: formData.zipCode
