@@ -2,8 +2,8 @@ const ProductCategory = require("../models/product-category");
 
 exports.createProductCategory = async (req, res) => {
   try {
-    const { name } = req.body;
-    const category = new ProductCategory({ name });
+    const { name, description } = req.body;
+    const category = new ProductCategory({ name, description });
     await category.save();
 
     res.status(201).json(category);
@@ -44,11 +44,11 @@ exports.getProductCategoryById = async (req, res) => {
 exports.updateProductCategory = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name } = req.body;
+    const { name, description } = req.body;
 
     const category = await ProductCategory.findByIdAndUpdate(
       id,
-      { name },
+      { name, description },
       { new: true, runValidators: true }
     );
 

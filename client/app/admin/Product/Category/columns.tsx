@@ -5,7 +5,7 @@ import { FiTrash2 } from "react-icons/fi";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 
-// Define Category type
+// Define Category type to match components
 type Category = {
   id: string;
   categoryName: string;
@@ -15,9 +15,10 @@ type Category = {
 interface ColumnsProps {
   onViewCategory: (category: Category) => void;
   onEditCategory: (category: Category) => void;
+  onDeleteCategory: (category: Category) => void;
 }
 
-export const createColumns = ({ onViewCategory, onEditCategory }: ColumnsProps): ColumnDef<Category>[] => [
+export const createColumns = ({ onViewCategory, onEditCategory, onDeleteCategory }: ColumnsProps): ColumnDef<Category>[] => [
   
   {
     accessorKey: "categoryName",
@@ -56,8 +57,7 @@ export const createColumns = ({ onViewCategory, onEditCategory }: ColumnsProps):
       };
 
       const handleDeleteClick = () => {
-        // Delete action - can be implemented later
-        console.log("Delete category:", row.original);
+        onDeleteCategory(row.original);
       };
 
       return (

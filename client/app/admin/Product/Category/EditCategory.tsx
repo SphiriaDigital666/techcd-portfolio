@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import EditButton from "./EditButton";
+import { categoryApi } from "./api/categoryApi";
+
 interface Category {
   id: string;
   categoryName: string;
@@ -34,20 +36,23 @@ const EditCategory: React.FC<EditCategoryProps> = ({ onClose, category, onCatego
     setError(null);
     
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Create updated category object
-      const updatedCategory: Category = {
-        id: category.id,
-        categoryName,
+      // Call the real API
+      const updatedApiCategory = await categoryApi.updateCategory(category.id, {
+        name: categoryName,
         description,
+      });
+      
+      // Convert API response to component format
+      const updatedCategory: Category = {
+        id: updatedApiCategory._id,
+        categoryName: updatedApiCategory.name,
+        description: updatedApiCategory.description,
       };
       
       onCategoryUpdated(updatedCategory);
       onClose();
     } catch (err: any) {
-      setError("Failed to update category");
+      setError(err.message || "Failed to update category");
     } finally {
       setLoading(false);
     }
@@ -101,7 +106,7 @@ const EditCategory: React.FC<EditCategoryProps> = ({ onClose, category, onCatego
         <EditButton
             identifier="edit-student"
             buttonText={loading ? "Updating..." : "Update"}
-           
+            onClick={handleSubmit}
             disabled={loading}
           />
         </div>

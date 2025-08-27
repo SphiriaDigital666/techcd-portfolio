@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import { X } from "lucide-react";
 import Updatebutton from "./Updatebutton";
-
-interface Category {
-  id: string;
-  category: string;
-  description: string;
-}
+import { categoryApi, Category } from "./api/categoryApi";
 
 interface AddCategoryProps {
   onClose: () => void;
@@ -28,22 +23,18 @@ const AddCategory: React.FC<AddCategoryProps> = ({ onClose, onCategoryAdded }) =
     setError(null);
     
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Create mock category object
-      const newCategory: Category = {
-        id: Date.now().toString(), // Generate mock ID
-        category: categoryName,
+      // Call the real API
+      const newCategory = await categoryApi.createCategory({
+        name: categoryName,
         description,
-      };
+      });
       
       setCategoryName("");
       setDescription("");
       onCategoryAdded(newCategory);
       onClose();
     } catch (err: any) {
-      setError("Failed to add category");
+      setError(err.message || "Failed to add category");
     } finally {
       setLoading(false);
     }
