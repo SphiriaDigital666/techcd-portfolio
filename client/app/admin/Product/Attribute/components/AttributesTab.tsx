@@ -48,7 +48,7 @@ const AttributesTab = () => {
     <div className="space-y-6">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-[#E5E5E5]">Variations</h2>
+          <h2 className="text-2xl font-bold text-[#E5E5E5]">Attributes</h2>
           <button
             onClick={handleAddClick}
             className="bg-[#028EFC] text-white px-3 py-1   transition-colors"
