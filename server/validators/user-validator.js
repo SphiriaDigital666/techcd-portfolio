@@ -55,7 +55,7 @@ exports.validateCreateUser = [
 exports.validateUpdateUser = [
   query("field")
     .notEmpty()
-    .withMessage("Field is required")
+    .withMessage("Field parameter is required")
     .isIn(["profile", "email", "username", "password", "phoneNo"])
     .withMessage(
       "Field must be either profile, email, username, password or phoneNo"
