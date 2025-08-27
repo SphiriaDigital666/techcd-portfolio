@@ -1,7 +1,64 @@
-import React from 'react'
+"use client";
+
+import React, { useState, useEffect } from 'react'
 import AddButton from './AddButton'
+import { categoryApi, Category as ApiCategory } from '../../Category/api/categoryApi'
+
+// Define Category type for this component
+type Category = {
+  id: string;
+  categoryName: string;
+  description: string;
+};
 
 const PublishingMetadata = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Convert API Category to Component Category format
+  const convertApiToComponent = (apiCategory: ApiCategory): Category => ({
+    id: apiCategory._id,
+    categoryName: apiCategory.name,
+    description: apiCategory.description,
+  });
+
+  // Fetch categories from API
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      const apiData = await categoryApi.getCategories();
+      const convertedData = apiData.map(convertApiToComponent);
+      setCategories(convertedData);
+      setError(null);
+    } catch (err: any) {
+      setError(err.message || 'Failed to fetch categories');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle category selection
+  const handleCategoryToggle = (categoryId: string) => {
+    setSelectedCategories(prev => 
+      prev.includes(categoryId)
+        ? prev.filter(id => id !== categoryId)
+        : [...prev, categoryId]
+    );
+  };
+
+  // Handle category input change
+  const handleCategoryInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // You can implement search/filter logic here if needed
+    console.log('Category input:', value);
+  };
+
   return (
     <div className="space-y-4">
       {/* Publish Section */}
@@ -26,26 +83,37 @@ const PublishingMetadata = () => {
           <input
             type="text"
             placeholder="Enter Category...."
+            onChange={handleCategoryInputChange}
             className="w-full px-3 text-sm py-3   border border-[#172D6D] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 placeholder:text-sm"
           />
           <div>
             <h4 className="text-lg font-medium text-white mb-3">All categories</h4>
             <div className="border border-[#172D6D]  p-4 rounded-lg">
               <div className="max-h-32 overflow-y-auto">
-                <div className="space-y-2">
-                  {Array.from({ length: 4 }, (_, i) => (
-                    <div key={i} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id={`category-${i}`}
-                        className="w-4 h-4 text-white bg-transparent border border-white rounded focus:ring-white focus:ring-1 appearance-none checked:bg-white checked:after:content-['✓'] checked:after:text-black checked:after:absolute checked:after:text-xs checked:after:font-bold checked:after:leading-none checked:after:top-0.5 checked:after:left-0.5 relative"
-                      />
-                      <label htmlFor={`category-${i}`} className="ml-2 text-sm text-white">
-                        Hip hop
-                      </label>
-                    </div>
-                  ))}
-                </div>
+                {loading ? (
+                  <div className="text-center text-gray-400 text-sm">Loading categories...</div>
+                ) : error ? (
+                  <div className="text-center text-red-400 text-sm">Error: {error}</div>
+                ) : categories.length === 0 ? (
+                  <div className="text-center text-gray-400 text-sm">No categories found</div>
+                ) : (
+                  <div className="space-y-2">
+                    {categories.map((category) => (
+                      <div key={category.id} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id={`category-${category.id}`}
+                          checked={selectedCategories.includes(category.id)}
+                          onChange={() => handleCategoryToggle(category.id)}
+                          className="w-4 h-4 text-white bg-transparent border border-white rounded focus:ring-white focus:ring-1 appearance-none checked:bg-white checked:after:content-['✓'] checked:after:text-black checked:after:absolute checked:after:text-xs checked:after:font-bold checked:after:leading-none checked:after:top-0.5 checked:after:left-0.5 relative"
+                        />
+                        <label htmlFor={`category-${category.id}`} className="ml-2 text-sm text-white">
+                          {category.categoryName}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
