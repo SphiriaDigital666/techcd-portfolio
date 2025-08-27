@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DataTable } from "./DataTable";
 import { createColumns } from "./columns";
 import { FaSearch } from "react-icons/fa";
@@ -8,8 +8,10 @@ import AddButton from './AddButton';
 import AddCategory from './AddCategory';
 import ViewCategory from './VeiwCategory';
 import EditCategory from './EditCategory';
+import DeleteCategoryModal from './DeleteCategoryModal';
+import { categoryApi, Category as ApiCategory } from './api/categoryApi';
 
-// Define Category type to match columns
+// Define Category type to match components
 type Category = {
     id: string;
     categoryName: string;
@@ -21,51 +23,44 @@ const AllProductsTable = () => {
     const [showAddCategory, setShowAddCategory] = useState(false);
     const [showViewCategory, setShowViewCategory] = useState(false);
     const [showEditCategory, setShowEditCategory] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [deleting, setDeleting] = useState(false);
 
-    // Mock category data
-    const [categories, setCategories] = useState<Category[]>([
-        {
-            id: "1",
-            categoryName: "Electronics",
-            description: "All electronic devices including smartphones, laptops, tablets, and accessories",
-        },
-        {
-            id: "2",
-            categoryName: "Clothing",
-            description: "Fashion items including shirts, pants, dresses, and footwear for all ages",
-        },
-        {
-            id: "3",
-            categoryName: "Home & Garden",
-            description: "Furniture, decor, kitchen appliances, and outdoor living essentials",
-        },
-        {
-            id: "4",
-            categoryName: "Sports & Fitness",
-            description: "Sports equipment, workout gear, and fitness accessories for active lifestyle",
-        },
-        {
-            id: "5",
-            categoryName: "Books & Media",
-            description: "Books, magazines, movies, music, and educational materials",
-        },
-        {
-            id: "6",
-            categoryName: "Beauty & Health",
-            description: "Cosmetics, skincare, personal care, and health supplements",
-        },
-        {
-            id: "7",
-            categoryName: "Automotive",
-            description: "Car parts, accessories, maintenance tools, and vehicle care products",
-        },
-        {
-            id: "8",
-            categoryName: "Toys & Games",
-            description: "Children's toys, board games, puzzles, and entertainment items",
-        },
-    ]);
+    // Convert API Category to Component Category format
+    const convertApiToComponent = (apiCategory: ApiCategory): Category => ({
+        id: apiCategory._id,
+        categoryName: apiCategory.name,
+        description: apiCategory.description,
+    });
+
+    // Convert Component Category to API Category format
+    const convertComponentToApi = (componentCategory: Category) => ({
+        name: componentCategory.categoryName,
+        description: componentCategory.description,
+    });
+
+    // Fetch categories from API
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
+    const fetchCategories = async () => {
+        try {
+            setLoading(true);
+            const apiData = await categoryApi.getCategories();
+            const convertedData = apiData.map(convertApiToComponent);
+            setCategories(convertedData);
+            setError(null);
+        } catch (err: any) {
+            setError(err.message || 'Failed to fetch categories');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     // Enhanced filtering logic
     const filteredCategories = categories.filter((category) => {
@@ -89,14 +84,9 @@ const AllProductsTable = () => {
     });
 
     // Handle adding new category
-    const handleCategoryAdded = (newCategory: any) => {
-        // Convert the API response format to match our Category type
-        const categoryToAdd: Category = {
-            id: newCategory.id,
-            categoryName: newCategory.category,
-            description: newCategory.description,
-        };
-        setCategories(prev => [...prev, categoryToAdd]);
+    const handleCategoryAdded = (newApiCategory: ApiCategory) => {
+        const newCategory = convertApiToComponent(newApiCategory);
+        setCategories(prev => [newCategory, ...prev]);
     };
 
     // Handle viewing category
@@ -120,11 +110,56 @@ const AllProductsTable = () => {
         );
     };
 
+    // Handle delete category
+    const handleDeleteCategory = (category: Category) => {
+        setSelectedCategory(category);
+        setShowDeleteModal(true);
+    };
+
+    // Handle confirm delete
+    const handleConfirmDelete = async () => {
+        if (!selectedCategory) return;
+        
+        try {
+            setDeleting(true);
+            await categoryApi.deleteCategory(selectedCategory.id);
+            
+            // Remove from local state
+            setCategories(prev => prev.filter(cat => cat.id !== selectedCategory.id));
+            
+            // Close modal
+            setShowDeleteModal(false);
+            setSelectedCategory(null);
+        } catch (err: any) {
+            console.error('Failed to delete category:', err);
+            alert(err.message || 'Failed to delete category');
+        } finally {
+            setDeleting(false);
+        }
+    };
+
     // Create columns with handlers
     const columns = createColumns({
         onViewCategory: handleViewCategory,
         onEditCategory: handleEditCategory,
+        onDeleteCategory: handleDeleteCategory,
     });
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <div className="text-white">Loading categories...</div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <div className="text-red-500">Error: {error}</div>
+            </div>
+        );
+    }
 
     return (
         <div>
@@ -162,55 +197,6 @@ const AllProductsTable = () => {
                                     onClick={() => setShowAddCategory(true)}
                                 />
                             </div>
-
-                            {/* Status Filter */}
-                            {/* <div className="relative mt-[7px] mr-[50px] rounded-2xl bg-[#F9FBFF]">
-                                <label className="text-[12px]">Status:</label>
-                                <select
-                                    value={statusFilter}
-                                    onChange={(e) => setStatusFilter(e.target.value)}
-                                    className="items-center bg-[#F9FBFF] px-3 py-1 text-[12px]"
-                                >
-                                    <option value="all">All</option>
-                                    <option
-                                        value="Pending"
-                                        className="font-poppins text-[#0F5FC2]"
-                                    >
-                                        Pending
-                                    </option>
-                                    <option
-                                        value="Accepted"
-                                        className="font-poppins text-[#00AC4F]"
-                                    >
-                                        Accepted
-                                    </option>
-                                    <option
-                                        value="Declined"
-                                        className="font-poppins text-[#D0004B]"
-                                    >
-                                        Declined
-                                    </option>
-                                </select>
-                            </div> */}
-
-                            {/* Class Filter */}
-                            {/* <div className="relative mt-[7px] mr-[50px] rounded-2xl bg-[#F9FBFF]">
-                                <label className="text-[12px]">Class:</label>
-                                <select
-                                    value={classFilter}
-                                    onChange={(e) => setClassFilter(e.target.value)}
-                                    className="font-poppins items-center bg-[#F9FBFF] px-2 py-1 text-[12px]"
-                                >
-                                    <option value="all" className="font-poppins">
-                                        All Classes
-                                    </option>
-                                    <option value="18_24_MONTHS">Month(18-24)</option>
-                                    <option value="TODDLER">Toddler(2-3)</option>
-                                    <option value="PRE_K1">Pre K1(3-4)</option>
-                                    <option value="SECOND_YEAR">2nd Year(4-5)</option>
-                                    <option value="THIRD_YEAR">Kindergarten(5-6)</option>
-                                </select>
-                            </div> */}
                         </div>
                     </div>
 
@@ -244,6 +230,18 @@ const AllProductsTable = () => {
                     onCategoryUpdated={handleCategoryUpdated}
                 />
             )}
+
+            {/* Delete Category Modal */}
+            <DeleteCategoryModal
+                isOpen={showDeleteModal}
+                onClose={() => {
+                    setShowDeleteModal(false);
+                    setSelectedCategory(null);
+                }}
+                onConfirm={handleConfirmDelete}
+                categoryName={selectedCategory?.categoryName || ''}
+                isLoading={deleting}
+            />
         </div>
     );
 };
