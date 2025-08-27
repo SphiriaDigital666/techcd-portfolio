@@ -10,7 +10,7 @@ const attributeSchema = new mongoose.Schema(
     variations: [
       {
         type: String,
-        required: true,
+        default: "",
         trim: true,
       },
     ],

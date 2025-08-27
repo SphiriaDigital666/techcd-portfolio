@@ -10,7 +10,7 @@ exports.validateCreateAttribute = [
     .trim(),
 
   body("variations")
-    .isArray({ min: 1 })
+    .isArray()
     .withMessage("Variations must be a non-empty array"),
 
   body("variations.*")
