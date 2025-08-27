@@ -8,6 +8,7 @@ interface ShippingProps {
     shippingLastName: string;
     shippingPhone: string;
     shippingEmail: string;
+    state: string;
     address: string;
     city: string;
     zipCode: string;
@@ -57,6 +58,16 @@ const Shipping: React.FC<ShippingProps> = ({ formData, onInputChange }) => {
             type="email"
             value={formData.shippingEmail}
             onChange={(e) => onInputChange('shippingEmail', e.target.value)}
+            className="w-full px-4 xl:py-1 py-2 border border-[#172D6D] rounded-md text-white focus:border-[#028EFC] focus:outline-none"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-[#FFFFFF] text-[17px] mb-2">State</label>
+          <input
+            type="text"
+            value={formData.state}
+            onChange={(e) => onInputChange('state', e.target.value)}
             className="w-full px-4 xl:py-1 py-2 border border-[#172D6D] rounded-md text-white focus:border-[#028EFC] focus:outline-none"
             required
           />

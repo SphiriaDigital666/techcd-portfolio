@@ -11,27 +11,13 @@ interface ShippingAddressTabProps {
       email: string;
       address: string;
       city: string;
+      state: string;
       zipCode: string;
     };
   };
-  editData: any;
-  setEditData: (data: any) => void;
-  isEditing: boolean;
 }
 
-const ShippingAddressTab: React.FC<ShippingAddressTabProps> = ({ customer, editData, setEditData, isEditing }) => {
-  const handleInputChange = (field: string, value: string) => {
-    if (isEditing) {
-      setEditData((prev: any) => ({
-        ...prev,
-        shippingInfo: {
-          ...prev.shippingInfo,
-          [field]: value
-        }
-      }));
-    }
-  };
-
+const ShippingAddressTab: React.FC<ShippingAddressTabProps> = ({ customer }) => {
   return (
     <div className="space-y-6">
       {/* First Name and Last Name */}
@@ -41,12 +27,9 @@ const ShippingAddressTab: React.FC<ShippingAddressTabProps> = ({ customer, editD
         </label>
         <input
           type="text"
-          value={editData.shippingInfo?.firstName || customer.shippingInfo.firstName}
-          onChange={(e) => handleInputChange('firstName', e.target.value)}
-          className={`w-full px-4 py-1 placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors ${
-            isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
-          }`}
-          readOnly={!isEditing}
+          value={customer.shippingInfo.firstName}
+          className="w-full px-4 py-1 placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors bg-transparent"
+          readOnly
         />
       </div>
       <div>
@@ -55,12 +38,9 @@ const ShippingAddressTab: React.FC<ShippingAddressTabProps> = ({ customer, editD
         </label>
         <input
           type="text"
-          value={editData.shippingInfo?.lastName || customer.shippingInfo.lastName}
-          onChange={(e) => handleInputChange('lastName', e.target.value)}
-          className={`w-full px-4 py-1 placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors ${
-            isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
-          }`}
-          readOnly={!isEditing}
+          value={customer.shippingInfo.lastName}
+          className="w-full px-4 py-1 placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors bg-transparent"
+          readOnly
         />
       </div>
 
@@ -71,12 +51,9 @@ const ShippingAddressTab: React.FC<ShippingAddressTabProps> = ({ customer, editD
         </label>
         <input
           type="tel"
-          value={editData.shippingInfo?.phoneNo || customer.shippingInfo.phoneNo}
-          onChange={(e) => handleInputChange('phoneNo', e.target.value)}
-          className={`w-full px-4 py-1 placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors ${
-            isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
-          }`}
-          readOnly={!isEditing}
+          value={customer.shippingInfo.phoneNo}
+          className="w-full px-4 py-1 placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors bg-transparent"
+          readOnly
         />
       </div>
 
@@ -87,12 +64,9 @@ const ShippingAddressTab: React.FC<ShippingAddressTabProps> = ({ customer, editD
         </label>
         <input
           type="text"
-          value={editData.shippingInfo?.address || customer.shippingInfo.address}
-          onChange={(e) => handleInputChange('address', e.target.value)}
-          className={`w-full px-4 py-1 placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors ${
-            isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
-          }`}
-          readOnly={!isEditing}
+          value={customer.shippingInfo.address}
+          className="w-full px-4 py-1 placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors bg-transparent"
+          readOnly
         />
       </div>
 
@@ -103,12 +77,9 @@ const ShippingAddressTab: React.FC<ShippingAddressTabProps> = ({ customer, editD
         </label>
         <input
           type="text"
-          value={editData.shippingInfo?.city || customer.shippingInfo.city}
-          onChange={(e) => handleInputChange('city', e.target.value)}
-          className={`w-full px-4 py-1 placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors ${
-            isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
-          }`}
-          readOnly={!isEditing}
+          value={customer.shippingInfo.city}
+          className="w-full px-4 py-1 placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors bg-transparent"
+          readOnly
         />
       </div>
       <div>
@@ -117,12 +88,9 @@ const ShippingAddressTab: React.FC<ShippingAddressTabProps> = ({ customer, editD
         </label>
         <input
           type="text"
-          value=""
-          className={`w-full px-4 py-1 placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors ${
-            isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
-          }`}
-          readOnly={!isEditing}
-          disabled={true}
+          value={customer.shippingInfo.state || ''}
+          className="w-full px-4 py-1 placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors bg-transparent"
+          readOnly
         />
       </div>
 
@@ -133,12 +101,9 @@ const ShippingAddressTab: React.FC<ShippingAddressTabProps> = ({ customer, editD
         </label>
         <input
           type="text"
-          value={editData.shippingInfo?.zipCode || customer.shippingInfo.zipCode}
-          onChange={(e) => handleInputChange('zipCode', e.target.value)}
-          className={`w-full px-4 py-1 placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors ${
-            isEditing ? 'bg-[#1a2a5a]' : 'bg-transparent'
-          }`}
-          readOnly={!isEditing}
+          value={customer.shippingInfo.zipCode}
+          className="w-full px-4 py-1 placeholder:text-xl border border-[#172D6D] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors bg-transparent"
+          readOnly
         />
       </div>
     </div>

@@ -61,7 +61,7 @@ export const createUser = async (userData: CreateUserData): Promise<ApiResponse<
 // Get all user roles
 export const getUserRoles = async (): Promise<UserRole[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/user-roles`);
+    const response = await fetch(`${API_BASE_URL}/user-role`);
     
     if (!response.ok) {
       throw new Error('Failed to fetch user roles');

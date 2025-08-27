@@ -18,7 +18,7 @@ exports.createUser = async (req, res) => {
     });
 
     await user.save();
-    const data = customer.toObject();
+    const data = user.toObject();
     delete data.password;
 
     res.status(201).json({

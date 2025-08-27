@@ -21,6 +21,7 @@ type Customer = {
     email: string;
     address: string;
     city: string;
+    state: string;
     zipCode: string;
   };
   createdAt: string;
@@ -34,8 +35,6 @@ function ViewCustomerPage() {
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editData, setEditData] = useState<Partial<Customer>>({});
 
   // Fetch customer data
   useEffect(() => {
@@ -48,7 +47,6 @@ function ViewCustomerPage() {
           const result = await response.json();
           if (result.success && result.data) {
             setCustomer(result.data);
-            setEditData(result.data);
           } else {
             setError('Failed to fetch customer data');
           }
@@ -68,50 +66,6 @@ function ViewCustomerPage() {
     }
   }, [customerId]);
 
-  // Handle save changes
-  const handleSave = async () => {
-    if (!customer || !editData) return;
-
-    try {
-      setLoading(true);
-      const response = await fetch(`http://localhost:8080/customer/${customerId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(editData),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success) {
-          setCustomer(result.data);
-          setEditData(result.data);
-          setIsEditing(false);
-          // Show success message or trigger refresh
-          window.dispatchEvent(new CustomEvent('customerUpdated'));
-        } else {
-          setError('Failed to update customer');
-        }
-      } else {
-        setError('Failed to update customer');
-      }
-    } catch (error) {
-      console.error('Error updating customer:', error);
-      setError('Network error while updating customer');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Handle cancel edit
-  const handleCancel = () => {
-    if (customer) {
-      setEditData(customer);
-      setIsEditing(false);
-    }
-  };
-
   const tabs = [
     { id: 'profile', label: 'Profile' },
     { id: 'credential', label: 'Credential' },
@@ -126,36 +80,24 @@ function ViewCustomerPage() {
         return (
           <ProfileTab 
             customer={customer}
-            editData={editData}
-            setEditData={setEditData}
-            isEditing={isEditing}
           />
         );
       case 'credential':
         return (
           <CredentialTab 
             customer={customer}
-            editData={editData}
-            setEditData={setEditData}
-            isEditing={isEditing}
           />
         );
       case 'shipping':
         return (
           <ShippingAddressTab 
             customer={customer}
-            editData={editData}
-            setEditData={setEditData}
-            isEditing={isEditing}
           />
         );
       default:
         return (
           <ProfileTab 
             customer={customer}
-            editData={editData}
-            setEditData={setEditData}
-            isEditing={isEditing}
           />
         );
     }
@@ -194,34 +136,7 @@ function ViewCustomerPage() {
             <h1 className="text-2xl font-bold text-[#E5E5E5]">
               Customer: {customer.firstName} {customer.lastName}
             </h1>
-            <p className="text-[#94A3B8]">View and edit customer information</p>
-          </div>
-          
-          <div className="flex gap-3">
-            {!isEditing ? (
-              <button
-                onClick={() => setIsEditing(true)}
-                className="px-4 py-2 bg-[#028EFC] text-white rounded-md hover:bg-[#5FA3B6] transition-colors"
-              >
-                Edit Customer
-              </button>
-            ) : (
-              <>
-                <button
-                  onClick={handleCancel}
-                  className="px-4 py-2 bg-[#334155] text-white rounded-md hover:bg-[#475569] transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSave}
-                  disabled={loading}
-                  className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors disabled:opacity-50"
-                >
-                  {loading ? 'Saving...' : 'Save Changes'}
-                </button>
-              </>
-            )}
+            <p className="text-[#94A3B8]">View customer information</p>
           </div>
         </div>
 
