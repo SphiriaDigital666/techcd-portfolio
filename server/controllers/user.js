@@ -18,11 +18,13 @@ exports.createUser = async (req, res) => {
     });
 
     await user.save();
+    const data = customer.toObject();
+    delete data.password;
 
     res.status(201).json({
       success: true,
       message: "User created successfully",
-      data: user,
+      data,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -32,7 +34,9 @@ exports.createUser = async (req, res) => {
 exports.getUsers = async (req, res) => {
   try {
     // populate role name
-    const users = await User.find().populate("role", "name");
+    const users = await User.find()
+      .select("-password")
+      .populate("role", "name");
     res.status(200).json({ success: true, data: users });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -41,7 +45,9 @@ exports.getUsers = async (req, res) => {
 
 exports.getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).populate("role", "name");
+    const user = await User.findById(req.params.id)
+      .select("-password")
+      .populate("role", "name");
 
     if (!user) {
       return res
