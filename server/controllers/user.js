@@ -57,15 +57,7 @@ exports.getUserById = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    const { password, ...updateData } = req.body;
-
-    if (password) {
-      updateData.password = await bcrypt.hash(password, 10);
-    }
-
-    const user = await User.findByIdAndUpdate(req.params.id, updateData, {
-      new: true,
-    }).populate("role", "name");
+    const user = await User.findById(req.params.id);
 
     if (!user) {
       return res
@@ -73,10 +65,84 @@ exports.updateUser = async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
+    const { field } = req.query;
+
+    switch (field) {
+      case "profile": {
+        const { firstName, lastName, role } = req.body;
+
+        user.firstName = firstName;
+        user.lastName = lastName;
+        user.role = role;
+        break;
+      }
+
+      case "username": {
+        const { username, password } = req.body;
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Invalid password" });
+        }
+
+        user.username = username;
+        break;
+      }
+
+      case "email": {
+        const { email, password } = req.body;
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Invalid password" });
+        }
+
+        user.email = email;
+        break;
+      }
+
+      case "password": {
+        const { password, newPassword } = req.body;
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Invalid password" });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+        break;
+      }
+
+      case "phoneNo": {
+        const { phoneNo, password } = req.body;
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Invalid password" });
+        }
+
+        user.phoneNo = phoneNo;
+        break;
+      }
+    }
+
+    await user.save();
+    const updatedUser = user.toObject();
+    delete updatedUser.password;
+
     res.status(200).json({
       success: true,
       message: "User updated successfully",
-      data: user,
+      data: updatedUser,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
