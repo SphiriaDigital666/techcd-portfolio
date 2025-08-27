@@ -13,12 +13,14 @@ const userRoutes = require("./routes/user");
 const customerRoutes = require("./routes/customer");
 const attributeRoutes = require("./routes/attribute");
 const productCategoryRoutes = require("./routes/product-category");
+const couponRoutes = require("./routes/coupon");
 
 app.use("/user-role", userRoleRoutes);
 app.use("/user", userRoutes);
 app.use("/customer", customerRoutes);
 app.use("/attribute", attributeRoutes);
 app.use("/product-category", productCategoryRoutes);
+app.use("/coupon", couponRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not Found!" });

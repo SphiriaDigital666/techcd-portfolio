@@ -69,6 +69,11 @@ const CustomerSchema = new mongoose.Schema(
         required: true,
         trim: true,
       },
+      state: {
+        type: String,
+        required: true,
+        trim: true,
+      },
       zipCode: {
         type: String,
         required: true,

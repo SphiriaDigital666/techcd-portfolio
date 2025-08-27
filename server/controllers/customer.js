@@ -25,11 +25,13 @@ exports.createCustomer = async (req, res) => {
     });
 
     await customer.save();
+    const data = customer.toObject();
+    delete data.password;
 
     res.status(201).json({
       success: true,
       message: "Customer created successfully",
-      data: customer,
+      data,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -38,7 +40,7 @@ exports.createCustomer = async (req, res) => {
 
 exports.getCustomers = async (req, res) => {
   try {
-    const customers = await Customer.find();
+    const customers = await Customer.find().select("-password");
     res.status(200).json({ success: true, data: customers });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -47,7 +49,7 @@ exports.getCustomers = async (req, res) => {
 
 exports.getCustomerById = async (req, res) => {
   try {
-    const customer = await Customer.findById(req.params.id);
+    const customer = await Customer.findById(req.params.id).select("-password");
 
     if (!customer) {
       return res
@@ -63,19 +65,7 @@ exports.getCustomerById = async (req, res) => {
 
 exports.updateCustomer = async (req, res) => {
   try {
-    const { password, ...updateData } = req.body;
-
-    if (password) {
-      updateData.password = await bcrypt.hash(password, 10);
-    }
-
-    const customer = await Customer.findByIdAndUpdate(
-      req.params.id,
-      updateData,
-      {
-        new: true,
-      }
-    );
+    const customer = await Customer.findById(req.params.id);
 
     if (!customer) {
       return res
@@ -83,10 +73,91 @@ exports.updateCustomer = async (req, res) => {
         .json({ success: false, message: "Customer not found" });
     }
 
+    const { field } = req.query;
+
+    switch (field) {
+      case "profile": {
+        const { firstName, lastName, role } = req.body;
+
+        customer.firstName = firstName;
+        customer.lastName = lastName;
+        customer.role = role;
+        break;
+      }
+
+      case "username": {
+        const { username, password } = req.body;
+
+        const isMatch = await bcrypt.compare(password, customer.password);
+        if (!isMatch) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Invalid password" });
+        }
+
+        customer.username = username;
+        break;
+      }
+
+      case "email": {
+        const { email, password } = req.body;
+
+        const isMatch = await bcrypt.compare(password, customer.password);
+        if (!isMatch) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Invalid password" });
+        }
+
+        customer.email = email;
+        break;
+      }
+
+      case "password": {
+        const { password, newPassword } = req.body;
+
+        const isMatch = await bcrypt.compare(password, customer.password);
+        if (!isMatch) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Invalid password" });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        customer.password = hashedPassword;
+        break;
+      }
+
+      case "phoneNo": {
+        const { phoneNo, password } = req.body;
+
+        const isMatch = await bcrypt.compare(password, customer.password);
+        if (!isMatch) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Invalid password" });
+        }
+
+        customer.phoneNo = phoneNo;
+        break;
+      }
+
+      case "address": {
+        const { shippingInfo } = req.body;
+
+        customer.shippingInfo = shippingInfo;
+        break;
+      }
+    }
+
+    await customer.save();
+    const updatedCustomer = customer.toObject();
+    delete updatedCustomer.password;
+
     res.status(200).json({
       success: true,
       message: "Customer updated successfully",
-      data: customer,
+      data: updatedCustomer,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
