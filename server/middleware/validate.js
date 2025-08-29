@@ -1,14 +1,21 @@
 const { validationResult } = require("express-validator");
 
-exports.runValidation = (req, res, next) => {
+const runValidation = (req, res, next) => {
   const errors = validationResult(req);
+  
   if (!errors.isEmpty()) {
+    console.log('Validation errors:', errors.array());
+    console.log('Request body:', req.body);
+    console.log('Request query:', req.query);
+    
     return res.status(400).json({
-      errors: errors.array().map((err) => ({
-        field: err.param,
-        message: err.msg,
-      })),
+      success: false,
+      message: errors.array()[0].msg,
+      errors: errors.array(),
     });
   }
+  
   next();
 };
+
+module.exports = { runValidation };

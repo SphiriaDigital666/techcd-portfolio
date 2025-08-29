@@ -1,21 +1,34 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import Editbutton from './Editbutton';
+
 interface EmailChangeFormProps {
   onClose: () => void;
   onSave: (emailData: { newEmail: string; currentPassword: string }) => void;
+  currentEmail?: string;
 }
 
 const EmailChangeForm: React.FC<EmailChangeFormProps> = ({
   onClose,
-  onSave
+  onSave,
+  currentEmail = ''
 }) => {
   const [newEmail, setNewEmail] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
 
+  // Keep the same UI, just ensure password field is empty for user input
+
   const handleSave = () => {
+    if (!currentPassword.trim()) {
+      alert('Please enter your current password');
+      return;
+    }
+    if (!newEmail.trim()) {
+      alert('Please enter a new email');
+      return;
+    }
     onSave({ newEmail, currentPassword });
     onClose();
   };
@@ -26,7 +39,7 @@ const EmailChangeForm: React.FC<EmailChangeFormProps> = ({
       <div className="flex items-center mb-8">
         <button
           onClick={onClose}
-          className="mr-4 p-2  rounded-lg transition-colors"
+          className="mr-4 p-2 hover:bg-[#172D6D] rounded-lg transition-colors"
         >
           <ArrowLeft className="w-5 h-5 text-white" />
         </button>
@@ -37,16 +50,30 @@ const EmailChangeForm: React.FC<EmailChangeFormProps> = ({
 
       {/* Email Change Fields */}
       <div className="space-y-6">
-        {/* Email */}
+        {/* Current Email Display */}
         <div>
           <label className="block text-[#FFFFFF] text-[17px] font-medium mb-3">
-            Email
+            Current Email
+          </label>
+          <input
+            type="email"
+            value={currentEmail}
+            readOnly
+            className="w-full px-4 py-1  rounded-xl border border-[#172D6D] text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
+          />
+        </div>
+
+        {/* New Email */}
+        <div>
+          <label className="block text-[#FFFFFF] text-[17px] font-medium mb-3">
+            New Email Address
           </label>
           <input
             type="email"
             value={newEmail}
             onChange={(e) => setNewEmail(e.target.value)}
-            className="w-full px-4 py-1 bg-[#0B1739]  rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
+            className="w-full px-4 py-1 border border-[#172D6D]
+               rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
            
           />
         </div>
@@ -60,15 +87,19 @@ const EmailChangeForm: React.FC<EmailChangeFormProps> = ({
             type="password"
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
-            className="w-full px-4 py-1 bg-[#0B1739]  rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
-           
+            className="w-full px-4 py-1 border border-[#172D6D]  rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
+
           />
         </div>
       </div>
 
       {/* Save Changes Button */}
       <div className="flex justify-end pt-8">
-      <Editbutton identifier="add-product-btn" buttonText="Save Changes" />
+        <Editbutton 
+          identifier="add-product-btn" 
+          buttonText="Save Changes" 
+          onClick={handleSave}
+        />
       </div>
     </div>
   );

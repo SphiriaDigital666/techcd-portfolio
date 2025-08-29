@@ -1,25 +1,74 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import ProfileTab from './components/ProfileTab';
 import CredentialTab from './components/CredentialTab';
+import { getUserById, User } from '@/lib/api/userApi';
 
 function AddCustomerPage() {
   const [activeTab, setActiveTab] = useState('profile');
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const params = useParams();
+  const userId = params.id as string;
 
   const tabs = [
     { id: 'profile', label: 'Profile' },
     { id: 'credential', label: 'Credential' }
   ];
 
+  const fetchUser = async () => {
+    try {
+      setLoading(true);
+      const userData = await getUserById(userId);
+      setUser(userData);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch user');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      fetchUser();
+    }
+  }, [userId]);
+
   const renderContent = () => {
+    if (loading) {
+      return (
+        <div className="flex items-center justify-center h-64">
+          <div className="text-white text-lg">Loading...</div>
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="flex items-center justify-center h-64">
+          <div className="text-red-400 text-lg">{error}</div>
+        </div>
+      );
+    }
+
+    if (!user) {
+      return (
+        <div className="flex items-center justify-center h-64">
+          <div className="text-white text-lg">User not found</div>
+        </div>
+      );
+    }
+
     switch (activeTab) {
       case 'profile':
-        return <ProfileTab />;
+        return <ProfileTab user={user} userId={userId} onUserUpdate={fetchUser} />;
       case 'credential':
-        return <CredentialTab />;
+        return <CredentialTab user={user} userId={userId} onUserUpdate={fetchUser} />;
       default:
-        return <ProfileTab />;
+        return <ProfileTab user={user} userId={userId} onUserUpdate={fetchUser} />;
     }
   };
 
