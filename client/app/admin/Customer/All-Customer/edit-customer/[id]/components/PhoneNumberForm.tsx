@@ -5,18 +5,29 @@ import { ArrowLeft, ArrowUpRight, ChevronDown } from 'lucide-react';
 import Editbutton from './Editbutton'
 interface PhoneNumberFormProps {
   onClose: () => void;
-  onSave: (phoneData: { countryCode: string; phoneNumber: string }) => void;
+  onSave: (phoneData: { countryCode: string; phoneNumber: string; currentPassword: string }) => void;
+  initialPhone?: string;
 }
 
 const PhoneNumberForm: React.FC<PhoneNumberFormProps> = ({
   onClose,
-  onSave
+  onSave,
+  initialPhone = ''
 }) => {
   const [countryCode, setCountryCode] = useState('US +1');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
 
   const handleSave = () => {
-    onSave({ countryCode, phoneNumber });
+    if (!currentPassword.trim()) {
+      alert('Please enter your current password');
+      return;
+    }
+    if (!phoneNumber.trim()) {
+      alert('Please enter a phone number');
+      return;
+    }
+    onSave({ countryCode, phoneNumber, currentPassword });
     onClose();
   };
 
@@ -65,19 +76,21 @@ const PhoneNumberForm: React.FC<PhoneNumberFormProps> = ({
         {/* Password Section */}
         <div>
           <label className="block text-[#FFFFFF] text-sm sm:text-base lg:text-lg font-medium mb-2 sm:mb-3">
-            Password
+            Current Password
           </label>
           <input
             type="password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
             className="w-full px-3 sm:px-4 py-2 sm:py-2 bg-[#0B1739]  rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors text-sm sm:text-base"
-          
+            placeholder="Enter your current password to verify"
           />
         </div>
       </div>
 
       {/* Save Changes Button */}
       <div className="flex justify-end pt-6 sm:pt-8">
-      <Editbutton identifier="add-product-btn" buttonText="Save Changes" />
+        <Editbutton identifier="add-product-btn" buttonText="Save Changes" onClick={handleSave} />
       </div>
     </div>
   );

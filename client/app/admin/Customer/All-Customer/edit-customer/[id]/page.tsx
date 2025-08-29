@@ -1,12 +1,18 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import ProfileTab from './components/ProfileTab';
 import CredentialTab from './components/CredentialTab';
 import ShippingAddressTab from './components/ShippingAddressTab';
+import { Customer } from '../../../../../../lib/api/customerApi';
 
 function AddCustomerPage() {
   const [activeTab, setActiveTab] = useState('profile');
+  const [customer, setCustomer] = useState<Customer | null>(null);
+  const [loading, setLoading] = useState(true);
+  const params = useParams();
+  const customerId = params.id as string;
 
   const tabs = [
     { id: 'profile', label: 'Profile' },
@@ -14,16 +20,60 @@ function AddCustomerPage() {
     { id: 'shipping', label: 'Shipping Address' }
   ];
 
+  // Fetch customer data
+  useEffect(() => {
+    const fetchCustomer = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/customer/${customerId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setCustomer(data.data);
+        } else {
+          console.error('Failed to fetch customer data');
+        }
+      } catch (error) {
+        console.error('Error fetching customer data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (customerId) {
+      fetchCustomer();
+    }
+  }, [customerId]);
+
+  const handleCustomerUpdate = async () => {
+    // Refresh customer data after update
+    try {
+      const response = await fetch(`http://localhost:8080/customer/${customerId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setCustomer(data.data);
+      }
+    } catch (error) {
+      console.error('Error refreshing customer data:', error);
+    }
+  };
+
   const renderContent = () => {
+    if (loading) {
+      return <div className="text-white">Loading...</div>;
+    }
+
+    if (!customer) {
+      return <div className="text-white">Customer not found</div>;
+    }
+
     switch (activeTab) {
       case 'profile':
-        return <ProfileTab />;
+        return <ProfileTab customer={customer} customerId={customerId} onCustomerUpdate={handleCustomerUpdate} />;
       case 'credential':
-        return <CredentialTab />;
+        return <CredentialTab customer={customer} customerId={customerId} onCustomerUpdate={handleCustomerUpdate} />;
       case 'shipping':
-        return <ShippingAddressTab />;
+        return <ShippingAddressTab customer={customer} customerId={customerId} onCustomerUpdate={handleCustomerUpdate} />;
       default:
-        return <ProfileTab />;
+        return <ProfileTab customer={customer} customerId={customerId} onCustomerUpdate={handleCustomerUpdate} />;
     }
   };
 

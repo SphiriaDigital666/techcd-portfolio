@@ -17,6 +17,22 @@ const PasswordChangeForm: React.FC<PasswordChangeFormProps> = ({
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleSave = () => {
+    if (!currentPassword.trim()) {
+      alert('Please enter your current password');
+      return;
+    }
+    if (!newPassword.trim()) {
+      alert('Please enter a new password');
+      return;
+    }
+    if (!confirmPassword.trim()) {
+      alert('Please confirm your new password');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      alert('New password and confirm password do not match');
+      return;
+    }
     onSave({ currentPassword, newPassword, confirmPassword });
     onClose();
   };
@@ -48,7 +64,7 @@ const PasswordChangeForm: React.FC<PasswordChangeFormProps> = ({
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
             className="w-full px-4 py-1 bg-[#0B1739]  rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
-          
+            placeholder="Enter your current password"
           />
         </div>
 
@@ -62,7 +78,7 @@ const PasswordChangeForm: React.FC<PasswordChangeFormProps> = ({
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             className="w-full px-4 py-1 bg-[#0B1739]  rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
-          
+            placeholder="Enter your new password"
           />
         </div>
 
@@ -76,14 +92,14 @@ const PasswordChangeForm: React.FC<PasswordChangeFormProps> = ({
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="w-full px-4 py-1 bg-[#0B1739]  rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
-            
+            placeholder="Confirm your new password"
           />
         </div>
       </div>
 
       {/* Save Changes Button */}
       <div className="flex justify-end pt-8">
-      <Editbutton identifier="add-product-btn" buttonText="Save Changes" />
+        <Editbutton identifier="add-product-btn" buttonText="Save Changes" onClick={handleSave} />
       </div>
     </div>
   );
