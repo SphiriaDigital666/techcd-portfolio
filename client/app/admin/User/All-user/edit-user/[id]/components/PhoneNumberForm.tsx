@@ -1,22 +1,37 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, ArrowUpRight, ChevronDown } from 'lucide-react';
 import Editbutton from './Editbutton'
+
 interface PhoneNumberFormProps {
   onClose: () => void;
-  onSave: (phoneData: { countryCode: string; phoneNumber: string }) => void;
+  onSave: (phoneData: { countryCode: string; phoneNumber: string; currentPassword: string }) => void;
+  initialPhone?: string;
 }
 
 const PhoneNumberForm: React.FC<PhoneNumberFormProps> = ({
   onClose,
-  onSave
+  onSave,
+  initialPhone = ''
 }) => {
   const [countryCode, setCountryCode] = useState('US +1');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+
+  // Don't pre-fill the phone number field - let user enter it fresh
+  // Don't pre-fill the password field - let user enter it fresh
 
   const handleSave = () => {
-    onSave({ countryCode, phoneNumber });
+    if (!currentPassword.trim()) {
+      alert('Please enter your current password');
+      return;
+    }
+    if (!phoneNumber.trim()) {
+      alert('Please enter a phone number');
+      return;
+    }
+    onSave({ countryCode, phoneNumber, currentPassword });
     onClose();
   };
 
@@ -39,7 +54,7 @@ const PhoneNumberForm: React.FC<PhoneNumberFormProps> = ({
       <div className="space-y-4 sm:space-y-6">
         <div>
           <label className="block text-[#FFFFFF] text-sm sm:text-base lg:text-lg font-medium mb-2 sm:mb-3">
-            Phone Number
+            New Phone Number
           </label>
           <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
             {/* Country Code Dropdown */}
@@ -56,8 +71,8 @@ const PhoneNumberForm: React.FC<PhoneNumberFormProps> = ({
               type="tel"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
-              className="w-full px-3 sm:px-4 py-2 sm:py-2 bg-[#0B1739]  rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors text-sm sm:text-base"
-              placeholder="+1"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2 border border-[#172D6D]  rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors text-sm sm:text-base"
+             
             />
           </div>
         </div>
@@ -65,11 +80,13 @@ const PhoneNumberForm: React.FC<PhoneNumberFormProps> = ({
         {/* Password Section */}
         <div>
           <label className="block text-[#FFFFFF] text-sm sm:text-base lg:text-lg font-medium mb-2 sm:mb-3">
-            Password
+            Current Password
           </label>
           <input
             type="password"
-            className="w-full px-3 sm:px-4 py-2 sm:py-2 bg-[#0B1739]  rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors text-sm sm:text-base"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            className="w-full px-3 sm:px-4 py-2 sm:py-2 border border-[#172D6D]  rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors text-sm sm:text-base"
           
           />
         </div>
@@ -77,7 +94,11 @@ const PhoneNumberForm: React.FC<PhoneNumberFormProps> = ({
 
       {/* Save Changes Button */}
       <div className="flex justify-end pt-6 sm:pt-8">
-      <Editbutton identifier="add-product-btn" buttonText="Save Changes" />
+        <Editbutton 
+          identifier="add-product-btn" 
+          buttonText="Save Changes" 
+          onClick={handleSave}
+        />
       </div>
     </div>
   );

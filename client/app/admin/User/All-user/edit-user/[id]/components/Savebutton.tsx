@@ -8,10 +8,12 @@ import { cn } from "@/lib/utils";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   identifier: string;
   buttonText: string;
+  onClick?: () => void;
+  disabled?: boolean;
 }
 
 const PrimaryButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ identifier, buttonText, className, ...props }, ref) => {
+  ({ identifier, buttonText, className, onClick, disabled, ...props }, ref) => {
     const spanRef = useRef<HTMLSpanElement | null>(null);
 
     const calSpanPosition = (
@@ -31,10 +33,12 @@ const PrimaryButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Button
         ref={ref}
-       
+        onClick={onClick}
+        disabled={disabled}
         className={cn(
           identifier,
           "relative flex items-center bg-[#028EFC] text-white rounded-md p-2 shadow-md transition-all duration-300 ease-in hover:bg-[#5FA3B6] overflow-hidden xl:w-1/4 ",
+          disabled && "opacity-50 cursor-not-allowed hover:bg-[#028EFC]",
           className
         )}
         onMouseEnter={calSpanPosition}

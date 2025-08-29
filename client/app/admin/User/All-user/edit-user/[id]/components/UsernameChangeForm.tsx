@@ -1,21 +1,35 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import Editbutton from './Editbutton';
+
 interface UsernameChangeFormProps {
   onClose: () => void;
   onSave: (usernameData: { newUsername: string; currentPassword: string }) => void;
+  currentUsername?: string;
 }
 
 const UsernameChangeForm: React.FC<UsernameChangeFormProps> = ({
   onClose,
-  onSave
+  onSave,
+  currentUsername = ''
 }) => {
   const [newUsername, setNewUsername] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
 
+  // Don't pre-fill the new username field - let user enter it fresh
+  // Don't pre-fill the password field - let user enter it fresh
+
   const handleSave = () => {
+    if (!currentPassword.trim()) {
+      alert('Please enter your current password');
+      return;
+    }
+    if (!newUsername.trim()) {
+      alert('Please enter a new username');
+      return;
+    }
     onSave({ newUsername, currentPassword });
     onClose();
   };
@@ -37,17 +51,30 @@ const UsernameChangeForm: React.FC<UsernameChangeFormProps> = ({
 
       {/* Username Change Fields */}
       <div className="space-y-6">
-        {/* User Name */}
+        {/* Current Username Display */}
         <div>
           <label className="block text-[#FFFFFF] text-[17px] font-medium mb-3">
-            User Name
+            Current Username
+          </label>
+          <input
+            type="text"
+            value={currentUsername}
+            readOnly
+            className="w-full px-4 py-1 border border-[#172D6D]  rounded-xl text-white  focus:outline-none focus:border-[#3B82F6] transition-colors "
+          />
+        </div>
+
+        {/* New User Name */}
+        <div>
+          <label className="block text-[#FFFFFF] text-[17px] font-medium mb-3">
+            New Username
           </label>
           <input
             type="text"
             value={newUsername}
             onChange={(e) => setNewUsername(e.target.value)}
-            className="w-full px-4 py-1 bg-[#0B1739]  rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
-          
+            className="w-full px-4 py-1 border border-[#172D6D]  rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
+           
           />
         </div>
 
@@ -60,15 +87,19 @@ const UsernameChangeForm: React.FC<UsernameChangeFormProps> = ({
             type="password"
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
-            className="w-full px-4 py-1 bg-[#0B1739]  rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
-         
+            className="w-full px-4 py-1 border border-[#172D6D]  rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#3B82F6] transition-colors"
+       
           />
         </div>
       </div>
 
       {/* Save Changes Button */}
       <div className="flex justify-end pt-8">
-      <Editbutton identifier="add-product-btn" buttonText="Save Changes" />
+        <Editbutton 
+          identifier="add-product-btn" 
+          buttonText="Save Changes" 
+          onClick={handleSave}
+        />
       </div>
     </div>
   );
