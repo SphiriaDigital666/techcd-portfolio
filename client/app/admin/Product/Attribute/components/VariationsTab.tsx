@@ -5,23 +5,35 @@ import SaveButton from './SaveButton';
 
 const VariationsTab = () => {
   const [variations, setVariations] = useState({
-    color: { values: ['White'], newValue: '' },
-    sizes: { values: [], newValue: '' },
-    example: { values: [], newValue: '' }
+    color: { values: ['White'] },
+    sizes: { values: [] },
+    storage: { values: [] }
   });
 
+  const [editingType, setEditingType] = useState<keyof typeof variations | null>(null);
+  const [newValue, setNewValue] = useState('');
+
   const addVariation = (type: keyof typeof variations) => {
-    const currentVariation = variations[type];
-    if (currentVariation.newValue.trim()) {
+    setEditingType(type);
+    setNewValue('');
+  };
+
+  const closeInput = () => {
+    setEditingType(null);
+    setNewValue('');
+  };
+
+  const handleSubmit = (type: keyof typeof variations) => {
+    if (newValue.trim()) {
       setVariations({
         ...variations,
         [type]: {
-          ...currentVariation,
-          values: [...currentVariation.values, currentVariation.newValue],
-          newValue: ''
+          ...variations[type],
+          values: [...variations[type].values, newValue.trim()]
         }
       });
     }
+    closeInput();
   };
 
   const removeVariation = (type: keyof typeof variations, value: string) => {
@@ -34,14 +46,10 @@ const VariationsTab = () => {
     });
   };
 
-  const updateNewValue = (type: keyof typeof variations, value: string) => {
-    setVariations({
-      ...variations,
-      [type]: {
-        ...variations[type],
-        newValue: value
-      }
-    });
+  const handleKeyPress = (e: React.KeyboardEvent, type: keyof typeof variations) => {
+    if (e.key === 'Enter') {
+      handleSubmit(type);
+    }
   };
 
   return (
@@ -55,20 +63,32 @@ const VariationsTab = () => {
             <label className="block text-lg font-medium text-white">Color</label>
             <button
               onClick={() => addVariation('color')}
-              className="bg-[#028EFC] text-white px-3  rounded-md hover:bg-blue-600 transition-colors"
+              className="bg-[#028EFC] text-white px-3 py-2  transition-colors"
             >
               Add
             </button>
           </div>
-          <input
-            type="text"
-            placeholder="Enter Variation"
-            value={variations.color.newValue}
-            onChange={(e) => updateNewValue('color', e.target.value)}
-            className="w-full px-4 py-2 border border-[#172D6D] rounded-xl text-white placeholder-gray-400 bg-transparent focus:outline-none focus:border-[#3B82F6] transition-colors"
-          />
+          {editingType === 'color' && (
+            <div className="flex items-center space-x-2">
+              <input
+                type="text"
+                placeholder="Enter color variation"
+                value={newValue}
+                onChange={(e) => setNewValue(e.target.value)}
+                onKeyPress={(e) => handleKeyPress(e, 'color')}
+                className="flex-1 px-4 py-2 border border-[#172D6D] rounded-xl text-white placeholder-gray-400 bg-transparent focus:outline-none focus:border-[#3B82F6] transition-colors"
+                autoFocus
+              />
+              <button
+                onClick={closeInput}
+                className="text-red-500 hover:text-red-400 transition-colors p-2"
+              >
+                ✕
+              </button>
+            </div>
+          )}
           {variations.color.values.map((value, index) => (
-            <div key={index} className="flex items-center justify-between">
+            <div key={index} className="flex items-center justify-between ml-4">
               <span className="text-white">{value}</span>
               <button
                 onClick={() => removeVariation('color', value)}
@@ -86,20 +106,32 @@ const VariationsTab = () => {
             <label className="block text-lg font-medium text-white">Sizes</label>
             <button
               onClick={() => addVariation('sizes')}
-              className="bg-[#028EFC] text-white px-3 rounded-md hover:bg-blue-600 transition-colors"
+              className="bg-[#028EFC] text-white px-3 py-2  transition-colors"
             >
               Add
             </button>
           </div>
-          <input
-            type="text"
-            placeholder="Enter Variation"
-            value={variations.sizes.newValue}
-            onChange={(e) => updateNewValue('sizes', e.target.value)}
-            className="w-full px-4 py-2 border border-[#172D6D] rounded-xl text-white placeholder-gray-400 bg-transparent focus:outline-none focus:border-[#3B82F6] transition-colors"
-          />
+          {editingType === 'sizes' && (
+            <div className="flex items-center space-x-2">
+              <input
+                type="text"
+                placeholder="Enter size variation"
+                value={newValue}
+                onChange={(e) => setNewValue(e.target.value)}
+                onKeyPress={(e) => handleKeyPress(e, 'sizes')}
+                className="flex-1 px-4 py-2 border border-[#172D6D] rounded-xl text-white placeholder-gray-400 bg-transparent focus:outline-none focus:border-[#3B82F6] transition-colors"
+                autoFocus
+              />
+              <button
+                onClick={closeInput}
+                className="text-red-500 hover:text-red-400 transition-colors p-2"
+              >
+                ✕
+              </button>
+            </div>
+          )}
           {variations.sizes.values.map((value, index) => (
-            <div key={index} className="flex items-center justify-between">
+            <div key={index} className="flex items-center justify-between ml-4">
               <span className="text-white">{value}</span>
               <button
                 onClick={() => removeVariation('sizes', value)}
@@ -111,29 +143,41 @@ const VariationsTab = () => {
           ))}
         </div>
 
-        {/* Example Section */}
+        {/* Storage Section */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <label className="block text-lg font-medium text-white">Example</label>
+            <label className="block text-lg font-medium text-white">Storage</label>
             <button
-              onClick={() => addVariation('example')}
-              className="bg-[#028EFC] text-white px-3 rounded-md hover:bg-blue-600 transition-colors"
+              onClick={() => addVariation('storage')}
+              className="bg-[#028EFC] text-white px-3 py-2   transition-colors"
             >
               Add
             </button>
           </div>
-          <input
-            type="text"
-            placeholder="Enter Variation"
-            value={variations.example.newValue}
-            onChange={(e) => updateNewValue('example', e.target.value)}
-            className="w-full px-4 py-2 border border-[#172D6D] rounded-xl text-white placeholder-gray-400 bg-transparent focus:outline-none focus:border-[#3B82F6] transition-colors"
-          />
-          {variations.example.values.map((value, index) => (
-            <div key={index} className="flex items-center justify-between">
+          {editingType === 'storage' && (
+            <div className="flex items-center space-x-2">
+              <input
+                type="text"
+                placeholder="Enter storage variation"
+                value={newValue}
+                onChange={(e) => setNewValue(e.target.value)}
+                onKeyPress={(e) => handleKeyPress(e, 'storage')}
+                className="flex-1 px-4 py-2 border border-[#172D6D] rounded-xl text-white placeholder-gray-400 bg-transparent focus:outline-none focus:border-[#3B82F6] transition-colors"
+                autoFocus
+              />
+              <button
+                onClick={closeInput}
+                className="text-red-500 hover:text-red-400 transition-colors p-2"
+              >
+                ✕
+              </button>
+            </div>
+          )}
+          {variations.storage.values.map((value, index) => (
+            <div key={index} className="flex items-center justify-between ml-4">
               <span className="text-white">{value}</span>
               <button
-                onClick={() => removeVariation('example', value)}
+                onClick={() => removeVariation('storage', value)}
                 className="text-red-500 text-sm hover:text-red-400 transition-colors"
               >
                 Remove

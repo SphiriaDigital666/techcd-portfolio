@@ -44,7 +44,7 @@ const PrimaryButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={isLoading}
         className={cn(
           identifier,
-          "relative flex items-center bg-[#028EFC] text-white rounded-md p-2 shadow-md transition-all duration-300 ease-in hover:bg-[#5FA3B6] overflow-hidden xL:w-1/4 disabled:opacity-50 disabled:cursor-not-allowed",
+          "relative flex items-center bg-[#028EFC] text-white rounded-md p-2 shadow-md transition-all duration-300 ease-in  overflow-hidden xL:w-1/4 disabled:opacity-50 disabled:cursor-not-allowed",
           className
         )}
         onMouseEnter={calSpanPosition}
