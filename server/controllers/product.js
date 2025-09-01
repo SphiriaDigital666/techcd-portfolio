@@ -1,8 +1,37 @@
 const Product = require("../models/product");
+const cloudinary = require("../utils/cloudinary");
 
 exports.createProduct = async (req, res) => {
   try {
-    const product = new Product(req.body);
+    const files = req.files;
+    const urls = [];
+    const {
+      title,
+      smallDescription,
+      description,
+      price,
+      discountPrice,
+      categories,
+      attributes,
+    } = req.body;
+
+    for (const file of files) {
+      await cloudinary.uploader.upload(file.path, function (error, result) {
+        if (error) throw error;
+        urls.push(result.secure_url);
+      });
+    }
+
+    const product = new Product({
+      title,
+      smallDescription,
+      description,
+      price,
+      discountPrice,
+      categories,
+      attributes,
+      productImages: urls,
+    });
     await product.save();
 
     res.status(201).json({
@@ -63,10 +92,42 @@ exports.getProductById = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    })
+    const files = req.files;
+    const urls = [];
+    const {
+      title,
+      smallDescription,
+      description,
+      price,
+      discountPrice,
+      categories,
+      attributes,
+    } = req.body;
+
+    for (const file of files) {
+      await cloudinary.uploader.upload(file.path, function (error, result) {
+        if (error) throw error;
+        urls.push(result.secure_url);
+      });
+    }
+
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      {
+        title,
+        smallDescription,
+        description,
+        price,
+        discountPrice,
+        categories,
+        attributes,
+        productImages: urls,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    )
       .populate("categories", "name description")
       .populate("attributes.attribute", "name variations");
 

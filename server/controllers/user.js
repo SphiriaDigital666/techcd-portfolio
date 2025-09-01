@@ -63,24 +63,13 @@ exports.getUserById = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    console.log('Update user request:', {
-      id: req.params.id,
-      field: req.query.field,
-      body: req.body,
-      bodyKeys: Object.keys(req.body),
-      bodyValues: Object.values(req.body).map(v => typeof v === 'string' ? `${v.substring(0, 10)}...` : v)
-    });
-
     const user = await User.findById(req.params.id);
 
     if (!user) {
-      console.log('User not found:', req.params.id);
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
     }
-
-    console.log('Found user:', user._id);
 
     const { field } = req.query;
 
@@ -88,33 +77,23 @@ exports.updateUser = async (req, res) => {
       case "profile": {
         const { firstName, lastName, role } = req.body;
 
-        console.log('Profile update data:', { firstName, lastName, role });
-
-        // Validate required fields
         if (!firstName || !lastName || !role) {
-          console.log('Missing required fields:', { firstName, lastName, role });
-          return res
-            .status(400)
-            .json({ 
-              success: false, 
-              message: "firstName, lastName, and role are required for profile update" 
-            });
+          return res.status(400).json({
+            success: false,
+            message:
+              "firstName, lastName, and role are required for profile update",
+          });
         }
 
         // Validate that the role exists
         const UserRole = require("../models/user-role");
         const roleExists = await UserRole.findById(role);
         if (!roleExists) {
-          console.log('Role not found:', role);
-          return res
-            .status(400)
-            .json({ 
-              success: false, 
-              message: "Invalid role ID provided" 
-            });
+          return res.status(400).json({
+            success: false,
+            message: "Invalid role ID provided",
+          });
         }
-
-        console.log('Role validation passed:', roleExists);
 
         user.firstName = firstName;
         user.lastName = lastName;
@@ -139,22 +118,14 @@ exports.updateUser = async (req, res) => {
       case "email": {
         const { email, password } = req.body;
 
-        console.log('Email update request data:', { email, password: password ? '***' : 'MISSING' });
-        console.log('Email update validation - email present:', !!email);
-        console.log('Email update validation - password present:', !!password);
-        console.log('Email update validation - password length:', password ? password.length : 0);
-
         const isMatch = await bcrypt.compare(password, user.password);
-        console.log('Email update - password match result:', isMatch);
-        
+
         if (!isMatch) {
-          console.log('Email update failed - invalid password');
           return res
             .status(400)
             .json({ success: false, message: "Invalid password" });
         }
 
-        console.log('Email update - password validated, updating email');
         user.email = email;
         break;
       }
@@ -189,29 +160,24 @@ exports.updateUser = async (req, res) => {
       }
 
       default: {
-        return res
-          .status(400)
-          .json({ 
-            success: false, 
-            message: `Invalid field: ${field}. Supported fields are: profile, email, username, password, phoneNo` 
-          });
+        return res.status(400).json({
+          success: false,
+          message: `Invalid field: ${field}. Supported fields are: profile, email, username, password, phoneNo`,
+        });
       }
     }
 
     await user.save();
-    console.log('User saved successfully');
-    
+
     const updatedUser = user.toObject();
     delete updatedUser.password;
 
-    console.log('Sending success response');
     res.status(200).json({
       success: true,
       message: "User updated successfully",
       data: updatedUser,
     });
   } catch (error) {
-    console.error('Error in updateUser:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
