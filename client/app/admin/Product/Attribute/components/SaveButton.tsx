@@ -33,7 +33,7 @@ const SaveButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={cn(
           identifier,
-          "relative flex items-center bg-[#028EFC] text-white rounded-md p-2 shadow-md transition-all duration-300 ease-in hover:bg-[#5FA3B6] overflow-hidden xl:w-1/4",
+          "relative flex items-center bg-[#028EFC] text-white rounded-md p-2 shadow-md transition-all duration-300 ease-in  overflow-hidden xl:w-1/4",
           className
         )}
         onMouseEnter={calSpanPosition}
