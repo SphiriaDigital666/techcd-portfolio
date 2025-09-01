@@ -272,12 +272,6 @@ const ProductForm = () => {
           {/* Left Column - Product Details */}
           <div className="lg:col-span-3">
             <div className="relative rounded-3xl border border-[#172D6D] bg-black/30 backdrop-blur-[500px] p-6">
-              {/* Debug info - remove this in production */}
-              <div className="mb-4 p-2 bg-blue-900/20 border border-blue-500 rounded text-xs text-blue-300">
-                Debug: Selected files: {formData.selectedFiles.length} | 
-                Files: {formData.selectedFiles.map(f => f.name).join(', ') || 'None'}
-              </div>
-              
               <ProductDetails 
                 key={`product-details-${resetKey}`}
                 onProductDataChange={handleProductDataChange} 

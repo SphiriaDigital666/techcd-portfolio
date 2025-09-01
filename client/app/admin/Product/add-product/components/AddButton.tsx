@@ -35,7 +35,7 @@ const PrimaryButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={loading || disabled}
         className={cn(
           identifier,
-          "relative flex items-center bg-[#028EFC] text-white rounded-md p-2 shadow-md transition-all duration-300 ease-in hover:bg-[#5FA3B6] overflow-hidden xl:w-full",
+          "relative flex items-center bg-[#028EFC] text-white rounded-md p-2 shadow-md transition-all duration-300 ease-in hover:bg-[#5FA3B6] overflow-hidden w-full",
           loading && "opacity-70 cursor-not-allowed",
           className
         )}
