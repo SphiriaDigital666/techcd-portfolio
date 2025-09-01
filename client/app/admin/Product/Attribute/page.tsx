@@ -136,6 +136,12 @@ function AttributePage() {
   ];
 
   const handleSaveAttributes = async (attributes: Array<{ id: string; name: string; values: string[] }>) => {
+    // Check if there are any attributes to save
+    if (attributes.length === 0) {
+      console.log('No attributes to save - skipping API call');
+      return;
+    }
+    
     setLoading(true);
     try {
       // Save to API
@@ -179,6 +185,14 @@ function AttributePage() {
   };
 
   const handleSaveVariations = async (variations: Record<string, { values: string[] }>) => {
+    // Check if there are any variations to save
+    const hasVariations = Object.values(variations).some(v => v.values.length > 0);
+    
+    if (!hasVariations) {
+      console.log('No variations to save - skipping API call');
+      return;
+    }
+    
     setLoading(true);
     try {
       // Update each attribute with its variations
