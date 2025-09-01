@@ -49,15 +49,81 @@ function Page() {
   }, []);
 
   const handleInputChange = (field: string, value: string) => {
+    // Clear error message when user starts typing
+    if (message) {
+      setMessage(null);
+    }
+    
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
   };
 
+  // Real-time email validation
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // Real-time phone validation
+  const validatePhone = (phone: string) => {
+    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+    return phoneRegex.test(phone.replace(/\s/g, ''));
+  };
+
+  // Real-time zip code validation
+  const validateZipCode = (zipCode: string) => {
+    const zipRegex = /^\d{5}(-\d{4})?$/;
+    return zipRegex.test(zipCode);
+  };
+
+  // Get field-specific error message
+  const getFieldError = (field: string) => {
+    const value = formData[field as keyof typeof formData];
+    
+    if (!value) return null;
+    
+    switch (field) {
+      case 'email':
+        return !validateEmail(value) ? 'Please enter a valid email address' : null;
+      case 'shippingEmail':
+        return !validateEmail(value) ? 'Please enter a valid shipping email address' : null;
+      case 'phoneNo':
+        return !validatePhone(value) ? 'Please enter a valid phone number' : null;
+      case 'shippingPhone':
+        return !validatePhone(value) ? 'Please enter a valid shipping phone number' : null;
+      case 'zipCode':
+        return !validateZipCode(value) ? 'Please enter a valid zip code' : null;
+      default:
+        return null;
+    }
+  };
+
+  // Check if form has any validation errors
+  const hasValidationErrors = () => {
+    const fieldsToValidate = ['email', 'shippingEmail', 'phoneNo', 'shippingPhone', 'zipCode'];
+    return fieldsToValidate.some(field => getFieldError(field));
+  };
+
   const handleSubmit = async () => {
     console.log('=== handleSubmit called ===');
     console.log('Form data:', formData);
+    
+    // Clear any existing messages
+    setMessage(null);
+    
+    // Check for real-time validation errors first
+    if (hasValidationErrors()) {
+      const firstError = getFieldError('email') || getFieldError('shippingEmail') || 
+                        getFieldError('phoneNo') || getFieldError('shippingPhone') || 
+                        getFieldError('zipCode');
+      setMessage({
+        type: 'error',
+        text: firstError || 'Please correct the validation errors above'
+      });
+      return;
+    }
     
     // Validate required fields
     const requiredFields = [
@@ -278,6 +344,7 @@ function Page() {
               password: formData.password
             }}
             onInputChange={handleInputChange}
+            getFieldError={getFieldError}
           />
 
           {/* Shipping Address Section */}
@@ -293,6 +360,7 @@ function Page() {
               zipCode: formData.zipCode
             }}
             onInputChange={handleInputChange}
+            getFieldError={getFieldError}
           />
 
            {/* Save Button */}

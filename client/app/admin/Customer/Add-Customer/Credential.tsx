@@ -12,9 +12,10 @@ interface CredentialProps {
     password: string;
   };
   onInputChange: (field: string, value: string) => void;
+  getFieldError?: (field: string) => string | null;
 }
 
-const Credential: React.FC<CredentialProps> = ({ formData, onInputChange }) => {
+const Credential: React.FC<CredentialProps> = ({ formData, onInputChange, getFieldError }) => {
   return (
     <div className="mb-8">
       <h3 className="xl:text-[32px] text-[24px] font-semibold text-[#E5E5E5] mb-6">Credential</h3>
@@ -45,9 +46,16 @@ const Credential: React.FC<CredentialProps> = ({ formData, onInputChange }) => {
             type="email"
             value={formData.email}
             onChange={(e) => onInputChange('email', e.target.value)}
-            className="w-full px-4 xl:py-1 py-2  border border-[#172D6D] rounded-md text-white focus:border-[#028EFC] focus:outline-none"
+            className={`w-full px-4 xl:py-1 py-2 border rounded-md text-white focus:outline-none ${
+              getFieldError && getFieldError('email') 
+                ? 'border-red-500 focus:border-red-500' 
+                : 'border-[#172D6D] focus:border-[#028EFC]'
+            }`}
             required
           />
+          {getFieldError && getFieldError('email') && (
+            <p className="text-red-400 text-sm mt-1">{getFieldError('email')}</p>
+          )}
         </div>
         <div>
           <label className="block text-[#FFFFFF] text-[17px] mb-2">User name</label>
@@ -65,10 +73,17 @@ const Credential: React.FC<CredentialProps> = ({ formData, onInputChange }) => {
             type="tel"
             value={formData.phoneNo}
             onChange={(e) => onInputChange('phoneNo', e.target.value)}
-            className="w-full px-4 xl:py-1 py-2 border border-[#172D6D] rounded-md text-white focus:border-[#028EFC] focus:outline-none"
+            className={`w-full px-4 xl:py-1 py-2 border rounded-md text-white focus:outline-none ${
+              getFieldError && getFieldError('phoneNo') 
+                ? 'border-red-500 focus:border-red-500' 
+                : 'border-[#172D6D] focus:border-[#028EFC]'
+            }`}
             placeholder="e.g., +1234567890 (no spaces)"
             required
           />
+          {getFieldError && getFieldError('phoneNo') && (
+            <p className="text-red-400 text-sm mt-1">{getFieldError('phoneNo')}</p>
+          )}
         </div>
         <div>
           <label className="block text-[#FFFFFF] text-[17px] mb-2">Password</label>
