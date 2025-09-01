@@ -24,7 +24,7 @@ router.get(
   productController.getProductById
 );
 
-router.put(
+router.patch(
   "/:id",
   validateIdParam,
   runValidation,
@@ -34,7 +34,6 @@ router.put(
 router.delete(
   "/:id",
   validateIdParam,
-  validateUpdateProduct,
   runValidation,
   productController.deleteProduct
 );
