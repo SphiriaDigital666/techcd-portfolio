@@ -1,84 +1,131 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DataTable } from "./DataTable";
-import { columns } from "./columns";
+import { createColumns } from "./columns";
 import { FaSearch } from "react-icons/fa";
-
+import { productApi, Product } from "@/lib/api/productApi";
+import DeleteUserModal from "./DeleteUserModal";
 
 const AllProductsTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Delete modal state
+  const [deleteModal, setDeleteModal] = useState({
+    isOpen: false,
+    productId: "",
+    productName: "",
+    isLoading: false
+  });
 
-  // Mock product data
-  const products = [
-    {
-      id: "1",
-      productImage: "/images/sample-img.jpg",
-      productName: "Polo T shirt",
-      stock: "12",
-      price: "$10.00",
-      publish: "12 june, 2025",
-    },
-    {
-      id: "2",
-      productImage: "/images/sample-img.jpg",
-      productName: "Polo T shirt",
-      stock: "20",
-      price: "$10.00",
-      publish: "12 june, 2025",
-    },
-    {
-      id: "3",
-      productImage: "/images/sample-img.jpg",
-      productName: "Polo T shirt",
-      stock: "Out of stock",
-      price: "$10.00",
-      publish: "12 june, 2025",
-    },
-    {
-      id: "4",
-      productImage: "/images/sample-img.jpg",
-      productName: "Polo T shirt",
-      stock: "20",
-      price: "$10.00",
-      publish: "12 june, 2025",
-    },
-    {
-      id: "5",
-      productImage: "/images/sample-img.jpg",
-      productName: "Polo T shirt",
-      stock: "20",
-      price: "$10.00",
-      publish: "12 june, 2025",
-    },
-    {
-      id: "6",
-      productImage: "/images/sample-img.jpg",
-      productName: "Polo T shirt",
-      stock: "20",
-      price: "$10.00",
-      publish: "12 june, 2025",
-    },
-    {
-      id: "7",
-      productImage: "/images/sample-img.jpg",
-      productName: "Polo T shirt",
-      stock: "20",
-      price: "$10.00",
-      publish: "12 june, 2025",
-    },
-    {
-      id: "8",
-      productImage: "/images/sample-img.jpg",
-      productName: "Polo T shirt",
-      stock: "20",
-      price: "$10.00",
-      publish: "12 june, 2025",
-    },
-  ];
+  // Fetch products from API
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const productsData = await productApi.getProducts();
+      setProducts(productsData);
+      setError(null);
+    } catch (err: any) {
+      setError(err.message || 'Failed to fetch products');
+      console.error('Error fetching products:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch products on component mount
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  // Listen for new product additions (you can use localStorage or a custom event)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      fetchProducts();
+    };
+
+    // Listen for storage changes (when add product form resets)
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also listen for custom event when product is added
+    window.addEventListener('productAdded', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('productAdded', handleStorageChange);
+    };
+  }, []);
+
+  // Handle delete product
+  const handleDeleteProduct = (productId: string, productName: string) => {
+    setDeleteModal({
+      isOpen: true,
+      productId,
+      productName,
+      isLoading: false
+    });
+  };
+
+  // Confirm delete product
+  const confirmDeleteProduct = async () => {
+    try {
+      setDeleteModal(prev => ({ ...prev, isLoading: true }));
+      
+      // Call API to delete product
+      await productApi.deleteProduct(deleteModal.productId);
+      
+      // Remove product from local state
+      setProducts(prev => prev.filter(product => product._id !== deleteModal.productId));
+      
+      // Close modal
+      setDeleteModal({
+        isOpen: false,
+        productId: "",
+        productName: "",
+        isLoading: false
+      });
+      
+      // Show success message (you can add a toast notification here)
+      console.log(`Product "${deleteModal.productName}" deleted successfully`);
+      
+    } catch (err: any) {
+      console.error('Error deleting product:', err);
+      // Show error message (you can add a toast notification here)
+      alert(`Failed to delete product: ${err.message || 'Please try again.'}`);
+    } finally {
+      setDeleteModal(prev => ({ ...prev, isLoading: false }));
+    }
+  };
+
+  // Close delete modal
+  const closeDeleteModal = () => {
+    setDeleteModal({
+      isOpen: false,
+      productId: "",
+      productName: "",
+      isLoading: false
+    });
+  };
+
+  // Transform API data to match table structure
+  const transformedProducts = products.map((product) => ({
+    id: product._id,
+    productImage: product.productImages.length > 0 ? product.productImages[0] : "/images/sample-img.jpg",
+    productName: product.title,
+    stock: "In Stock", // You can add stock field to your product model later
+    price: `$${product.price.toFixed(2)}`,
+    publish: new Date(product.createdAt).toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    }),
+  }));
 
   // Enhanced filtering logic
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts = transformedProducts.filter((product) => {
     // Product name search
     const nameMatches =
       searchTerm === "" ||
@@ -89,6 +136,39 @@ const AllProductsTable = () => {
 
     return nameMatches;
   });
+
+  // Create columns with delete handler
+  const columns = createColumns(handleDeleteProduct);
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p>Loading products...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen text-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-400 mb-4">Error: {error}</p>
+          <button 
+            onClick={fetchProducts}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="container mx-auto">
@@ -151,7 +231,7 @@ const AllProductsTable = () => {
 
               {/* Class Filter */}
               {/* <div className="relative mt-[7px] mr-[50px] rounded-2xl bg-[#F9FBFF]">
-                <label className="text-[12px]">Class:</label>
+                <label className="label className="text-[12px]">Class:</label>
                 <select
                   value={classFilter}
                   onChange={(e) => setClassFilter(e.target.value)}
@@ -175,6 +255,15 @@ const AllProductsTable = () => {
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <DeleteUserModal
+        isOpen={deleteModal.isOpen}
+        onClose={closeDeleteModal}
+        onConfirm={confirmDeleteProduct}
+        userName={deleteModal.productName}
+        isLoading={deleteModal.isLoading}
+      />
     </div>
   );
 };
