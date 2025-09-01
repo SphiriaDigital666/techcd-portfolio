@@ -24,6 +24,7 @@ interface ProductFormData {
   // Gallery
   selectedFiles: Array<{
     id: string;
+    file: File; // Store the actual File object
     name: string;
     size: number;
     type: string;
@@ -85,11 +86,13 @@ const ProductForm = () => {
   // Handle gallery files changes
   const handleGalleryFilesChange = useCallback((files: Array<{
     id: string;
+    file: File; // Store the actual File object
     name: string;
     size: number;
     type: string;
     lastModified: number;
   }>) => {
+    console.log('ProductForm received files:', files);
     setFormData(prev => ({
       ...prev,
       selectedFiles: files
@@ -127,6 +130,16 @@ const ProductForm = () => {
     setLoading(true);
     
     try {
+      // Debug: Log current form state
+      console.log('=== FORM SUBMISSION DEBUG ===');
+      console.log('Current form data before validation:', formData);
+      console.log('Selected files count:', formData.selectedFiles.length);
+      console.log('Selected files array:', formData.selectedFiles);
+      console.log('Selected files type:', typeof formData.selectedFiles);
+      console.log('Is selectedFiles an array?', Array.isArray(formData.selectedFiles));
+      console.log('Selected files length check:', formData.selectedFiles?.length || 'undefined');
+      console.log('=== END DEBUG ===');
+      
       // Validate required fields
       if (!formData.title.trim()) {
         alert('Product title is required');
@@ -153,32 +166,51 @@ const ProductForm = () => {
         return;
       }
 
+      // Debug the file validation specifically
+      console.log('=== FILE VALIDATION DEBUG ===');
+      console.log('About to check selectedFiles.length === 0');
+      console.log('formData.selectedFiles:', formData.selectedFiles);
+      console.log('formData.selectedFiles.length:', formData.selectedFiles.length);
+      console.log('formData.selectedFiles.length === 0:', formData.selectedFiles.length === 0);
+      console.log('=== END FILE VALIDATION DEBUG ===');
+
       if (formData.selectedFiles.length === 0) {
         alert('Please select at least one product image');
         return;
       }
 
       // Prepare product data for API
-      const productData: CreateProductData = {
-        title: formData.title.trim(),
-        smallDescription: formData.shortDescription.trim(),
-        description: formData.description.trim(),
-        price: parseFloat(formData.price),
-        discountPrice: formData.discountPrice ? parseFloat(formData.discountPrice) : undefined,
-        categories: formData.selectedCategories,
-        productImages: formData.selectedFiles.map(file => file.name), // Use file names for now
-        attributes: Object.entries(formData.attributes)
-          .filter(([_, attr]) => attr.enabled && attr.selectedValue)
-          .map(([attrId, attr]) => ({
-            attribute: attrId,
-            selectedVariations: [attr.selectedValue]
-          }))
-      };
+      const formDataToSend = new FormData();
+      formDataToSend.append('title', formData.title.trim());
+      formDataToSend.append('smallDescription', formData.shortDescription.trim());
+      formDataToSend.append('description', formData.description.trim());
+      formDataToSend.append('price', formData.price);
+      if (formData.discountPrice) {
+        formDataToSend.append('discountPrice', formData.discountPrice);
+      }
+      formDataToSend.append('categories', JSON.stringify(formData.selectedCategories));
+      if (Object.keys(formData.attributes).length > 0) {
+        formDataToSend.append('attributes', JSON.stringify(
+          Object.entries(formData.attributes)
+            .filter(([_, attr]) => attr.enabled && attr.selectedValue)
+            .map(([attrId, attr]) => ({
+              attribute: attrId,
+              selectedVariations: [attr.selectedValue]
+            }))
+        ));
+      }
+      
+      // Append actual files
+      formData.selectedFiles.forEach((file, index) => {
+        // The file should already be a File object from the file input
+        formDataToSend.append('productImages', file.file);
+      });
 
-      console.log('Submitting product data:', productData);
+      console.log('Submitting form data with files:', formDataToSend);
+      console.log('Files to be sent:', formData.selectedFiles);
 
-      // Call the real API
-      const createdProduct = await productApi.createProduct(productData);
+      // Call the real API with FormData
+      const createdProduct = await productApi.createProduct(formDataToSend);
       
       console.log('Product created successfully:', createdProduct);
       
@@ -240,6 +272,12 @@ const ProductForm = () => {
           {/* Left Column - Product Details */}
           <div className="lg:col-span-3">
             <div className="relative rounded-3xl border border-[#172D6D] bg-black/30 backdrop-blur-[500px] p-6">
+              {/* Debug info - remove this in production */}
+              <div className="mb-4 p-2 bg-blue-900/20 border border-blue-500 rounded text-xs text-blue-300">
+                Debug: Selected files: {formData.selectedFiles.length} | 
+                Files: {formData.selectedFiles.map(f => f.name).join(', ') || 'None'}
+              </div>
+              
               <ProductDetails 
                 key={`product-details-${resetKey}`}
                 onProductDataChange={handleProductDataChange} 

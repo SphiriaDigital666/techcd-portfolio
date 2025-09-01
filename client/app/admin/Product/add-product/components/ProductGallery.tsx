@@ -4,6 +4,7 @@ import React, { useState, useRef } from 'react'
 
 interface SelectedFile {
   id: string;
+  file: File; // Store the actual File object
   name: string;
   size: number;
   type: string;
@@ -24,6 +25,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ onFilesChange }) => {
 
     const newFiles: SelectedFile[] = Array.from(files).map(file => ({
       id: `${Date.now()}-${Math.random()}`,
+      file: file, // Store the actual File object
       name: file.name,
       size: file.size,
       type: file.type,
@@ -33,6 +35,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ onFilesChange }) => {
     const updatedFiles = [...selectedFiles, ...newFiles];
     setSelectedFiles(updatedFiles);
     
+    // Directly notify parent component
     if (onFilesChange) {
       onFilesChange(updatedFiles);
     }
@@ -58,6 +61,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ onFilesChange }) => {
     const updatedFiles = selectedFiles.filter(file => file.id !== fileId);
     setSelectedFiles(updatedFiles);
     
+    // Directly notify parent component
     if (onFilesChange) {
       onFilesChange(updatedFiles);
     }
