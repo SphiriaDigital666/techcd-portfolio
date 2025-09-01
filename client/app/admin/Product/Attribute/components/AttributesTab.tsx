@@ -5,10 +5,11 @@ import SaveButton from './SaveButton';
 
 interface AttributesTabProps {
   onSaveAttributes: (attributes: Array<{ id: string; name: string; values: string[] }>) => void;
+  onDeleteAttribute?: (attributeId: string) => Promise<boolean>;
   savedAttributes?: Array<{ id: string; name: string; values: string[] }>;
 }
 
-const AttributesTab: React.FC<AttributesTabProps> = ({ onSaveAttributes, savedAttributes = [] }) => {
+const AttributesTab: React.FC<AttributesTabProps> = ({ onSaveAttributes, onDeleteAttribute, savedAttributes = [] }) => {
   const [attributes, setAttributes] = useState<Array<{ id: string; name: string; values: string[] }>>(savedAttributes);
   const [inputFields, setInputFields] = useState<Array<{ id: string; value: string }>>([]);
   const [nextId, setNextId] = useState(1); // Start from 1
@@ -33,16 +34,44 @@ const AttributesTab: React.FC<AttributesTabProps> = ({ onSaveAttributes, savedAt
   };
 
   const removeAttribute = async (id: string) => {
-    const updatedAttributes = attributes.filter(attr => attr.id !== id);
-    setAttributes(updatedAttributes);
-    console.log('Removed attribute:', id);
+    console.log('Attempting to remove attribute:', id);
+    console.log('onDeleteAttribute prop:', onDeleteAttribute);
     
-    // Immediately save the changes
-    try {
+    // Check if this is a temporary attribute (not yet saved to API)
+    if (id.startsWith('temp_')) {
+      // Just remove from local state for temporary attributes
+      const updatedAttributes = attributes.filter(attr => attr.id !== id);
+      setAttributes(updatedAttributes);
+      console.log('Removed temporary attribute:', id);
+      return;
+    }
+
+    // For existing attributes, use the delete handler from parent
+    if (onDeleteAttribute) {
+      console.log('Using onDeleteAttribute handler for:', id);
+      try {
+        const success = await onDeleteAttribute(id);
+        console.log('Delete result:', success);
+        if (success) {
+          // Remove from local state after successful API deletion
+          const updatedAttributes = attributes.filter(attr => attr.id !== id);
+          setAttributes(updatedAttributes);
+          console.log('Attribute permanently removed:', id);
+        } else {
+          console.error('Delete operation returned false');
+          alert('Failed to remove attribute. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error removing attribute:', error);
+        alert('Failed to remove attribute. Please try again.');
+      }
+    } else {
+      console.log('No onDeleteAttribute handler, using fallback method');
+      // Fallback: just remove from local state and save
+      const updatedAttributes = attributes.filter(attr => attr.id !== id);
+      setAttributes(updatedAttributes);
       await onSaveAttributes(updatedAttributes);
-      console.log('Attributes saved after removal');
-    } catch (error) {
-      console.error('Error saving attributes after removal:', error);
+      console.log('Attribute removed (fallback method):', id);
     }
   };
 

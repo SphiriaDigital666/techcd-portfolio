@@ -59,11 +59,22 @@ const attributeAPI = {
   // Delete attribute
   deleteAttribute: async (id: string) => {
     try {
+      console.log('Making DELETE request to:', `${API_BASE_URL}/attribute/${id}`);
       const response = await fetch(`${API_BASE_URL}/attribute/${id}`, {
         method: 'DELETE',
       });
-      if (!response.ok) throw new Error('Failed to delete attribute');
-      return await response.json();
+      console.log('Delete response status:', response.status);
+      console.log('Delete response ok:', response.ok);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Delete failed with status:', response.status, 'Error:', errorText);
+        throw new Error(`Failed to delete attribute: ${response.status} ${errorText}`);
+      }
+      
+      const result = await response.json();
+      console.log('Delete response data:', result);
+      return result;
     } catch (error) {
       console.error('Error deleting attribute:', error);
       throw error;
@@ -221,6 +232,37 @@ function AttributePage() {
     }
   };
 
+  // Handle attribute deletion
+  const handleDeleteAttribute = async (attributeId: string) => {
+    console.log('handleDeleteAttribute called with ID:', attributeId);
+    try {
+      console.log('Calling API to delete attribute:', attributeId);
+      // Delete from API
+      const result = await attributeAPI.deleteAttribute(attributeId);
+      console.log('API delete result:', result);
+      
+      // Remove from local state
+      const updatedAttributes = savedAttributes.filter(attr => attr.id !== attributeId);
+      setSavedAttributes(updatedAttributes);
+      console.log('Updated local attributes:', updatedAttributes);
+      
+      // Update variations data
+      const updatedVariations = { ...savedVariations };
+      delete updatedVariations[attributeId];
+      setSavedVariations(updatedVariations);
+      
+      // Update localStorage
+      localStorage.setItem('savedAttributes', JSON.stringify(updatedAttributes));
+      localStorage.setItem('savedVariations', JSON.stringify(updatedVariations));
+      
+      console.log('Attribute deletion completed successfully');
+      return true; // Success
+    } catch (error) {
+      console.error('Error deleting attribute:', error);
+      return false; // Failed
+    }
+  };
+
   const renderContent = () => {
     if (loading) {
       return (
@@ -232,7 +274,7 @@ function AttributePage() {
 
     switch (activeTab) {
       case 'attributes':
-        return <AttributesTab onSaveAttributes={handleSaveAttributes} savedAttributes={savedAttributes} />;
+        return <AttributesTab onSaveAttributes={handleSaveAttributes} onDeleteAttribute={handleDeleteAttribute} savedAttributes={savedAttributes} />;
       case 'variations':
         return <VariationsTab savedAttributes={savedAttributes} onSaveVariations={handleSaveVariations} savedVariations={savedVariations} />;
       default:
