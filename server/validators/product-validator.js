@@ -22,17 +22,20 @@ exports.validateCreateProduct = [
     .withMessage("Description must be a string")
     .trim(),
 
-  body("productImages")
-    .isArray({ min: 1 })
-    .withMessage("At least one product image is required")
-    .custom((images) => {
-      if (!images.every((img) => typeof img === "string")) {
-        throw new Error(
-          "All product images must be strings (URLs or file paths)"
-        );
+  body("productImages").custom((value, { req }) => {
+    const files = req.files;
+    if (!files || files.length === 0) {
+      throw new Error("At least one product image is required");
+    }
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    files.forEach((file) => {
+      if (!allowedTypes.includes(file.mimetype)) {
+        throw new Error("Only JPEG, PNG, or GIF images are allowed");
       }
-      return true;
-    }),
+    });
+    return true;
+  }),
 
   body("price")
     .notEmpty()
@@ -105,17 +108,20 @@ exports.validateUpdateProduct = [
     .withMessage("Description must be a string")
     .trim(),
 
-  body("productImages")
-    .isArray({ min: 1 })
-    .withMessage("At least one product image is required")
-    .custom((images) => {
-      if (!images.every((img) => typeof img === "string")) {
-        throw new Error(
-          "All product images must be strings (URLs or file paths)"
-        );
+  body("productImages").custom((value, { req }) => {
+    const files = req.files;
+    if (!files || files.length === 0) {
+      throw new Error("At least one product image is required");
+    }
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    files.forEach((file) => {
+      if (!allowedTypes.includes(file.mimetype)) {
+        throw new Error("Only JPEG, PNG, or GIF images are allowed");
       }
-      return true;
-    }),
+    });
+    return true;
+  }),
 
   body("price")
     .notEmpty()
