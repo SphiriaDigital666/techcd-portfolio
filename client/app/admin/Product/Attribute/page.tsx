@@ -5,13 +5,13 @@ import AttributesTab from './components/AttributesTab';
 import VariationsTab from './components/VariationsTab';
 
 // API functions
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
 const attributeAPI = {
   // Get all attributes
   getAttributes: async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/attributes`);
+      const response = await fetch(`${API_BASE_URL}/attribute`);
       if (!response.ok) throw new Error('Failed to fetch attributes');
       return await response.json();
     } catch (error) {
@@ -23,7 +23,7 @@ const attributeAPI = {
   // Create new attribute
   createAttribute: async (attributeData: { name: string; variations: string[] }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/attributes`, {
+      const response = await fetch(`${API_BASE_URL}/attribute`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ const attributeAPI = {
   // Update attribute
   updateAttribute: async (id: string, attributeData: { name: string; variations: string[] }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/attributes/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/attribute/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ const attributeAPI = {
   // Delete attribute
   deleteAttribute: async (id: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/attributes/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/attribute/${id}`, {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('Failed to delete attribute');
