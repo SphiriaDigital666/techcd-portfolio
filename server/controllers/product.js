@@ -20,7 +20,7 @@ exports.createProduct = async (req, res) => {
 exports.getProducts = async (req, res) => {
   try {
     const products = await Product.find()
-      .populate("categories")
+      .populate("categories", "name description")
       .populate("attributes.attribute", "name variations");
 
     res.status(200).json({
@@ -39,7 +39,7 @@ exports.getProducts = async (req, res) => {
 exports.getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id)
-      .populate("categories")
+      .populate("categories", "name description")
       .populate("attributes.attribute", "name variations");
 
     if (!product) {
@@ -67,7 +67,7 @@ exports.updateProduct = async (req, res) => {
       new: true,
       runValidators: true,
     })
-      .populate("categories")
+      .populate("categories", "name description")
       .populate("attributes.attribute", "name variations");
 
     if (!product) {
