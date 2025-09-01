@@ -17,7 +17,15 @@ type Product = {
 };
 
 // Action Buttons Component
-const ActionButtons = ({ productId }: { productId: string }) => {
+const ActionButtons = ({ 
+  productId, 
+  productName, 
+  onDelete 
+}: { 
+  productId: string; 
+  productName: string;
+  onDelete: (productId: string, productName: string) => void;
+}) => {
   const router = useRouter();
 
   const handleViewClick = () => {
@@ -29,7 +37,7 @@ const ActionButtons = ({ productId }: { productId: string }) => {
   };
 
   const handleDeleteClick = () => {
-    console.log("Delete product:", productId);
+    onDelete(productId, productName);
   };
 
   return (
@@ -59,7 +67,7 @@ const ActionButtons = ({ productId }: { productId: string }) => {
   );
 };
 
-export const columns: ColumnDef<Product>[] = [
+export const createColumns = (onDelete: (productId: string, productName: string) => void): ColumnDef<Product>[] => [
   {
     accessorKey: "productImage",
     header: "Product Image",
@@ -110,7 +118,13 @@ export const columns: ColumnDef<Product>[] = [
     id: "actions",
     header: "Action",
     cell: ({ row }) => {
-      return <ActionButtons productId={row.original.id} />;
+      return (
+        <ActionButtons 
+          productId={row.original.id} 
+          productName={row.original.productName}
+          onDelete={onDelete}
+        />
+      );
     },
   },
 ];

@@ -185,6 +185,11 @@ const ProductForm = () => {
       // Show success message
       showSuccessMessage(`Product "${formData.title}" has been added successfully!`);
       
+      // Dispatch custom event to refresh all-products table
+      window.dispatchEvent(new CustomEvent('productAdded', { 
+        detail: { productId: createdProduct._id, productName: formData.title } 
+      }));
+      
       // Reset form
       resetForm();
 
