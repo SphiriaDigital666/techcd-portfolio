@@ -13,6 +13,7 @@ interface ProductDetailsProps {
   }) => void;
   onFilesChange?: (files: Array<{
     id: string;
+    file: File; // Store the actual File object
     name: string;
     size: number;
     type: string;

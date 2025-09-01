@@ -44,14 +44,12 @@ export interface Product {
 
 export const productApi = {
   // Create new product
-  createProduct: async (productData: CreateProductData): Promise<Product> => {
+  createProduct: async (productData: FormData): Promise<Product> => {
     try {
       const response = await fetch(`${API_BASE_URL}/product`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(productData),
+        // Don't set Content-Type header for FormData - let the browser set it with boundary
+        body: productData,
       });
 
       if (!response.ok) {
