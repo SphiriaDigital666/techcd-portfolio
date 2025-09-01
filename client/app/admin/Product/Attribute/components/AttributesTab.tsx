@@ -76,6 +76,12 @@ const AttributesTab: React.FC<AttributesTabProps> = ({ onSaveAttributes, savedAt
     // Combine existing attributes with new ones
     const allAttributes = [...attributes, ...newAttributes];
     
+    // Check if there are any changes to save
+    if (validInputs.length === 0) {
+      console.log('No new attributes to save');
+      return;
+    }
+    
     // Save all attributes
     try {
       await onSaveAttributes(allAttributes);

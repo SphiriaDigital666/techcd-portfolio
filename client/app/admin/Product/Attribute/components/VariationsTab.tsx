@@ -103,16 +103,54 @@ const VariationsTab: React.FC<VariationsTabProps> = ({ savedAttributes, onSaveVa
     }
   };
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async () => {
     console.log('Saving variations...', variations);
     
-    if (onSaveVariations) {
-      onSaveVariations(variations);
+    let hasChanges = false;
+    let updatedVariations = { ...variations };
+    
+    // If there's a variation being entered, add it first
+    if (editingType && newValue.trim()) {
+      const currentVariations = variations[editingType] || { values: [] };
+      updatedVariations = {
+        ...variations,
+        [editingType]: {
+          values: [...currentVariations.values, newValue.trim()]
+        }
+      };
+      setVariations(updatedVariations);
+      console.log('Added variation from input field:', newValue.trim());
+      
+      // Clear the input field
+      setNewValue('');
+      setEditingType(null);
+      hasChanges = true;
     }
     
-    // Add visual feedback
-    alert('Variations saved successfully!');
-    console.log('Variations saved:', variations);
+    // Check if there are any variations to save
+    const hasVariations = Object.values(updatedVariations).some(v => v.values.length > 0);
+    
+    if (!hasVariations) {
+      console.log('No variations to save');
+      return;
+    }
+    
+    // Only call parent function if there are actual changes
+    if (hasChanges) {
+      if (onSaveVariations) {
+        try {
+          await onSaveVariations(updatedVariations);
+          console.log('Variations saved');
+        } catch (error) {
+          console.error('Error saving variations:', error);
+        }
+      }
+      
+      // Only show success message if there were actual changes
+      alert('Variations saved successfully!');
+    }
+    
+    console.log('Variations saved:', updatedVariations);
   };
 
   return (
