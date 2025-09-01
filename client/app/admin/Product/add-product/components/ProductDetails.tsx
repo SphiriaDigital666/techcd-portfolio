@@ -1,8 +1,40 @@
-import React from 'react'
+"use client";
+
+import React, { useState } from 'react'
 import ProductGallery from './ProductGallery'
 
+interface ProductDetailsProps {
+  onProductDataChange: (data: {
+    title: string;
+    shortDescription: string;
+    description: string;
+    price: string;
+    discountPrice: string;
+  }) => void;
+  onFilesChange?: (files: Array<{
+    id: string;
+    name: string;
+    size: number;
+    type: string;
+    lastModified: number;
+  }>) => void;
+}
 
-const ProductDetails = () => {
+const ProductDetails: React.FC<ProductDetailsProps> = ({ onProductDataChange, onFilesChange }) => {
+  const [productData, setProductData] = useState({
+    title: '',
+    shortDescription: '',
+    description: '',
+    price: '',
+    discountPrice: ''
+  });
+
+  const handleInputChange = (field: string, value: string) => {
+    const newData = { ...productData, [field]: value };
+    setProductData(newData);
+    onProductDataChange(newData);
+  };
+
   return (
     <div className="space-y-6">
       {/* Product Title */}
@@ -12,8 +44,10 @@ const ProductDetails = () => {
         </label>
         <input
           type="text"
-          className="w-full px-4 py-3  rounded-lg border border-[#172D6D]  text-white text-sm"
-
+          value={productData.title}
+          onChange={(e) => handleInputChange('title', e.target.value)}
+          placeholder="Enter product title"
+          className="w-full px-4 py-3  rounded-lg border border-[#172D6D]  text-white text-sm bg-black/30 backdrop-blur-[500px] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
 
@@ -24,8 +58,10 @@ const ProductDetails = () => {
         </label>
         <textarea
           rows={3}
-          className="w-full px-4 py-3 b rounded-lg border border-[#172D6D] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 text-sm resize-none"
-         
+          value={productData.shortDescription}
+          onChange={(e) => handleInputChange('shortDescription', e.target.value)}
+          placeholder="Enter short description"
+          className="w-full px-4 py-3 b rounded-lg border border-[#172D6D] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 text-sm resize-none bg-black/30 backdrop-blur-[500px]"
         />
       </div>
 
@@ -36,13 +72,15 @@ const ProductDetails = () => {
         </label>
         <textarea
           rows={6}
-          className="w-full px-4 py-3  rounded-lg border border-[#172D6D] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 text-sm resize-none"
-         
+          value={productData.description}
+          onChange={(e) => handleInputChange('description', e.target.value)}
+          placeholder="Enter detailed description"
+          className="w-full px-4 py-3  rounded-lg border border-[#172D6D] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 text-sm resize-none bg-black/30 backdrop-blur-[500px]"
         />
       </div>
 
       {/* Product Gallery */}
-      <ProductGallery />
+      <ProductGallery onFilesChange={onFilesChange} />
 
       {/* Price Section */}
       <div className="grid grid-cols-2 gap-4">
@@ -51,9 +89,13 @@ const ProductDetails = () => {
             Price
           </label>
           <input
-
-            className="w-full px-4 py-3  rounded-lg border border-[#172D6D] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 text-sm"
-           
+            type="number"
+            value={productData.price}
+            onChange={(e) => handleInputChange('price', e.target.value)}
+            placeholder="0.00"
+            step="0.01"
+            min="0"
+            className="w-full px-4 py-3  rounded-lg border border-[#172D6D] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 text-sm bg-black/30 backdrop-blur-[500px]"
           />
         </div>
         <div>
@@ -61,14 +103,16 @@ const ProductDetails = () => {
             Discount Price
           </label>
           <input
-
-            className="w-full px-4 py-3  rounded-lg border border-[#172D6D] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 text-sm"
-           
+            type="number"
+            value={productData.discountPrice}
+            onChange={(e) => handleInputChange('discountPrice', e.target.value)}
+            placeholder="0.00"
+            step="0.01"
+            min="0"
+            className="w-full px-4 py-3  rounded-lg border border-[#172D6D] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 text-sm bg-black/30 backdrop-blur-[500px]"
           />
         </div>
       </div>
-
-    
     </div>
   )
 }

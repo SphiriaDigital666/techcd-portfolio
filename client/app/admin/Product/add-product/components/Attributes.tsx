@@ -17,7 +17,11 @@ const attributeAPI = {
   },
 };
 
-const Attributes = () => {
+interface AttributesProps {
+  onAttributesChange: (attributes: Record<string, { enabled: boolean; selectedValue: string }>) => void;
+}
+
+const Attributes: React.FC<AttributesProps> = ({ onAttributesChange }) => {
   const [enabledAttributes, setEnabledAttributes] = useState<Record<string, boolean>>({});
   const [selectedValues, setSelectedValues] = useState<Record<string, string>>({});
   const [attributes, setAttributes] = useState<Array<{ _id: string; name: string; variations: string[] }>>([]);
@@ -52,6 +56,9 @@ const Attributes = () => {
           
           setEnabledAttributes(newEnabledAttributes);
           setSelectedValues(newSelectedValues);
+          
+          // Notify parent component of initial state
+          notifyParent(newEnabledAttributes, newSelectedValues);
         }
       } catch (error) {
         console.error('Error loading attributes:', error);
@@ -65,18 +72,36 @@ const Attributes = () => {
 
   // Helper function to toggle attribute enabled state
   const toggleAttribute = (attributeId: string) => {
-    setEnabledAttributes(prev => ({
-      ...prev,
-      [attributeId]: !prev[attributeId]
-    }));
+    const newEnabledAttributes = {
+      ...enabledAttributes,
+      [attributeId]: !enabledAttributes[attributeId]
+    };
+    setEnabledAttributes(newEnabledAttributes);
+    notifyParent(newEnabledAttributes, selectedValues);
   };
 
   // Helper function to update selected value
   const updateSelectedValue = (attributeId: string, value: string) => {
-    setSelectedValues(prev => ({
-      ...prev,
+    const newSelectedValues = {
+      ...selectedValues,
       [attributeId]: value
-    }));
+    };
+    setSelectedValues(newSelectedValues);
+    notifyParent(enabledAttributes, newSelectedValues);
+  };
+
+  // Notify parent component of changes
+  const notifyParent = (enabled: Record<string, boolean>, selected: Record<string, string>) => {
+    const attributesData: Record<string, { enabled: boolean; selectedValue: string }> = {};
+    
+    attributes.forEach(attr => {
+      attributesData[attr._id] = {
+        enabled: enabled[attr._id] || false,
+        selectedValue: selected[attr._id] || ''
+      };
+    });
+    
+    onAttributesChange(attributesData);
   };
 
   return (
