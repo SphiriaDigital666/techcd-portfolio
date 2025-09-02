@@ -1,20 +1,5 @@
-export type FetchedProduct = {
-  _id: string;
-  title: string;
-  smallDescription: string;
-  description: string;
-  productImages: string[];
-  price: number;
-  discountPrice: number;
-  categories: { _id: string; name: string; description: string }[];
-  attributes: {
-    attribute: { _id: string; name: string; variations: string[] };
-    selectedVariations: string[];
-  }[];
-};
-
 export type Product = {
-  id: string;
+  _id: string;
   title: string;
   smallDescription: string;
   description: string;
@@ -23,4 +8,9 @@ export type Product = {
   discountPrice: number;
   categories: { name: string; description: string }[];
   attributes: { name: string; variations: string[] }[];
+};
+
+export type Category = {
+  name: string;
+  description: string;
 };

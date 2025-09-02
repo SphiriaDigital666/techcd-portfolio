@@ -9,13 +9,16 @@ import ProductGrid from "./ProductGrid";
 type ProductGridAreaProps = {
   products: Product[];
   total: number;
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
 };
 
 const ProductGridArea: React.FC<ProductGridAreaProps> = ({
   products,
   total,
+  currentPage,
+  setCurrentPage,
 }) => {
-  const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(3);
 
   useEffect(() => {
@@ -43,9 +46,11 @@ const ProductGridArea: React.FC<ProductGridAreaProps> = ({
 
   return (
     <div className="text-[13px] sm:text-[15px] md:text-[17px] lg:col-span-4 lg:text-[19px] xl:text-[20px] 2xl:text-[21px]">
-      <div className="mb-[1em] font-medium">
-        Showing {total} product{total > 1 && "s"} matching your filters
-      </div>
+      {paginatedProducts.length > 0 && (
+        <div className="mb-[1em] font-medium">
+          Showing {total} product{total > 1 && "s"} matching your filters
+        </div>
+      )}
       <ProductGrid products={paginatedProducts} />
       {paginatedProducts.length > 0 && (
         <Pagination
@@ -55,8 +60,8 @@ const ProductGridArea: React.FC<ProductGridAreaProps> = ({
         />
       )}
       {paginatedProducts.length === 0 && (
-        <div className="pt-[2em]">
-          <p>No prodcuts found</p>
+        <div className="bg-foreground/5 border-foreground/20 flex h-full items-center justify-center rounded-[1em] border">
+          <p>No prodcuts found matching your filters</p>
         </div>
       )}
     </div>
