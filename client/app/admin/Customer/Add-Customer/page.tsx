@@ -63,27 +63,37 @@ function Page() {
   // Real-time email validation
   const validateEmail = (email: string) => {
     if (!email) return null;
+    if (email.length === 1) return 'Please enter a valid email address (e.g., user@example.com)';
+    if (email.length < 3) return 'Please enter a valid email address (e.g., user@example.com)';
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    if (!emailRegex.test(email)) return 'Please enter a valid email address (e.g., user@example.com)';
+    return null;
   };
 
   // Real-time phone validation
   const validatePhone = (phone: string) => {
     if (!phone) return null;
+    if (phone.length === 1) return 'Please enter a valid phone number (e.g., +1234567890 or 1234567890)';
+    if (phone.length < 3) return 'Please enter a valid phone number (e.g., +1234567890 or 1234567890)';
     const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-    return phoneRegex.test(phone.replace(/\s/g, ''));
+    if (!phoneRegex.test(phone.replace(/\s/g, ''))) return 'Please enter a valid phone number (e.g., +1234567890 or 1234567890)';
+    return null;
   };
 
   // Real-time zip code validation
   const validateZipCode = (zipCode: string) => {
     if (!zipCode) return null;
+    if (zipCode.length === 1) return 'Please enter a valid zip code (e.g., 12345 or 12345-6789)';
+    if (zipCode.length < 5) return 'Please enter a valid zip code (e.g., 12345 or 12345-6789)';
     const zipRegex = /^\d{5}(-\d{4})?$/;
-    return zipRegex.test(zipCode);
+    if (!zipRegex.test(zipCode)) return 'Please enter a valid zip code (e.g., 12345 or 12345-6789)';
+    return null;
   };
 
   // Real-time name validation
   const validateName = (name: string, fieldName: string): string | null => {
     if (!name) return null;
+    if (name.length === 1) return `${fieldName} must be at least 2 characters (${name.length}/2)`;
     if (name.length < 2) return `${fieldName} must be at least 2 characters (${name.length}/2)`;
     return null;
   };
@@ -91,6 +101,8 @@ function Page() {
   // Real-time username validation
   const validateUsername = (username: string): string | null => {
     if (!username) return null;
+    if (username.length === 1) return `Username must be at least 3 characters (${username.length}/3)`;
+    if (username.length === 2) return `Username must be at least 3 characters (${username.length}/3)`;
     if (username.length < 3) return `Username must be at least 3 characters (${username.length}/3)`;
     return null;
   };
@@ -114,6 +126,10 @@ function Page() {
   // Real-time address validation
   const validateAddress = (address: string): string | null => {
     if (!address) return null;
+    if (address.length === 1) return `Address must be at least 5 characters (${address.length}/5)`;
+    if (address.length === 2) return `Address must be at least 5 characters (${address.length}/5)`;
+    if (address.length === 3) return `Address must be at least 5 characters (${address.length}/5)`;
+    if (address.length === 4) return `Address must be at least 5 characters (${address.length}/5)`;
     if (address.length < 5) return `Address must be at least 5 characters (${address.length}/5)`;
     return null;
   };
@@ -130,15 +146,9 @@ function Page() {
       case 'username':
         return validateUsername(value);
       case 'email':
-        if (value && !validateEmail(value)) {
-          return 'Please enter a valid email address (e.g., user@example.com)';
-        }
-        break;
+        return validateEmail(value);
       case 'phoneNo':
-        if (value && !validatePhone(value)) {
-          return 'Please enter a valid phone number (e.g., +1234567890 or 1234567890)';
-        }
-        break;
+        return validatePhone(value);
       case 'password':
         return validatePassword(value);
       case 'shippingFirstName':
@@ -146,15 +156,9 @@ function Page() {
       case 'shippingLastName':
         return validateName(value, 'Shipping last name');
       case 'shippingEmail':
-        if (value && !validateEmail(value)) {
-          return 'Please enter a valid shipping email address (e.g., user@example.com)';
-        }
-        break;
+        return validateEmail(value);
       case 'shippingPhone':
-        if (value && !validatePhone(value)) {
-          return 'Please enter a valid shipping phone number (e.g., +1234567890 or 1234567890)';
-        }
-        break;
+        return validatePhone(value);
       case 'address':
         return validateAddress(value);
       case 'city':
@@ -162,10 +166,7 @@ function Page() {
       case 'state':
         return validateName(value, 'State');
       case 'zipCode':
-        if (value && !validateZipCode(value)) {
-          return 'Please enter a valid zip code (e.g., 12345 or 12345-6789)';
-        }
-        break;
+        return validateZipCode(value);
     }
     return null;
   };

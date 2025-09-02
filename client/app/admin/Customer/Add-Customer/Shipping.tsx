@@ -40,7 +40,7 @@ const Shipping: React.FC<ShippingProps> = ({ formData, onInputChange, getFieldEr
                 ? 'border-red-500 focus:border-red-500' 
                 : 'border-[#172D6D] focus:border-[#028EFC]'
             }`}
-            placeholder="Enter shipping first name (min 2 characters)"
+
             required
           />
           {getFieldError && getFieldError('shippingFirstName') && (
@@ -65,7 +65,7 @@ const Shipping: React.FC<ShippingProps> = ({ formData, onInputChange, getFieldEr
                 ? 'border-red-500 focus:border-red-500' 
                 : 'border-[#172D6D] focus:border-[#028EFC]'
             }`}
-            placeholder="Enter shipping last name (min 2 characters)"
+
             required
           />
           {getFieldError && getFieldError('shippingLastName') && (
@@ -83,7 +83,7 @@ const Shipping: React.FC<ShippingProps> = ({ formData, onInputChange, getFieldEr
                 ? 'border-red-500 focus:border-red-500' 
                 : 'border-[#172D6D] focus:border-[#028EFC]'
             }`}
-            placeholder="e.g., +1234567890 (no spaces)"
+
             required
           />
           {getFieldError && getFieldError('shippingPhone') && (
@@ -125,7 +125,7 @@ const Shipping: React.FC<ShippingProps> = ({ formData, onInputChange, getFieldEr
                 ? 'border-red-500 focus:border-red-500' 
                 : 'border-[#172D6D] focus:border-[#028EFC]'
             }`}
-            placeholder="Enter state (min 2 characters)"
+
             required
           />
           {getFieldError && getFieldError('state') && (
@@ -150,7 +150,7 @@ const Shipping: React.FC<ShippingProps> = ({ formData, onInputChange, getFieldEr
                 ? 'border-red-500 focus:border-red-500' 
                 : 'border-[#172D6D] focus:border-[#028EFC]'
             }`}
-            placeholder="Enter city (min 2 characters)"
+
             required
           />
           {getFieldError && getFieldError('city') && (
@@ -168,7 +168,7 @@ const Shipping: React.FC<ShippingProps> = ({ formData, onInputChange, getFieldEr
                 ? 'border-red-500 focus:border-red-500' 
                 : 'border-[#028EFC] focus:border-[#028EFC]'
             }`}
-            placeholder="e.g., 12345 (5 digits)"
+
             required
           />
           {getFieldError && getFieldError('zipCode') && (
@@ -193,7 +193,7 @@ const Shipping: React.FC<ShippingProps> = ({ formData, onInputChange, getFieldEr
                 ? 'border-red-500 focus:border-red-500' 
                 : 'border-[#172D6D] focus:border-[#028EFC]'
             }`}
-            placeholder="Enter full address (min 5 characters)"
+
             required
           />
           {getFieldError && getFieldError('address') && (
