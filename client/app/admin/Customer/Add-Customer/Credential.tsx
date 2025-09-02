@@ -38,7 +38,7 @@ const Credential: React.FC<CredentialProps> = ({ formData, onInputChange, getFie
                 ? 'border-red-500 focus:border-red-500' 
                 : 'border-[#172D6D] focus:border-[#028EFC]'
             }`}
-            placeholder="Enter first name (min 2 characters)"
+
             required
           />
           {getFieldError && getFieldError('firstName') && (
@@ -63,7 +63,7 @@ const Credential: React.FC<CredentialProps> = ({ formData, onInputChange, getFie
                 ? 'border-red-500 focus:border-red-500' 
                 : 'border-[#172D6D] focus:border-[#028EFC]'
             }`}
-            placeholder="Enter last name (min 2 characters)"
+
             required
           />
           {getFieldError && getFieldError('lastName') && (
@@ -105,7 +105,7 @@ const Credential: React.FC<CredentialProps> = ({ formData, onInputChange, getFie
                 ? 'border-red-500 focus:border-red-500' 
                 : 'border-[#172D6D] focus:border-[#028EFC]'
             }`}
-            placeholder="Enter username (min 3 characters)"
+
             required
           />
           {getFieldError && getFieldError('username') && (
@@ -123,7 +123,7 @@ const Credential: React.FC<CredentialProps> = ({ formData, onInputChange, getFie
                 ? 'border-red-500 focus:border-red-500' 
                 : 'border-[#172D6D] focus:border-[#028EFC]'
             }`}
-            placeholder="e.g., +1234567890 (no spaces)"
+
             required
           />
           {getFieldError && getFieldError('phoneNo') && (
@@ -148,7 +148,7 @@ const Credential: React.FC<CredentialProps> = ({ formData, onInputChange, getFie
                 ? 'border-red-500 focus:border-red-500' 
                 : 'border-[#172D6D] focus:border-[#028EFC]'
             }`}
-            placeholder="Enter password (min 8 characters with uppercase, lowercase, number, special char)"
+
             required
           />
           {getFieldError && getFieldError('password') && (
