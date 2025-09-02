@@ -31,7 +31,7 @@ const ProductGrid = ({ products }: { products: Product[] }) => {
 
           <div className="relative">
             <div>{product.title}</div>
-            <div>${product.discountPrice}</div>
+            <div>Rs. {product.discountPrice}</div>
           </div>
 
           <button

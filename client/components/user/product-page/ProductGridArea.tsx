@@ -60,7 +60,7 @@ const ProductGridArea: React.FC<ProductGridAreaProps> = ({
         />
       )}
       {paginatedProducts.length === 0 && (
-        <div className="bg-foreground/5 border-foreground/20 flex h-full items-center justify-center rounded-[1em] border">
+        <div className="bg-foreground/5 border-foreground/20 flex h-full min-h-[8em] items-center justify-center rounded-[1em] border">
           <p>No prodcuts found matching your filters</p>
         </div>
       )}
