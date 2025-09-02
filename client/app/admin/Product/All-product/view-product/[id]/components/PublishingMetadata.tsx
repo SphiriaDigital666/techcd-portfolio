@@ -53,7 +53,7 @@ const PublishingMetadata = () => {
       </div>
 
       {/* Tags Section */}
-      <div className="border border-[#172D6D] bg-black/30 backdrop-blur-[500px] p-4 rounded-3xl">
+      {/* <div className="border border-[#172D6D] bg-black/30 backdrop-blur-[500px] p-4 rounded-3xl">
         <h3 className="text-lg font-medium text-white mb-4">Tags</h3>
         <div className="space-y-3">
           <input
@@ -84,10 +84,10 @@ const PublishingMetadata = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* SEO Settings */}
-      <div className="border border-[#172D6D] bg-black/30 backdrop-blur-[500px] p-4 rounded-3xl">
+      {/* <div className="border border-[#172D6D] bg-black/30 backdrop-blur-[500px] p-4 rounded-3xl">
         <h3 className="text-lg font-medium text-white mb-4">SEO Setting</h3>
         <div className="space-y-4">
           <div>
@@ -124,7 +124,7 @@ const PublishingMetadata = () => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }
