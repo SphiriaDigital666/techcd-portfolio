@@ -23,24 +23,54 @@ const Shipping: React.FC<ShippingProps> = ({ formData, onInputChange, getFieldEr
       <h3 className="xl:text-[32px] text-[24px] font-semibold text-[#E5E5E5] mb-6">Shipping Address</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-[#FFFFFF] text-[17px] mb-2">First Name</label>
+          <label className="block text-[#FFFFFF] text-[17px] mb-2">
+            First Name
+            {formData.shippingFirstName && (
+              <span className="text-sm text-gray-400 ml-2">
+                ({formData.shippingFirstName.length}/2 min)
+              </span>
+            )}
+          </label>
           <input
             type="text"
             value={formData.shippingFirstName}
             onChange={(e) => onInputChange('shippingFirstName', e.target.value)}
-            className="w-full px-4 xl:py-1 py-2 border border-[#172D6D] rounded-md text-white focus:border-[#028EFC] focus:outline-none"
+            className={`w-full px-4 xl:py-1 py-2 border rounded-md text-white focus:outline-none ${
+              getFieldError && getFieldError('shippingFirstName') 
+                ? 'border-red-500 focus:border-red-500' 
+                : 'border-[#172D6D] focus:border-[#028EFC]'
+            }`}
+            placeholder="Enter shipping first name (min 2 characters)"
             required
           />
+          {getFieldError && getFieldError('shippingFirstName') && (
+            <p className="text-red-400 text-sm mt-1">{getFieldError('shippingFirstName')}</p>
+          )}
         </div>
         <div>
-          <label className="block text-[#FFFFFF] text-[17px] mb-2">Last Name</label>
+          <label className="block text-[#FFFFFF] text-[17px] mb-2">
+            Last Name
+            {formData.shippingLastName && (
+              <span className="text-sm text-gray-400 ml-2">
+                ({formData.shippingLastName.length}/2 min)
+              </span>
+            )}
+          </label>
           <input
             type="text"
             value={formData.shippingLastName}
             onChange={(e) => onInputChange('shippingLastName', e.target.value)}
-            className="w-full px-4 xl:py-1 py-2  border border-[#172D6D] rounded-md text-white focus:border-[#028EFC] focus:outline-none"
+            className={`w-full px-4 xl:py-1 py-2 border rounded-md text-white focus:outline-none ${
+              getFieldError && getFieldError('shippingLastName') 
+                ? 'border-red-500 focus:border-red-500' 
+                : 'border-[#172D6D] focus:border-[#028EFC]'
+            }`}
+            placeholder="Enter shipping last name (min 2 characters)"
             required
           />
+          {getFieldError && getFieldError('shippingLastName') && (
+            <p className="text-red-400 text-sm mt-1">{getFieldError('shippingLastName')}</p>
+          )}
         </div>
         <div>
           <label className="block text-[#FFFFFF] text-[17px] mb-2">Phone number</label>
@@ -78,24 +108,54 @@ const Shipping: React.FC<ShippingProps> = ({ formData, onInputChange, getFieldEr
           )}
         </div>
         <div>
-          <label className="block text-[#FFFFFF] text-[17px] mb-2">State</label>
+          <label className="block text-[#FFFFFF] text-[17px] mb-2">
+            State
+            {formData.state && (
+              <span className="text-sm text-gray-400 ml-2">
+                ({formData.state.length}/2 min)
+              </span>
+            )}
+          </label>
           <input
             type="text"
             value={formData.state}
             onChange={(e) => onInputChange('state', e.target.value)}
-            className="w-full px-4 xl:py-1 py-2 border border-[#172D6D] rounded-md text-white focus:border-[#028EFC] focus:outline-none"
+            className={`w-full px-4 xl:py-1 py-2 border rounded-md text-white focus:outline-none ${
+              getFieldError && getFieldError('state') 
+                ? 'border-red-500 focus:border-red-500' 
+                : 'border-[#172D6D] focus:border-[#028EFC]'
+            }`}
+            placeholder="Enter state (min 2 characters)"
             required
           />
+          {getFieldError && getFieldError('state') && (
+            <p className="text-red-400 text-sm mt-1">{getFieldError('state')}</p>
+          )}
         </div>
         <div>
-          <label className="block text-[#FFFFFF] text-[17px] mb-2">City</label>
+          <label className="block text-[#FFFFFF] text-[17px] mb-2">
+            City
+            {formData.city && (
+              <span className="text-sm text-gray-400 ml-2">
+                ({formData.city.length}/2 min)
+              </span>
+            )}
+          </label>
           <input
             type="text"
             value={formData.city}
             onChange={(e) => onInputChange('city', e.target.value)}
-            className="w-full px-4 xl:py-1 py-2  border border-[#172D6D] rounded-md text-white focus:border-[#028EFC] focus:outline-none"
+            className={`w-full px-4 xl:py-1 py-2 border rounded-md text-white focus:outline-none ${
+              getFieldError && getFieldError('city') 
+                ? 'border-red-500 focus:border-red-500' 
+                : 'border-[#172D6D] focus:border-[#028EFC]'
+            }`}
+            placeholder="Enter city (min 2 characters)"
             required
           />
+          {getFieldError && getFieldError('city') && (
+            <p className="text-red-400 text-sm mt-1">{getFieldError('city')}</p>
+          )}
         </div>
         <div>
           <label className="block text-[#FFFFFF] text-[17px] mb-2">Zip Code</label>
@@ -116,14 +176,29 @@ const Shipping: React.FC<ShippingProps> = ({ formData, onInputChange, getFieldEr
           )}
         </div>
         <div className="md:col-span-2">
-          <label className="block text-[#FFFFFF] text-[17px] mb-2">Address</label>
+          <label className="block text-[#FFFFFF] text-[17px] mb-2">
+            Address
+            {formData.address && (
+              <span className="text-sm text-gray-400 ml-2">
+                ({formData.address.length}/5 min)
+              </span>
+            )}
+          </label>
           <textarea
             value={formData.address}
             onChange={(e) => onInputChange('address', e.target.value)}
             rows={3}
-            className="w-full px-4 xl:py-1 py-2 border border-[#172D6D] rounded-md text-white focus:border-[#028EFC] focus:outline-none resize-none"
+            className={`w-full px-4 xl:py-1 py-2 border rounded-md text-white focus:outline-none resize-none ${
+              getFieldError && getFieldError('address') 
+                ? 'border-red-500 focus:border-red-500' 
+                : 'border-[#172D6D] focus:border-[#028EFC]'
+            }`}
+            placeholder="Enter full address (min 5 characters)"
             required
           />
+          {getFieldError && getFieldError('address') && (
+            <p className="text-red-400 text-sm mt-1">{getFieldError('address')}</p>
+          )}
         </div>
       </div>
     </div>
