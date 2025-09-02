@@ -14,16 +14,41 @@ const AttributesView: React.FC<AttributesViewProps> = ({ product }) => {
           {product.attributes && product.attributes.length > 0 ? (
             product.attributes.map((attr, index) => (
               <div key={attr.attribute._id}>
-                <label className="block text-white text-sm font-medium mb-2">
+                <label className="block text-white text-sm font-medium mb-3">
                   {attr.attribute.name}
                 </label>
+                
+                {/* Display selected variations as tags */}
+                <div className="mb-4">
+                  {attr.selectedVariations.length > 0 ? (
+                    <div>
+                      <p className="text-sm text-gray-300 mb-2">Selected variations:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {attr.selectedVariations.map((variation, idx) => (
+                          <span 
+                            key={idx}
+                            className="inline-flex items-center gap-1 px-3 py-1 bg-blue-500 text-white text-sm rounded-full"
+                          >
+                            {variation}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-gray-400 text-sm">
+                      <p>No variations selected for this attribute</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Show all available variations for reference */}
                 <div className="relative">
                   <select 
                     className="w-full px-4 py-3 rounded-lg border border-[#172D6D] bg-black/30 text-white appearance-none focus:outline-none focus:border-[#3B82F6] transition-colors"
                     disabled
-                    value={attr.selectedVariations[0] || ''}
+                    value=""
                   >
-                    <option value="">Select {attr.attribute.name}</option>
+                    <option value="">Available {attr.attribute.name} options</option>
                     {attr.attribute.variations.map((variation) => (
                       <option key={variation} value={variation}>
                         {variation}
@@ -36,21 +61,6 @@ const AttributesView: React.FC<AttributesViewProps> = ({ product }) => {
                     </svg>
                   </div>
                 </div>
-                {attr.selectedVariations.length > 1 && (
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-300 mb-2">Selected variations:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {attr.selectedVariations.map((variation, idx) => (
-                        <span 
-                          key={idx}
-                          className="px-2 py-1 bg-blue-600 text-white text-xs rounded"
-                        >
-                          {variation}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             ))
           ) : (
