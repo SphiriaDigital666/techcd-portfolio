@@ -1,10 +1,16 @@
 export type Product = {
-  id: number;
-  name: string;
-  image: string;
+  _id: string;
+  title: string;
+  smallDescription: string;
+  description: string;
+  productImages: string[];
   price: number;
-  isNew: boolean;
-  color: string;
-  category: string;
-  subCategory: string;
+  discountPrice: number;
+  categories: { name: string; description: string }[];
+  attributes: { attribute: { name: string }; selectedVariations: string[] }[];
+};
+
+export type Category = {
+  name: string;
+  description: string;
 };

@@ -8,23 +8,25 @@ import ProductGrid from "./ProductGrid";
 
 type ProductGridAreaProps = {
   products: Product[];
+  total: number;
+  isFiltered: boolean;
   currentPage: number;
   setCurrentPage: (page: number) => void;
-  total: number;
 };
 
 const ProductGridArea: React.FC<ProductGridAreaProps> = ({
   products,
+  total,
+  isFiltered,
   currentPage,
   setCurrentPage,
-  total,
 }) => {
-  const [pageSize, setPageSize] = useState(4);
+  const [pageSize, setPageSize] = useState(3);
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      let size = 4;
+      let size = 3;
 
       if (width < 1024) size = 6;
       else size = 9;
@@ -46,9 +48,11 @@ const ProductGridArea: React.FC<ProductGridAreaProps> = ({
 
   return (
     <div className="text-[13px] sm:text-[15px] md:text-[17px] lg:col-span-4 lg:text-[19px] xl:text-[20px] 2xl:text-[21px]">
-      <div className="mb-[1em] font-medium">
-        Showing {total} t-shirts matching your filters
-      </div>
+      {paginatedProducts.length > 0 && (
+        <div className="mb-[1em] font-medium">
+          Showing {total} product{total > 1 && "s"} matching your filters
+        </div>
+      )}
       <ProductGrid products={paginatedProducts} />
       {paginatedProducts.length > 0 && (
         <Pagination
@@ -58,8 +62,8 @@ const ProductGridArea: React.FC<ProductGridAreaProps> = ({
         />
       )}
       {paginatedProducts.length === 0 && (
-        <div className="pt-[2em]">
-          <p>No prodcuts found</p>
+        <div className="bg-foreground/5 border-foreground/20 flex h-full min-h-[8em] items-center justify-center rounded-[1em] border">
+          <p>No products found {!isFiltered && "matching your filters"}</p>
         </div>
       )}
     </div>

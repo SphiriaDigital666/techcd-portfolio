@@ -22,7 +22,7 @@ const Pagination = ({
       >
         Previous
       </button>
-      <div className="grid grid-cols-4 gap-[0.5em]">
+      <div className="flex flex-wrap gap-[0.5em]">
         {[...Array(totalPages)].map((_, i) => (
           <button
             key={i}

@@ -1,79 +1,92 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
+import api from "@/lib/axios-instance";
+import { Product, Category } from "@/lib/types";
+
+import Error from "./Error";
+import Loading from "./Loading";
 import ProductFilterSidebar from "./ProductFilterSidebar";
 import ProductGridArea from "./ProductGridArea";
-
-const mockCategories = [
-  {
-    name: "Men's",
-    subCategories: ["T-Shirts", "Hoodies", "Jackets"],
-  },
-  {
-    name: "Women's",
-    subCategories: ["T-Shirts", "Hoodies", "Dresses"],
-  },
-  {
-    name: "Kids",
-    subCategories: ["T-Shirts", "Hoodies"],
-  },
-];
-
-const mockProducts = Array.from({ length: 24 }, (_, i) => ({
-  id: i + 1,
-  name: i % 2 === 0 ? "Black T-Shirt" : "White T-Shirt",
-  image: "/images/home-page/store/t-shirt.png",
-  price: 23,
-  isNew: i < 3,
-  color: i % 2 === 0 ? "Black" : "White",
-  category: i % 3 === 0 ? "Men's" : i % 3 === 1 ? "Women's" : "Kids",
-  subCategory: "T-Shirts",
-}));
+import BrandCarousel from "../home-page/about/BrandCarousel";
 
 const ProductArea = () => {
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  const handleFilterChange = (filterKey: string) => {
+  const [fetchedProducts, setFetchedProducts] = useState<Product[]>([]);
+  const [fetchedCategories, setFetchedCategories] = useState<Category[]>([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const productRes = await api.get("/product");
+        const categoryRes = await api.get("/product-category");
+        const productData = productRes.data.data;
+        const categoryData = categoryRes.data;
+
+        setFetchedProducts(productData);
+        setFetchedCategories(categoryData);
+      } catch {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleCategoryChange = (cat: Category) => {
+    console.log(selectedCategories);
     setCurrentPage(1);
-    setSelectedFilters((prev) =>
-      prev.includes(filterKey)
-        ? prev.filter((f) => f !== filterKey)
-        : [...prev, filterKey],
+    setSelectedCategories((prev) =>
+      prev.includes(cat) ? prev.filter((f) => f !== cat) : [...prev, cat],
     );
   };
 
   const filteredProducts =
-    selectedFilters.length === 0
-      ? mockProducts
-      : mockProducts.filter((p) =>
-          selectedFilters.includes(`${p.category}|${p.subCategory}`),
+    selectedCategories.length === 0
+      ? fetchedProducts
+      : fetchedProducts.filter((p) =>
+          p.categories.some((cat) =>
+            selectedCategories.some((sel) => sel.name === cat.name),
+          ),
         );
 
-  const total = filteredProducts.length;
-
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden pb-[2em]">
       {filteredProducts.length > 0 && (
         <div className="from-primary absolute right-0 bottom-0 aspect-square w-2/5 translate-x-1/2 rounded-full bg-radial to-transparent blur-[5em]"></div>
       )}
 
       <div className="px-container relative container mx-auto py-[2em]">
-        <div className="relative grid grid-cols-1 gap-[1.5em] lg:grid-cols-5">
-          <ProductFilterSidebar
-            categories={mockCategories}
-            selectedFilters={selectedFilters}
-            handleFilterChange={handleFilterChange}
-          />
+        {error && <Error />}
+        {!error && loading && <Loading />}
+        {!loading && !error && (
+          <div className="relative grid grid-cols-1 gap-[1.5em] lg:grid-cols-5">
+            <ProductFilterSidebar
+              categories={fetchedCategories}
+              selectedCategories={selectedCategories}
+              handleCategoryChange={handleCategoryChange}
+            />
 
-          <ProductGridArea
-            products={filteredProducts}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            total={total}
-          />
-        </div>
+            <ProductGridArea
+              products={filteredProducts}
+              total={filteredProducts.length}
+              isFiltered={selectedCategories.length === 0}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          </div>
+        )}
       </div>
+
+      <BrandCarousel />
     </section>
   );
 };
