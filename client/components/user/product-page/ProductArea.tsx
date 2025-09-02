@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import api from "@/lib/axios-instance";
 import { Product, Category } from "@/lib/types";
 
+import Error from "./Error";
 import Loading from "./Loading";
 import ProductFilterSidebar from "./ProductFilterSidebar";
 import ProductGridArea from "./ProductGridArea";
@@ -32,9 +33,7 @@ const ProductArea = () => {
 
         setFetchedProducts(productData);
         setFetchedCategories(categoryData);
-      } catch (err) {
-        console.log(err);
-
+      } catch {
         setError(true);
       } finally {
         setLoading(false);
@@ -69,7 +68,7 @@ const ProductArea = () => {
       )}
 
       <div className="px-container relative container mx-auto py-[2em]">
-        {error && <div>error</div>}
+        {error && <Error />}
         {!error && loading && <Loading />}
         {!loading && !error && (
           <div className="relative grid grid-cols-1 gap-[1.5em] lg:grid-cols-5">

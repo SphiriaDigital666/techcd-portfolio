@@ -30,12 +30,12 @@ const ProductGrid = ({ products }: { products: Product[] }) => {
           </div>
 
           <div className="relative">
-            <div className="text-white">{product.title}</div>
-            <div className="text-white">${product.discountPrice}</div>
+            <div>{product.title}</div>
+            <div>${product.discountPrice}</div>
           </div>
 
           <button
-            className="bg-foreground text-background hover:bg-background hover:text-foreground relative rounded-full px-[2.5em] py-[0.5em] transition-all duration-300 ease-in"
+            className="border-foreground hover:bg-foreground hover:text-background relative rounded-full border-2 px-[2.5em] py-[0.5em] transition-all duration-300 ease-in"
             tabIndex={0}
             aria-label={`Buy ${product.title}`}
             onClick={() => handleBuyClick(product._id)}
