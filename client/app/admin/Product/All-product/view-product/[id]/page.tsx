@@ -1,9 +1,9 @@
 import React from 'react'
-import ProductForm from './components/ProductForm'
+import ProductView from './components/ProductView'
 
 function page() {
   return (
-    <ProductForm />
+    <ProductView />
   )
 }
 
