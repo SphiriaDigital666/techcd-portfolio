@@ -21,17 +21,113 @@ function Page() {
   const [submitMessage, setSubmitMessage] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
   const handleInputChange = (field: string, value: string) => {
+    // Clear error message when user starts typing
+    if (submitMessage) {
+      setSubmitMessage(null);
+    }
+    
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
   };
 
+  // Real-time email validation
+  const validateEmail = (email: string) => {
+    if (!email) return null;
+    if (email.length === 1) return 'Please enter a valid email address (e.g., user@example.com)';
+    if (email.length < 3) return 'Please enter a valid email address (e.g., user@example.com)';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return 'Please enter a valid email address (e.g., user@example.com)';
+    return null;
+  };
+
+  // Real-time phone validation
+  const validatePhone = (phone: string) => {
+    if (!phone) return null;
+    if (phone.length === 1) return 'Please enter a valid phone number (e.g., +1234567890 or 1234567890)';
+    if (phone.length < 3) return 'Please enter a valid phone number (e.g., +1234567890 or 1234567890)';
+    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+    if (!phoneRegex.test(phone.replace(/\s/g, ''))) return 'Please enter a valid phone number (e.g., +1234567890 or 1234567890)';
+    return null;
+  };
+
+  // Real-time name validation
+  const validateName = (name: string, fieldName: string): string | null => {
+    if (!name) return null;
+    if (name.length === 1) return `${fieldName} must be at least 2 characters (${name.length}/2)`;
+    if (name.length < 2) return `${fieldName} must be at least 2 characters (${name.length}/2)`;
+    return null;
+  };
+
+  // Real-time username validation
+  const validateUsername = (username: string): string | null => {
+    if (!username) return null;
+    if (username.length === 1) return `Username must be at least 3 characters (${username.length}/3)`;
+    if (username.length === 2) return `Username must be at least 3 characters (${username.length}/3)`;
+    if (username.length < 3) return `Username must be at least 3 characters (${username.length}/3)`;
+    return null;
+  };
+
+  // Real-time password validation
+  const validatePassword = (password: string): string | null => {
+    if (!password) return null;
+    const errors = [];
+    if (password.length < 8) errors.push(`at least 8 characters (${password.length}/8)`);
+    if (!/[A-Z]/.test(password)) errors.push('one uppercase letter');
+    if (!/[a-z]/.test(password)) errors.push('one lowercase letter');
+    if (!/[0-9]/.test(password)) errors.push('one number');
+    if (!/[@$!%*?&#^()_\-+=]/.test(password)) errors.push('one special character');
+    
+    if (errors.length > 0) {
+      return `Password needs: ${errors.join(', ')}`;
+    }
+    return null;
+  };
+
+  // Get field-specific error message
+  const getFieldError = (field: string) => {
+    const value = formData[field as keyof typeof formData];
+    
+    switch (field) {
+      case 'firstName':
+        return validateName(value, 'First name');
+      case 'lastName':
+        return validateName(value, 'Last name');
+      case 'username':
+        return validateUsername(value);
+      case 'email':
+        return validateEmail(value);
+      case 'phoneNumber':
+        return validatePhone(value);
+      case 'password':
+        return validatePassword(value);
+      case 'role':
+        if (!value) return 'Please select a role';
+        return null;
+    }
+    return null;
+  };
+
+  // Check if form has any validation errors
+  const hasValidationErrors = () => {
+    const fieldsToValidate = ['firstName', 'lastName', 'username', 'email', 'phoneNumber', 'password', 'role'];
+    return fieldsToValidate.some(field => getFieldError(field));
+  };
+
   const handleSubmit = async () => {
-    // Validate required fields
-    if (!formData.firstName || !formData.lastName || !formData.email || 
-        !formData.username || !formData.phoneNumber || !formData.password || !formData.role) {
-      setSubmitMessage({ type: 'error', message: 'Please fill in all required fields' });
+    // Check for real-time validation errors first
+    if (hasValidationErrors()) {
+      const fieldsToCheck = ['firstName', 'lastName', 'username', 'email', 'phoneNumber', 'password', 'role'];
+      
+      const firstError = fieldsToCheck
+        .map(field => getFieldError(field))
+        .find(error => error !== null);
+        
+      setSubmitMessage({
+        type: 'error',
+        message: firstError || 'Please correct the validation errors above'
+      });
       return;
     }
 
@@ -116,6 +212,7 @@ function Page() {
           <Credential 
             formData={formData}
             onInputChange={handleInputChange}
+            getFieldError={getFieldError}
           />
 
          
