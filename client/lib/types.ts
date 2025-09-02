@@ -7,7 +7,7 @@ export type Product = {
   price: number;
   discountPrice: number;
   categories: { name: string; description: string }[];
-  attributes: { name: string; variations: string[] }[];
+  attributes: { attribute: { name: string }; selectedVariations: string[] }[];
 };
 
 export type Category = {

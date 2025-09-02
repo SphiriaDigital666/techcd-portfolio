@@ -1,203 +1,176 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
+import { MdProductionQuantityLimits } from "react-icons/md";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/user/ui/Select";
+
+import { Product } from "@/lib/types";
+import api from "@/lib/axios-instance";
 import ProductCarousel from "./ProductCarousel";
 import PrimaryButton from "../ui/PrimaryButton";
-import { cn } from "@/lib/utils";
 
-const mockProducts = Array.from({ length: 24 }, (_, i) => ({
-  id: i + 1,
-  name: i % 2 === 0 ? "Black T-Shirt" : "White T-Shirt",
-  images: [
-    "/images/home-page/store/t-shirt.png",
-    "/images/home-page/store/t-shirt.png",
-    "/images/home-page/store/t-shirt.png",
-    "/images/home-page/store/t-shirt.png",
-  ],
-  price: 23,
-  color: i % 2 === 0 ? "#000000" : "#FFFFFF",
-  category: i % 3 === 0 ? "Men's" : i % 3 === 1 ? "Women's" : "Kids",
-  subCategory: "T-Shirts",
-}));
+const ProductDetails = ({ productId }: { productId: string }) => {
+  const [loading, setLoading] = useState(true);
+  const [fetchedProduct, setFetchedProduct] = useState<Product>();
+  const [error, setError] = useState(false);
 
-const ProductDetails = ({ productId }: { productId: number }) => {
-  const product = mockProducts.find((p) => p.id === productId);
+  const [quantity, setQuantity] = useState(1);
 
-  const [selectedSize, setSelectedSize] = useState<string>("S");
-  const [selectedColor, setSelectedColor] = useState<string>(
-    product?.color === "#000000" ? "#000000" : "#FFFFFF",
-  );
-  const [quantity, setQuantity] = useState<number>(1);
-  const sizes = ["S", "M", "L", "XL"];
-  const colors = ["#000000", "#FFFFFF"];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await api.get(`/product/${productId}`);
+        const data = res.data.data;
 
-  if (!product) {
-    return (
-      <section className="mt-[2em]">
-        <div className="px-container relative container mx-auto">
-          <div className="text-center">
-            <h1 className="mb-4 text-2xl font-bold">Product Not Found</h1>
-            <p className="mb-6">
-              The product you&apos;re looking for doesn&apos;t exist.
-            </p>
-            <Link
-              href="/products"
-              className="bg-foreground text-background hover:bg-background hover:text-foreground rounded-full px-6 py-2 transition-all duration-300"
-            >
-              Back to Products
-            </Link>
-          </div>
-        </div>
-      </section>
-    );
-  }
+        console.log(data);
+        setFetchedProduct(data);
+      } catch (err) {
+        console.log(err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [productId]);
 
   return (
     <section className="mt-[2em]">
       <div className="px-container relative container mx-auto">
-        <div className="grid grid-cols-1 gap-[1.5em] lg:grid-cols-10">
-          <div className="bg-foreground/10 border-foreground/30 relative h-[200px] rounded-[1em] border lg:col-span-4 lg:h-auto">
-            <ProductCarousel name={product.name} images={product.images} />
+        {error && (
+          <div className="bg-foreground/10 border-foreground/30 flex h-[200px] flex-col items-center justify-center gap-[0.3em] rounded-[1em] border p-[1em] sm:h-[250px] md:h-[300px] lg:h-[350px] xl:h-[400px] 2xl:h-[450px]">
+            <MdProductionQuantityLimits className="text-[3em]" />
+            <p>Product Not Found</p>
+            <p className="mt-[0.5em] text-[12px] sm:text-[13px] md:text-[14px] lg:text-[15px] xl:text-[16px] 2xl:text-[18px]">
+              The product you&apos;re looking for doesn&apos;t exist.
+            </p>
+            <Link
+              href="/products"
+              className="border-foreground hover:bg-foreground hover:text-background mt-[0.5em] rounded-full border-2 px-[1em] py-[0.4em] text-[12px] transition-all duration-300 ease-in sm:text-[13px] md:text-[14px] lg:text-[15px] xl:text-[16px] 2xl:text-[18px]"
+            >
+              Back to Products
+            </Link>
           </div>
+        )}
 
-          <div className="flex flex-col gap-[1em] lg:col-span-6">
-            {/* Title */}
-            <p className="dark:from-foreground to-foreground bg-gradient-to-b from-[#999999] bg-clip-text text-[15px] font-semibold text-transparent uppercase sm:text-[18px] md:text-[22px] lg:text-[25px] xl:text-[28px] 2xl:text-[31px] dark:to-[#999999]">
-              {product.name}
+        {!error && loading && (
+          <div className="bg-foreground/10 border-foreground/30 flex h-[200px] animate-pulse flex-col items-center justify-center gap-[0.3em] rounded-[1em] border p-[1em] sm:h-[250px] md:h-[300px] lg:h-[350px] xl:h-[400px] 2xl:h-[450px]">
+            <p className="text-[12px] sm:text-[13px] md:text-[14px] lg:text-[15px] xl:text-[16px] 2xl:text-[18px]">
+              Loading product details
             </p>
+          </div>
+        )}
 
-            {/* Desc */}
-            <p className="text-[13px] sm:text-[14px] md:text-[15px] lg:text-[16px] xl:text-[17px] 2xl:text-[18px]">
-              Aliquam hendrerit a augue insuscipit. Etiam aliquam massa quis des
-              mauris commodo venenatis ligula commodo leez sed blandit convallis
-              dignissim.
-            </p>
+        {!error && !loading && fetchedProduct && (
+          <>
+            <div className="grid grid-cols-1 gap-[1.5em] lg:grid-cols-10">
+              <div className="bg-foreground/10 border-foreground/30 relative h-[200px] rounded-[1em] border lg:col-span-4 lg:h-auto">
+                <ProductCarousel
+                  name={fetchedProduct.title}
+                  images={fetchedProduct.productImages}
+                />
+              </div>
 
-            {/* Price */}
-            <p className="text-[15px] font-medium sm:text-[18px] md:text-[22px] lg:text-[25px] xl:text-[28px] 2xl:text-[31px]">
-              RS 1200.00{" "}
-              <span className="text-[13px] font-normal line-through sm:text-[14px] md:text-[15px] lg:text-[16px] xl:text-[17px] 2xl:text-[18px]">
-                RS 2000.00
-              </span>
-            </p>
+              <div className="flex flex-col gap-[1em] lg:col-span-6">
+                {/* Title */}
+                <p className="dark:from-foreground to-foreground bg-gradient-to-b from-[#999999] bg-clip-text text-[15px] font-semibold text-transparent uppercase sm:text-[18px] md:text-[22px] lg:text-[25px] xl:text-[28px] 2xl:text-[31px] dark:to-[#999999]">
+                  {fetchedProduct.title}
+                </p>
 
-            <div className="via-foreground h-[2px] bg-gradient-to-r from-transparent to-transparent"></div>
+                {/* Desc */}
+                <p className="text-[13px] sm:text-[14px] md:text-[15px] lg:text-[16px] xl:text-[17px] 2xl:text-[18px]">
+                  {fetchedProduct.smallDescription}
+                </p>
 
-            {/* Size Filter */}
-            <div className="flex items-center gap-4 text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]">
-              <p className="min-w-[40px]">Size</p>
-              {sizes.map((size) => (
-                <button
-                  key={size}
-                  className={cn(
-                    "border-foreground/30 bg-foreground/10 size-[2em] rounded-[0.5em] border transition-colors duration-300",
-                    selectedSize === size && "bg-primary border-primary",
+                {/* Price */}
+                <p className="text-[15px] font-medium sm:text-[18px] md:text-[22px] lg:text-[25px] xl:text-[28px] 2xl:text-[31px]">
+                  Rs {fetchedProduct.discountPrice}.00{" "}
+                  {fetchedProduct.discountPrice < fetchedProduct.price && (
+                    <span className="text-[13px] font-normal line-through sm:text-[14px] md:text-[15px] lg:text-[16px] xl:text-[17px] 2xl:text-[18px]">
+                      Rs {fetchedProduct.price}.00
+                    </span>
                   )}
-                  onClick={() => setSelectedSize(size)}
-                >
-                  {size}
-                </button>
-              ))}
-            </div>
+                </p>
 
-            {/* Color Filter */}
-            <div className="flex items-center gap-4 text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]">
-              <p className="min-w-[40px]">Color</p>
-              {colors.map((color) => {
-                const colorId = `color-${color}`;
-                return (
-                  <label
-                    key={color}
-                    htmlFor={colorId}
-                    className={cn(
-                      "outline-foreground size-[1.5em] rounded-full outline-2 outline-offset-2 transition-all duration-300",
-                      selectedColor === color && "outline-primary",
-                    )}
-                    style={{ backgroundColor: color }}
-                  >
-                    <input
-                      type="radio"
-                      id={colorId}
-                      name="color"
-                      value={color}
-                      checked={selectedColor === color}
-                      onChange={() => setSelectedColor(color)}
-                      className="hidden"
-                    />
-                  </label>
-                );
-              })}
-            </div>
+                <div className="via-foreground h-[2px] bg-gradient-to-r from-transparent to-transparent"></div>
 
-            <div className="via-foreground h-[2px] bg-gradient-to-r from-transparent to-transparent"></div>
+                {/* Attributes */}
+                <div className="space-y-[0.5em]">
+                  {fetchedProduct.attributes.map((a) => (
+                    <Select key={a.attribute.name}>
+                      <SelectTrigger className="data-[placeholder]:text-foreground m-0 h-[2em] max-w-3/5 leading-normal">
+                        <SelectValue placeholder={a.attribute.name} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {a.selectedVariations.map((v) => (
+                          <SelectItem
+                            key={v}
+                            value={v}
+                            className="text-[12px] sm:text-[13px] md:text-[14px] lg:text-[15px] xl:text-[16px] 2xl:text-[18px]"
+                          >
+                            {v}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ))}
+                </div>
 
-            {/* Quantity Filter */}
-            <div className="flex items-center gap-4 text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]">
-              <p className="min-w-[70px]">Quantity</p>
-              <div className="flex items-center gap-1">
-                <button
-                  className="border-foreground/30 bg-foreground/10 size-[2em] rounded-[0.5em] border transition-colors disabled:opacity-50"
-                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  disabled={quantity <= 1}
-                  aria-label="Decrease quantity"
-                >
-                  -
-                </button>
-                <span className="border-foreground/30 bg-foreground/10 flex size-[2em] items-center justify-center rounded-[0.5em] border transition-colors">
-                  {quantity}
-                </span>
-                <button
-                  className="border-foreground/30 bg-foreground/10 size-[2em] rounded-[0.5em] border transition-colors"
-                  onClick={() => setQuantity((q) => q + 1)}
-                  aria-label="Increase quantity"
-                >
-                  +
-                </button>
+                <div className="via-foreground h-[2px] bg-gradient-to-r from-transparent to-transparent"></div>
+
+                {/* Quantity Filter */}
+                <div className="flex items-center gap-4 text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]">
+                  <p className="min-w-[70px]">Quantity</p>
+                  <div className="flex items-center gap-1">
+                    <button
+                      className="border-foreground/30 bg-foreground/10 size-[2em] rounded-[0.5em] border transition-colors disabled:opacity-50"
+                      onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                      disabled={quantity <= 1}
+                      aria-label="Decrease quantity"
+                    >
+                      -
+                    </button>
+                    <span className="border-foreground/30 bg-foreground/10 flex size-[2em] items-center justify-center rounded-[0.5em] border transition-colors">
+                      {quantity}
+                    </span>
+                    <button
+                      className="border-foreground/30 bg-foreground/10 size-[2em] rounded-[0.5em] border transition-colors"
+                      onClick={() => setQuantity((q) => q + 1)}
+                      aria-label="Increase quantity"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <PrimaryButton
+                  text="Buy Now"
+                  className="mt-[0.5em] w-fit gap-[2em] ps-[3em] text-[13px] sm:text-[14px] md:text-[15px] lg:text-[16px] xl:text-[17px] 2xl:text-[18px]"
+                  iconStyles="bg-foreground"
+                />
               </div>
             </div>
 
-            <PrimaryButton
-              text="Buy Now"
-              className="mt-[0.5em] w-fit gap-[2em] ps-[3em] text-[13px] sm:text-[14px] md:text-[15px] lg:text-[16px] xl:text-[17px] 2xl:text-[18px]"
-              iconStyles="bg-foreground"
-            />
-          </div>
-        </div>
+            <div className="via-foreground mt-[3em] mb-[2em] h-[2px] bg-gradient-to-r from-transparent to-transparent"></div>
 
-        <div className="via-foreground mt-[3em] mb-[2em] h-[2px] bg-gradient-to-r from-transparent to-transparent"></div>
+            <p className="text-[15px] font-medium sm:text-[18px] md:text-[22px] lg:text-[25px] xl:text-[28px] 2xl:text-[31px]">
+              Item Description
+            </p>
 
-        <p className="text-[15px] font-medium sm:text-[18px] md:text-[22px] lg:text-[25px] xl:text-[28px] 2xl:text-[31px]">
-          Item Description
-        </p>
-
-        <p className="mt-[1.5em] text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]">
-          Phasellus eget fermentum mauris. Suspendisse nec dignissim nulla.
-          Integer non quam commodo, scelerisque felis id, eleifend turpis.
-          Phasellus in nulla quis erat tempor tristique eget vel purus. Nulla
-          pharetra pharetra pharetra. Praesent varius eget justo ut lacinia.
-          Phasellus pharetra, velit viverra lacinia consequat, ipsum odio mollis
-          dolor, nec facilisis arcu arcu ultricies sapien. Quisque ut dapibus
-          nunc. Vivamus sit amet efficitur velit. Phasellus eget fermentum
-          mauris. Suspendisse nec dignissim nulla. Integer non quam commodo,
-          scelerisque felis id, eleifend turpis. Phasellus in nulla quis erat
-          tempor tristique eget vel purus. Nulla pharetra pharetra pharetra.
-          Praesent varius eget justo ut lacinia. Phasellus pharetra, velit
-          viverra lacinia consequat, ipsum odio mollis dolor, nec facilisis arcu
-          arcu ultricies sapien. Quisque ut dapibus nunc. Vivamus sit amet
-          efficitur velit.
-          <br /> <br />
-          Phasellus eget fermentum mauris. Suspendisse nec dignissim nulla.
-          Integer non quam commodo, scelerisque felis id, eleifend turpis.
-          Phasellus in nulla quis erat tempor tristique eget vel purus. Nulla
-          pharetra pharetra pharetra. Praesent varius eget justo ut lacinia.
-          Phasellus pharetra, velit viverra lacinia consequat, ipsum odio mollis
-          dolor, nec facilisis arcu arcu ultricies sapien. Quisque ut dapibus
-          nunc. Vivamus sit amet efficitur velit. Phasellus eget fermentum
-          mauris. Suspendisse nec dignissim nulla. Integer non quam commodo,
-          scelerisque felis id, eleifend turpis
-        </p>
+            <p className="mt-[1.5em] text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] xl:text-[20px] 2xl:text-[21px]">
+              {fetchedProduct.description}
+            </p>
+          </>
+        )}
       </div>
     </section>
   );

@@ -29,8 +29,6 @@ const ProductArea = () => {
         const productData = productRes.data.data;
         const categoryData = categoryRes.data;
 
-        console.log(productData);
-
         setFetchedProducts(productData);
         setFetchedCategories(categoryData);
       } catch {
@@ -49,7 +47,6 @@ const ProductArea = () => {
     setSelectedCategories((prev) =>
       prev.includes(cat) ? prev.filter((f) => f !== cat) : [...prev, cat],
     );
-    console.log(cat);
   };
 
   const filteredProducts =
@@ -81,6 +78,7 @@ const ProductArea = () => {
             <ProductGridArea
               products={filteredProducts}
               total={filteredProducts.length}
+              isFiltered={selectedCategories.length === 0}
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
             />

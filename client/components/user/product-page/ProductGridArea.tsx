@@ -9,6 +9,7 @@ import ProductGrid from "./ProductGrid";
 type ProductGridAreaProps = {
   products: Product[];
   total: number;
+  isFiltered: boolean;
   currentPage: number;
   setCurrentPage: (page: number) => void;
 };
@@ -16,6 +17,7 @@ type ProductGridAreaProps = {
 const ProductGridArea: React.FC<ProductGridAreaProps> = ({
   products,
   total,
+  isFiltered,
   currentPage,
   setCurrentPage,
 }) => {
@@ -61,7 +63,7 @@ const ProductGridArea: React.FC<ProductGridAreaProps> = ({
       )}
       {paginatedProducts.length === 0 && (
         <div className="bg-foreground/5 border-foreground/20 flex h-full min-h-[8em] items-center justify-center rounded-[1em] border">
-          <p>No prodcuts found matching your filters</p>
+          <p>No prodcuts found {!isFiltered && "matching your filters"}</p>
         </div>
       )}
     </div>

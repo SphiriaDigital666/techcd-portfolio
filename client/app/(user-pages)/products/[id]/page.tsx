@@ -5,18 +5,16 @@ import ProductDetails from "@/components/user/product-description-page/ProductDe
 import RecommendedProducts from "@/components/user/product-description-page/RecommendedProducts";
 
 interface ProductDetailPageProps {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }
 
-const ProductDetailPage = ({ params }: ProductDetailPageProps) => {
-  const productId = parseInt(params.id);
+const ProductDetailPage = async ({ params }: ProductDetailPageProps) => {
+  const { id } = await params;
 
   return (
     <>
       <TitleArea />
-      <ProductDetails productId={productId} />
+      <ProductDetails productId={id} />
       <RecommendedProducts />
     </>
   );
