@@ -19,7 +19,7 @@ interface ProductFormData {
   selectedCategories: string[];
   
   // Attributes
-  attributes: Record<string, { enabled: boolean; selectedValue: string }>;
+  attributes: Record<string, { enabled: boolean; selectedValues: string[] }>;
   
   // Gallery
   selectedFiles: Array<{
@@ -76,7 +76,7 @@ const ProductForm = () => {
   }, []);
 
   // Handle attributes changes
-  const handleAttributesChange = useCallback((attributes: Record<string, { enabled: boolean; selectedValue: string }>) => {
+  const handleAttributesChange = useCallback((attributes: Record<string, { enabled: boolean; selectedValues: string[] }>) => {
     setFormData(prev => ({
       ...prev,
       attributes
@@ -192,10 +192,10 @@ const ProductForm = () => {
       if (Object.keys(formData.attributes).length > 0) {
         formDataToSend.append('attributes', JSON.stringify(
           Object.entries(formData.attributes)
-            .filter(([_, attr]) => attr.enabled && attr.selectedValue)
+            .filter(([_, attr]) => attr.enabled && attr.selectedValues.length > 0)
             .map(([attrId, attr]) => ({
               attribute: attrId,
-              selectedVariations: [attr.selectedValue]
+              selectedVariations: attr.selectedValues
             }))
         ));
       }
