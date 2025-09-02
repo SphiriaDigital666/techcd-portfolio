@@ -9,7 +9,7 @@ import { Product } from "@/lib/types";
 const ProductGrid = ({ products }: { products: Product[] }) => {
   const router = useRouter();
 
-  const handleBuyClick = (productId: number) => {
+  const handleBuyClick = (productId: string) => {
     router.push(`/products/${productId}`);
   };
 
@@ -22,22 +22,22 @@ const ProductGrid = ({ products }: { products: Product[] }) => {
         >
           <div className="absolute inset-0 mx-auto w-4/5">
             <Image
-              src={product.image}
-              alt={product.name}
+              src={product.productImages[0]}
+              alt={product.title}
               fill
-              className="object-contain object-bottom"
+              className="object-contain object-center"
             />
           </div>
 
           <div className="relative">
-            <div className="text-white">{product.name}</div>
-            <div className="text-white">${product.price}</div>
+            <div className="text-white">{product.title}</div>
+            <div className="text-white">${product.discountPrice}</div>
           </div>
 
           <button
             className="bg-foreground text-background hover:bg-background hover:text-foreground relative rounded-full px-[2.5em] py-[0.5em] transition-all duration-300 ease-in"
             tabIndex={0}
-            aria-label={`Buy ${product.name}`}
+            aria-label={`Buy ${product.title}`}
             onClick={() => handleBuyClick(product.id)}
           >
             Buy

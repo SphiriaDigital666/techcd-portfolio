@@ -8,23 +8,20 @@ import ProductGrid from "./ProductGrid";
 
 type ProductGridAreaProps = {
   products: Product[];
-  currentPage: number;
-  setCurrentPage: (page: number) => void;
   total: number;
 };
 
 const ProductGridArea: React.FC<ProductGridAreaProps> = ({
   products,
-  currentPage,
-  setCurrentPage,
   total,
 }) => {
-  const [pageSize, setPageSize] = useState(4);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(3);
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      let size = 4;
+      let size = 3;
 
       if (width < 1024) size = 6;
       else size = 9;
@@ -47,7 +44,7 @@ const ProductGridArea: React.FC<ProductGridAreaProps> = ({
   return (
     <div className="text-[13px] sm:text-[15px] md:text-[17px] lg:col-span-4 lg:text-[19px] xl:text-[20px] 2xl:text-[21px]">
       <div className="mb-[1em] font-medium">
-        Showing {total} t-shirts matching your filters
+        Showing {total} product{total > 1 && "s"} matching your filters
       </div>
       <ProductGrid products={paginatedProducts} />
       {paginatedProducts.length > 0 && (
