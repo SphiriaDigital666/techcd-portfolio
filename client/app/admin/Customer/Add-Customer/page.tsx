@@ -62,47 +62,121 @@ function Page() {
 
   // Real-time email validation
   const validateEmail = (email: string) => {
+    if (!email) return null;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
   // Real-time phone validation
   const validatePhone = (phone: string) => {
+    if (!phone) return null;
     const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
     return phoneRegex.test(phone.replace(/\s/g, ''));
   };
 
   // Real-time zip code validation
   const validateZipCode = (zipCode: string) => {
+    if (!zipCode) return null;
     const zipRegex = /^\d{5}(-\d{4})?$/;
     return zipRegex.test(zipCode);
+  };
+
+  // Real-time name validation
+  const validateName = (name: string, fieldName: string): string | null => {
+    if (!name) return null;
+    if (name.length < 2) return `${fieldName} must be at least 2 characters (${name.length}/2)`;
+    return null;
+  };
+
+  // Real-time username validation
+  const validateUsername = (username: string): string | null => {
+    if (!username) return null;
+    if (username.length < 3) return `Username must be at least 3 characters (${username.length}/3)`;
+    return null;
+  };
+
+  // Real-time password validation
+  const validatePassword = (password: string): string | null => {
+    if (!password) return null;
+    const errors = [];
+    if (password.length < 8) errors.push(`at least 8 characters (${password.length}/8)`);
+    if (!/[A-Z]/.test(password)) errors.push('one uppercase letter');
+    if (!/[a-z]/.test(password)) errors.push('one lowercase letter');
+    if (!/[0-9]/.test(password)) errors.push('one number');
+    if (!/[@$!%*?&#^()_\-+=]/.test(password)) errors.push('one special character');
+    
+    if (errors.length > 0) {
+      return `Password needs: ${errors.join(', ')}`;
+    }
+    return null;
+  };
+
+  // Real-time address validation
+  const validateAddress = (address: string): string | null => {
+    if (!address) return null;
+    if (address.length < 5) return `Address must be at least 5 characters (${address.length}/5)`;
+    return null;
   };
 
   // Get field-specific error message
   const getFieldError = (field: string) => {
     const value = formData[field as keyof typeof formData];
     
-    if (!value) return null;
-    
     switch (field) {
+      case 'firstName':
+        return validateName(value, 'First name');
+      case 'lastName':
+        return validateName(value, 'Last name');
+      case 'username':
+        return validateUsername(value);
       case 'email':
-        return !validateEmail(value) ? 'Please enter a valid email address' : null;
-      case 'shippingEmail':
-        return !validateEmail(value) ? 'Please enter a valid shipping email address' : null;
+        if (value && !validateEmail(value)) {
+          return 'Please enter a valid email address (e.g., user@example.com)';
+        }
+        break;
       case 'phoneNo':
-        return !validatePhone(value) ? 'Please enter a valid phone number' : null;
+        if (value && !validatePhone(value)) {
+          return 'Please enter a valid phone number (e.g., +1234567890 or 1234567890)';
+        }
+        break;
+      case 'password':
+        return validatePassword(value);
+      case 'shippingFirstName':
+        return validateName(value, 'Shipping first name');
+      case 'shippingLastName':
+        return validateName(value, 'Shipping last name');
+      case 'shippingEmail':
+        if (value && !validateEmail(value)) {
+          return 'Please enter a valid shipping email address (e.g., user@example.com)';
+        }
+        break;
       case 'shippingPhone':
-        return !validatePhone(value) ? 'Please enter a valid shipping phone number' : null;
+        if (value && !validatePhone(value)) {
+          return 'Please enter a valid shipping phone number (e.g., +1234567890 or 1234567890)';
+        }
+        break;
+      case 'address':
+        return validateAddress(value);
+      case 'city':
+        return validateName(value, 'City');
+      case 'state':
+        return validateName(value, 'State');
       case 'zipCode':
-        return !validateZipCode(value) ? 'Please enter a valid zip code' : null;
-      default:
-        return null;
+        if (value && !validateZipCode(value)) {
+          return 'Please enter a valid zip code (e.g., 12345 or 12345-6789)';
+        }
+        break;
     }
+    return null;
   };
 
   // Check if form has any validation errors
   const hasValidationErrors = () => {
-    const fieldsToValidate = ['email', 'shippingEmail', 'phoneNo', 'shippingPhone', 'zipCode'];
+    const fieldsToValidate = [
+      'firstName', 'lastName', 'username', 'email', 'phoneNo', 'password',
+      'shippingFirstName', 'shippingLastName', 'shippingEmail', 'shippingPhone', 
+      'address', 'city', 'state', 'zipCode'
+    ];
     return fieldsToValidate.some(field => getFieldError(field));
   };
 
@@ -115,9 +189,16 @@ function Page() {
     
     // Check for real-time validation errors first
     if (hasValidationErrors()) {
-      const firstError = getFieldError('email') || getFieldError('shippingEmail') || 
-                        getFieldError('phoneNo') || getFieldError('shippingPhone') || 
-                        getFieldError('zipCode');
+      const fieldsToCheck = [
+        'firstName', 'lastName', 'username', 'email', 'phoneNo', 'password',
+        'shippingFirstName', 'shippingLastName', 'shippingEmail', 'shippingPhone', 
+        'address', 'city', 'state', 'zipCode'
+      ];
+      
+      const firstError = fieldsToCheck
+        .map(field => getFieldError(field))
+        .find(error => error !== null);
+        
       setMessage({
         type: 'error',
         text: firstError || 'Please correct the validation errors above'
@@ -267,6 +348,26 @@ function Page() {
           console.log('Error message:', result.message);
         }
         
+        // Add helpful suggestions for common errors
+        if (result.field) {
+          switch (result.field) {
+            case 'phoneNo':
+            case 'phone number':
+              errorMessage += '. Please use a different phone number.';
+              break;
+            case 'email':
+            case 'email address':
+              errorMessage += '. Please use a different email address.';
+              break;
+            case 'username':
+              errorMessage += '. Please choose a different username.';
+              break;
+            case 'multiple':
+              errorMessage += '. Please check your phone number, email, and username.';
+              break;
+          }
+        }
+        
         console.log('Final error message:', errorMessage);
         setMessage({
           type: 'error',
@@ -278,9 +379,23 @@ function Page() {
       console.error('Network error:', error);
       console.log('Error type:', typeof error);
       console.log('Error message:', error instanceof Error ? error.message : 'Unknown error');
+      
+      let errorMessage = 'Network error. Please try again.';
+      
+      // Provide more specific error messages for common network issues
+      if (error instanceof Error) {
+        if (error.message.includes('fetch')) {
+          errorMessage = 'Unable to connect to the server. Please check your internet connection and try again.';
+        } else if (error.message.includes('timeout')) {
+          errorMessage = 'Request timed out. Please try again.';
+        } else {
+          errorMessage = 'An unexpected error occurred. Please try again.';
+        }
+      }
+      
       setMessage({
         type: 'error',
-        text: error instanceof Error ? error.message : 'Network error. Please try again.'
+        text: errorMessage
       });
     } finally {
       setIsLoading(false);

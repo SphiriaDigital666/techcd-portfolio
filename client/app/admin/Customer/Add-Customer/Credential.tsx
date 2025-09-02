@@ -21,24 +21,54 @@ const Credential: React.FC<CredentialProps> = ({ formData, onInputChange, getFie
       <h3 className="xl:text-[32px] text-[24px] font-semibold text-[#E5E5E5] mb-6">Credential</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-[#FFFFFF] text-[17px] mb-2">First Name</label>
+          <label className="block text-[#FFFFFF] text-[17px] mb-2">
+            First Name
+            {formData.firstName && (
+              <span className="text-sm text-gray-400 ml-2">
+                ({formData.firstName.length}/2 min)
+              </span>
+            )}
+          </label>
           <input
             type="text"
             value={formData.firstName}
             onChange={(e) => onInputChange('firstName', e.target.value)}
-            className="w-full px-4 xl:py-1 py-2  border border-[#172D6D] rounded-md text-white focus:border-[#028EFC] focus:outline-none"
+            className={`w-full px-4 xl:py-1 py-2 border rounded-md text-white focus:outline-none ${
+              getFieldError && getFieldError('firstName') 
+                ? 'border-red-500 focus:border-red-500' 
+                : 'border-[#172D6D] focus:border-[#028EFC]'
+            }`}
+            placeholder="Enter first name (min 2 characters)"
             required
           />
+          {getFieldError && getFieldError('firstName') && (
+            <p className="text-red-400 text-sm mt-1">{getFieldError('firstName')}</p>
+          )}
         </div>
         <div>
-          <label className="block text-[#FFFFFF] text-[17px] mb-2">Last Name</label>
+          <label className="block text-[#FFFFFF] text-[17px] mb-2">
+            Last Name
+            {formData.lastName && (
+              <span className="text-sm text-gray-400 ml-2">
+                ({formData.lastName.length}/2 min)
+              </span>
+            )}
+          </label>
           <input
             type="text"
             value={formData.lastName}
             onChange={(e) => onInputChange('lastName', e.target.value)}
-            className="w-full px-4 xl:py-1 py-2  border border-[#172D6D] rounded-md text-white focus:border-[#028EFC] focus:outline-none"
+            className={`w-full px-4 xl:py-1 py-2 border rounded-md text-white focus:outline-none ${
+              getFieldError && getFieldError('lastName') 
+                ? 'border-red-500 focus:border-red-500' 
+                : 'border-[#172D6D] focus:border-[#028EFC]'
+            }`}
+            placeholder="Enter last name (min 2 characters)"
             required
           />
+          {getFieldError && getFieldError('lastName') && (
+            <p className="text-red-400 text-sm mt-1">{getFieldError('lastName')}</p>
+          )}
         </div>
         <div>
           <label className="block text-[#FFFFFF] text-[17px] mb-2">Email</label>
@@ -58,14 +88,29 @@ const Credential: React.FC<CredentialProps> = ({ formData, onInputChange, getFie
           )}
         </div>
         <div>
-          <label className="block text-[#FFFFFF] text-[17px] mb-2">User name</label>
+          <label className="block text-[#FFFFFF] text-[17px] mb-2">
+            Username
+            {formData.username && (
+              <span className="text-sm text-gray-400 ml-2">
+                ({formData.username.length}/3 min)
+              </span>
+            )}
+          </label>
           <input
             type="text"
             value={formData.username}
             onChange={(e) => onInputChange('username', e.target.value)}
-            className="w-full px-4 xl:py-1 py-2 border border-[#172D6D] rounded-md text-white focus:border-[#028EFC] focus:outline-none"
+            className={`w-full px-4 xl:py-1 py-2 border rounded-md text-white focus:outline-none ${
+              getFieldError && getFieldError('username') 
+                ? 'border-red-500 focus:border-red-500' 
+                : 'border-[#172D6D] focus:border-[#028EFC]'
+            }`}
+            placeholder="Enter username (min 3 characters)"
             required
           />
+          {getFieldError && getFieldError('username') && (
+            <p className="text-red-400 text-sm mt-1">{getFieldError('username')}</p>
+          )}
         </div>
         <div>
           <label className="block text-[#FFFFFF] text-[17px] mb-2">Phone number</label>
@@ -86,14 +131,29 @@ const Credential: React.FC<CredentialProps> = ({ formData, onInputChange, getFie
           )}
         </div>
         <div>
-          <label className="block text-[#FFFFFF] text-[17px] mb-2">Password</label>
+          <label className="block text-[#FFFFFF] text-[17px] mb-2">
+            Password
+            {formData.password && (
+              <span className="text-sm text-gray-400 ml-2">
+                ({formData.password.length}/8 min)
+              </span>
+            )}
+          </label>
           <input
             type="password"
             value={formData.password}
             onChange={(e) => onInputChange('password', e.target.value)}
-            className="w-full px-4 xl:py-1 py-2  border border-[#172D6D] rounded-md text-white focus:border-[#028EFC] focus:outline-none"
+            className={`w-full px-4 xl:py-1 py-2 border rounded-md text-white focus:outline-none ${
+              getFieldError && getFieldError('password') 
+                ? 'border-red-500 focus:border-red-500' 
+                : 'border-[#172D6D] focus:border-[#028EFC]'
+            }`}
+            placeholder="Enter password (min 8 characters with uppercase, lowercase, number, special char)"
             required
           />
+          {getFieldError && getFieldError('password') && (
+            <p className="text-red-400 text-sm mt-1">{getFieldError('password')}</p>
+          )}
         </div>
       </div>
     </div>
