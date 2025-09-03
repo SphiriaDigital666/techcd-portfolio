@@ -17,6 +17,32 @@ exports.createUser = async (req, res) => {
       role,
     });
 
+    const existingUser = await User.findOne({
+      $or: [{ phoneNo: phoneNo }, { email: email }, { username: username }],
+    });
+
+    if (existingUser) {
+      let errorMessage = "Customer already exists with entered ";
+      const conflicts = [];
+
+      if (existingUser.phoneNo === phoneNo) {
+        conflicts.push("phone number");
+      }
+      if (existingUser.email === email) {
+        conflicts.push("email address");
+      }
+      if (existingUser.username === username) {
+        conflicts.push("username");
+      }
+
+      errorMessage += conflicts.join(", ");
+
+      return res.status(400).json({
+        success: false,
+        message: errorMessage,
+      });
+    }
+
     await user.save();
     const data = user.toObject();
     delete data.password;
@@ -33,7 +59,6 @@ exports.createUser = async (req, res) => {
 
 exports.getUsers = async (req, res) => {
   try {
-    // populate role name
     const users = await User.find()
       .select("-password")
       .populate("role", "name");
@@ -85,13 +110,12 @@ exports.updateUser = async (req, res) => {
           });
         }
 
-        // Validate that the role exists
         const UserRole = require("../models/user-role");
         const roleExists = await UserRole.findById(role);
         if (!roleExists) {
           return res.status(400).json({
             success: false,
-            message: "Invalid role ID provided",
+            message: "Provided role is invalid",
           });
         }
 
@@ -111,6 +135,17 @@ exports.updateUser = async (req, res) => {
             .json({ success: false, message: "Invalid password" });
         }
 
+        const existingUser = await User.findOne({
+          username,
+          _id: { $ne: req.params.id },
+        });
+        if (existingUser) {
+          return res.status(400).json({
+            success: false,
+            message: "Customer already exists with entered username",
+          });
+        }
+
         user.username = username;
         break;
       }
@@ -119,11 +154,21 @@ exports.updateUser = async (req, res) => {
         const { email, password } = req.body;
 
         const isMatch = await bcrypt.compare(password, user.password);
-
         if (!isMatch) {
           return res
             .status(400)
             .json({ success: false, message: "Invalid password" });
+        }
+
+        const existingUser = await User.findOne({
+          email,
+          _id: { $ne: req.params.id },
+        });
+        if (existingUser) {
+          return res.status(400).json({
+            success: false,
+            message: "Customer already exists with entered email",
+          });
         }
 
         user.email = email;
@@ -153,6 +198,17 @@ exports.updateUser = async (req, res) => {
           return res
             .status(400)
             .json({ success: false, message: "Invalid password" });
+        }
+
+        const existingUser = await User.findOne({
+          phoneNo,
+          _id: { $ne: req.params.id },
+        });
+        if (existingUser) {
+          return res.status(400).json({
+            success: false,
+            message: "Customer already exists with entered phone number",
+          });
         }
 
         user.phoneNo = phoneNo;
