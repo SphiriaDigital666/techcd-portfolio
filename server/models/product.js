@@ -50,6 +50,10 @@ const productSchema = new mongoose.Schema(
       type: Number,
       min: 0,
     },
+    quantity: {
+      type: Number,
+      min: 0,
+    },
     categories: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -61,8 +65,8 @@ const productSchema = new mongoose.Schema(
     attributes: [productAttributeSchema],
     status: {
       type: String,
-      enum: ['Draft', 'Public', 'Private'],
-      default: 'Draft'
+      enum: ["Draft", "Public", "Private"],
+      default: "Draft",
     },
   },
   { timestamps: true }

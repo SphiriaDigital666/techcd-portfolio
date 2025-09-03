@@ -48,14 +48,17 @@ exports.validateCreateProduct = [
     .isFloat({ min: 0 })
     .withMessage("Discount price must be a positive number")
     .custom((value, { req }) => {
-      const discountPrice = parseFloat(value);
-      const regularPrice = parseFloat(req.body.price);
-      
-      if (discountPrice >= regularPrice) {
-        throw new Error("Discount price must be less than regular price");
+      if (value > req.body.price) {
+        throw new Error("Discount price cannot be greater than price");
       }
       return true;
     }),
+
+  body("quantity")
+    .notEmpty()
+    .withMessage("Quantity is required")
+    .isInt({ min: 0 })
+    .withMessage("Quantity must be a positive number"),
 
   body("attributes")
     .optional()
@@ -89,9 +92,11 @@ exports.validateCreateProduct = [
     }),
 
   body("status")
-    .optional()
-    .isIn(['Draft', 'Public', 'Private'])
-    .withMessage("Status must be one of: Draft, Public, Private"),
+    .notEmpty()
+    .withMessage("Status is required")
+    .toLowerCase()
+    .isIn(["draft", "public", "private"])
+    .withMessage('Status must be one of "draft", "public" or "private"'),
 ];
 
 exports.validateUpdateProduct = [
@@ -142,14 +147,17 @@ exports.validateUpdateProduct = [
     .isFloat({ min: 0 })
     .withMessage("Discount price must be a positive number")
     .custom((value, { req }) => {
-      const discountPrice = parseFloat(value);
-      const regularPrice = parseFloat(req.body.price);
-      
-      if (discountPrice >= regularPrice) {
-        throw new Error("Discount price must be less than regular price");
+      if (value > req.body.price) {
+        throw new Error("Discount price cannot be greater than price");
       }
       return true;
     }),
+
+  body("quantity")
+    .notEmpty()
+    .withMessage("Quantity is required")
+    .isInt({ min: 0 })
+    .withMessage("Quantity must be a positive number"),
 
   body("attributes")
     .optional()
@@ -183,9 +191,11 @@ exports.validateUpdateProduct = [
     }),
 
   body("status")
-    .optional()
-    .isIn(['Draft', 'Public', 'Private'])
-    .withMessage("Status must be one of: Draft, Public, Private"),
+    .notEmpty()
+    .withMessage("Status is required")
+    .toLowerCase()
+    .isIn(["draft", "public", "private"])
+    .withMessage('Status must be one of "draft", "public" or "private"'),
 ];
 
 exports.validateIdParam = [
