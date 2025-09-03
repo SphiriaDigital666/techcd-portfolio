@@ -48,8 +48,11 @@ exports.validateCreateProduct = [
     .isFloat({ min: 0 })
     .withMessage("Discount price must be a positive number")
     .custom((value, { req }) => {
-      if (value > req.body.price) {
-        throw new Error("Discount price cannot be greater than price");
+      const discountPrice = parseFloat(value);
+      const regularPrice = parseFloat(req.body.price);
+      
+      if (discountPrice >= regularPrice) {
+        throw new Error("Discount price must be less than regular price");
       }
       return true;
     }),
@@ -84,6 +87,11 @@ exports.validateCreateProduct = [
       }
       return true;
     }),
+
+  body("status")
+    .optional()
+    .isIn(['Draft', 'Public', 'Private'])
+    .withMessage("Status must be one of: Draft, Public, Private"),
 ];
 
 exports.validateUpdateProduct = [
@@ -134,8 +142,11 @@ exports.validateUpdateProduct = [
     .isFloat({ min: 0 })
     .withMessage("Discount price must be a positive number")
     .custom((value, { req }) => {
-      if (value > req.body.price) {
-        throw new Error("Discount price cannot be greater than price");
+      const discountPrice = parseFloat(value);
+      const regularPrice = parseFloat(req.body.price);
+      
+      if (discountPrice >= regularPrice) {
+        throw new Error("Discount price must be less than regular price");
       }
       return true;
     }),
@@ -170,6 +181,11 @@ exports.validateUpdateProduct = [
       }
       return true;
     }),
+
+  body("status")
+    .optional()
+    .isIn(['Draft', 'Public', 'Private'])
+    .withMessage("Status must be one of: Draft, Public, Private"),
 ];
 
 exports.validateIdParam = [

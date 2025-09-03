@@ -59,6 +59,11 @@ const productSchema = new mongoose.Schema(
       },
     ],
     attributes: [productAttributeSchema],
+    status: {
+      type: String,
+      enum: ['Draft', 'Public', 'Private'],
+      default: 'Draft'
+    },
   },
   { timestamps: true }
 );

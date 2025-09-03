@@ -117,11 +117,7 @@ const AllProductsTable = () => {
     productName: product.title,
     stock: "In Stock", // You can add stock field to your product model later
     price: `$${product.price.toFixed(2)}`,
-    publish: new Date(product.createdAt).toLocaleDateString('en-US', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    }),
+    publish: product.status || "Public", // Show status (Draft/Public/Private) instead of date
   }));
 
   // Enhanced filtering logic

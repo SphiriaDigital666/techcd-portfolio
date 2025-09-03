@@ -109,9 +109,27 @@ export const createColumns = (onDelete: (productId: string, productName: string)
   },
   {
     accessorKey: "publish",
-    header: "Publish",
+    header: "Status",
     cell: ({ row }) => {
-      return row.original.publish;
+      const status = row.original.publish;
+      const getStatusColor = (status: string) => {
+        switch (status.toLowerCase()) {
+          case 'public':
+            return 'text-green-400 bg-green-400/20';
+          case 'draft':
+            return 'text-yellow-400 bg-yellow-400/20';
+          case 'private':
+            return 'text-red-400 bg-red-400/20';
+          default:
+            return 'text-blue-400 bg-blue-400/20';
+        }
+      };
+      
+      return (
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(status)}`}>
+          {status}
+        </span>
+      );
     },
   },
   {
