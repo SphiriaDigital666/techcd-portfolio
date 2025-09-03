@@ -188,6 +188,7 @@ const ProductForm = () => {
       if (formData.discountPrice) {
         formDataToSend.append('discountPrice', formData.discountPrice);
       }
+      formDataToSend.append('status', formData.status);
       formDataToSend.append('categories', JSON.stringify(formData.selectedCategories));
       if (Object.keys(formData.attributes).length > 0) {
         formDataToSend.append('attributes', JSON.stringify(

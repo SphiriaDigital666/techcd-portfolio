@@ -29,9 +29,25 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ onProductDataChange, on
     price: '',
     discountPrice: ''
   });
+  
+  const [priceError, setPriceError] = useState('');
 
   const handleInputChange = (field: string, value: string) => {
     const newData = { ...productData, [field]: value };
+    
+    // Validate price vs discount price
+    if (field === 'price' || field === 'discountPrice') {
+      const price = parseFloat(field === 'price' ? value : newData.price);
+      const discountPrice = parseFloat(field === 'discountPrice' ? value : newData.discountPrice);
+      
+      if (price && discountPrice && discountPrice >= price) {
+        setPriceError('Discount price must be less than regular price');
+        return;
+      } else {
+        setPriceError('');
+      }
+    }
+    
     setProductData(newData);
     onProductDataChange(newData);
   };
@@ -110,8 +126,13 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ onProductDataChange, on
             placeholder="0.00"
             step="0.01"
             min="0"
-            className="w-full px-4 py-3  rounded-lg border border-[#172D6D] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 text-sm bg-black/30 backdrop-blur-[500px]"
+            className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:border-transparent text-white placeholder-gray-400 text-sm bg-black/30 backdrop-blur-[500px] ${
+              priceError ? 'border-red-500 focus:ring-red-500' : 'border-[#172D6D] focus:ring-blue-500'
+            }`}
           />
+          {priceError && (
+            <p className="text-red-400 text-sm mt-1">{priceError}</p>
+          )}
         </div>
       </div>
     </div>

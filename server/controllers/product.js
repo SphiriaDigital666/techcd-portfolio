@@ -13,6 +13,7 @@ exports.createProduct = async (req, res) => {
       discountPrice,
       categories,
       attributes,
+      status,
     } = req.body;
 
     for (const file of files) {
@@ -31,6 +32,7 @@ exports.createProduct = async (req, res) => {
       categories,
       attributes,
       productImages: urls,
+      status,
     });
     await product.save();
 
@@ -102,6 +104,7 @@ exports.updateProduct = async (req, res) => {
       discountPrice,
       categories,
       attributes,
+      status,
     } = req.body;
 
     for (const file of files) {
@@ -122,6 +125,7 @@ exports.updateProduct = async (req, res) => {
         categories,
         attributes,
         productImages: urls,
+        status,
       },
       {
         new: true,
