@@ -13,7 +13,7 @@ exports.createCustomer = async (req, res) => {
       shippingInfo,
     } = req.body;
 
-    const existingCustomer = await User.findOne({
+    const existingCustomer = await Customer.findOne({
       $or: [{ phoneNo: phoneNo }, { email: email }, { username: username }],
     });
     if (existingCustomer) {
@@ -151,7 +151,7 @@ exports.updateCustomer = async (req, res) => {
         if (existingCustomer) {
           return res.status(400).json({
             success: false,
-            message: "Customer already exists with entered username",
+            message: "Customer already exists with entered email",
           });
         }
 
@@ -191,7 +191,7 @@ exports.updateCustomer = async (req, res) => {
         if (existingCustomer) {
           return res.status(400).json({
             success: false,
-            message: "Customer already exists with entered username",
+            message: "Customer already exists with entered phone number",
           });
         }
 
