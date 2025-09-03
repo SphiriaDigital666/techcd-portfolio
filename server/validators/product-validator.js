@@ -29,9 +29,14 @@ exports.validateCreateProduct = [
     }
 
     const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    const maxSize = 2 * 1024 * 1024;
+
     files.forEach((file) => {
       if (!allowedTypes.includes(file.mimetype)) {
         throw new Error("Only JPEG, PNG, or GIF images are allowed");
+      }
+      if (file.size > maxSize) {
+        throw new Error("Each image must be smaller than 2 MB");
       }
     });
     return true;
@@ -128,9 +133,14 @@ exports.validateUpdateProduct = [
     }
 
     const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    const maxSize = 2 * 1024 * 1024;
+
     files.forEach((file) => {
       if (!allowedTypes.includes(file.mimetype)) {
         throw new Error("Only JPEG, PNG, or GIF images are allowed");
+      }
+      if (file.size > maxSize) {
+        throw new Error("Each image must be smaller than 2 MB");
       }
     });
     return true;
