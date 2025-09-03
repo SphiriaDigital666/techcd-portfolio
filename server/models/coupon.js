@@ -7,10 +7,10 @@ const couponSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    productType: {
+    couponType: {
       type: String,
+      enum: ["percentage", "exact"],
       required: true,
-      trim: true,
     },
     code: {
       type: String,
@@ -23,11 +23,6 @@ const couponSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: 0,
-    },
-    valueType: {
-      type: String,
-      enum: ["percentage", "exact"],
-      required: true,
     },
     startDate: {
       type: Date,
