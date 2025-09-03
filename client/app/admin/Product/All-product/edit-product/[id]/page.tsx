@@ -1,9 +1,15 @@
 import React from 'react'
 import ProductForm from './components/ProductForm'
 
-function page() {
+interface PageProps {
+  params: {
+    id: string
+  }
+}
+
+function page({ params }: PageProps) {
   return (
-    <ProductForm />
+    <ProductForm productId={params.id} />
   )
 }
 

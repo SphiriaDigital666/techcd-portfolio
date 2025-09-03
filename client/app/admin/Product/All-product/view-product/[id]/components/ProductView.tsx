@@ -67,7 +67,7 @@ const ProductView = () => {
 
   return (
     <div className="min-h-screen text-white">
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="max-w-7xl  space-y-8">
         <div className="flex items-center gap-4">
           <h1 className="text-[28px] font-bold sm:text-[24px] md:text-[26px] lg:text-[28px] xl:text-[30px] text-[#E5E5E5]">
             Products

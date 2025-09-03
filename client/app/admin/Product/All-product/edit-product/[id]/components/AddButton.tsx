@@ -8,10 +8,11 @@ import { cn } from "@/lib/utils";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   identifier: string;
   buttonText: string;
+  loading?: boolean;
 }
 
 const PrimaryButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ identifier, buttonText, className, ...props }, ref) => {
+  ({ identifier, buttonText, className, loading = false, disabled, ...props }, ref) => {
     const spanRef = useRef<HTMLSpanElement | null>(null);
 
     const calSpanPosition = (
@@ -31,20 +32,26 @@ const PrimaryButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Button
         ref={ref}
-       
+        disabled={disabled || loading}
         className={cn(
           identifier,
-          "relative flex items-center bg-[#028EFC] text-white rounded-md p-2 shadow-md transition-all duration-300 ease-in hover:bg-[#5FA3B6] overflow-hidden xl:w-full ",
+          "relative flex items-center bg-[#028EFC] text-white rounded-md p-2 shadow-md transition-all duration-300 ease-in hover:bg-[#5FA3B6] overflow-hidden xl:w-full disabled:opacity-50 disabled:cursor-not-allowed",
           className
         )}
         onMouseEnter={calSpanPosition}
         {...props}
       >
-        <span className="flex-1 text-center pr-6">{buttonText}</span>
+        <span className="flex-1 text-center pr-6">
+          {loading ? 'Updating...' : buttonText}
+        </span>
 
         {/* Properly positioned arrow icon */}
-        <span className="absolute right-1 flex items-center justify-center w-6 h-6  rounded-full ">
-          <GoArrowUpRight size={14} className="text-white" />
+        <span className="absolute right-1 flex items-center justify-center w-6 h-6 rounded-full">
+          {loading ? (
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+          ) : (
+            <GoArrowUpRight size={14} className="text-white" />
+          )}
         </span>
       </Button>
     );
