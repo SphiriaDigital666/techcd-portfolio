@@ -2,14 +2,12 @@ const Coupon = require("../models/coupon");
 
 exports.createCoupon = async (req, res) => {
   try {
-    const { title, productType, code, value, valueType, startDate, endDate } =
-      req.body;
+    const { title, couponType, code, value, startDate, endDate } = req.body;
     const coupon = new Coupon({
       title,
-      productType,
+      couponType,
       code,
       value,
-      valueType,
       startDate,
       endDate,
     });
@@ -52,12 +50,11 @@ exports.getCouponById = async (req, res) => {
 exports.updateCoupon = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, productType, code, value, valueType, startDate, endDate } =
-      req.body;
+    const { title, couponType, code, value, startDate, endDate } = req.body;
 
     const coupon = await Coupon.findByIdAndUpdate(
       id,
-      { title, productType, code, value, valueType, startDate, endDate },
+      { title, couponType, code, value, startDate, endDate },
       { new: true, runValidators: true }
     );
 

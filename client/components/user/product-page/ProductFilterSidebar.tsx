@@ -21,7 +21,7 @@ const ProductFilterSidebar: React.FC<ProductFilterSidebarProps> = ({
       <div className="space-y-[0.8em]">
         {categories.map((cat) => (
           <div key={cat.name}>
-            <label className="flex cursor-pointer items-center gap-2 select-none">
+            <label className="flex cursor-pointer items-center gap-2 capitalize select-none">
               <Checkbox
                 checked={selectedCategories.includes(cat)}
                 onCheckedChange={() => handleCategoryChange(cat)}

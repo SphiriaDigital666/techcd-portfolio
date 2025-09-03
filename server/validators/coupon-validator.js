@@ -8,10 +8,11 @@ exports.validateCreateCoupon = [
     .isLength({ min: 2, max: 50 })
     .withMessage("Coupon title must be between 2 and 50 characters"),
 
-  body("productType")
-    .trim()
+  body("couponType")
     .notEmpty()
-    .withMessage("Coupon product type is required"),
+    .withMessage("Coupon type is required")
+    .isIn(["percentage", "exact"])
+    .withMessage('Coupon type must be either "percentage" or "exact"'),
 
   body("code")
     .trim()
@@ -27,12 +28,6 @@ exports.validateCreateCoupon = [
     .withMessage("Coupon value is required")
     .isFloat({ min: 0 })
     .withMessage("Coupon value must be a number greater than or equal to 0"),
-
-  body("valueType")
-    .notEmpty()
-    .withMessage("Coupon value type is required")
-    .isIn(["percentage", "exact"])
-    .withMessage('Coupon value type must be either "percentage" or "exact"'),
 
   body("startDate")
     .notEmpty()
@@ -63,10 +58,11 @@ exports.validateUpdateCoupon = [
     .isLength({ min: 2, max: 50 })
     .withMessage("Coupon title must be between 2 and 50 characters"),
 
-  body("productType")
-    .trim()
+  body("couponType")
     .notEmpty()
-    .withMessage("Coupon product type is required"),
+    .withMessage("Coupon type is required")
+    .isIn(["percentage", "exact"])
+    .withMessage('Coupon type must be either "percentage" or "exact"'),
 
   body("code")
     .trim()
@@ -82,12 +78,6 @@ exports.validateUpdateCoupon = [
     .withMessage("Coupon value is required")
     .isFloat({ min: 0 })
     .withMessage("Coupon value must be a number greater than or equal to 0"),
-
-  body("valueType")
-    .notEmpty()
-    .withMessage("Coupon value type is required")
-    .isIn(["percentage", "exact"])
-    .withMessage('Coupon value type must be either "percentage" or "exact"'),
 
   body("startDate")
     .notEmpty()

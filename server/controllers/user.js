@@ -1,10 +1,44 @@
 const User = require("../models/user");
+const UserRole = require("../models/user-role");
 const bcrypt = require("bcryptjs");
 
 exports.createUser = async (req, res) => {
   try {
     const { firstName, lastName, username, email, phoneNo, password, role } =
       req.body;
+
+    const existingUser = await User.findOne({
+      $or: [{ phoneNo: phoneNo }, { email: email }, { username: username }],
+    });
+    if (existingUser) {
+      let errorMessage = "User already exists with entered ";
+      const conflicts = [];
+
+      if (existingUser.phoneNo === phoneNo) {
+        conflicts.push("phone number");
+      }
+      if (existingUser.email === email) {
+        conflicts.push("email address");
+      }
+      if (existingUser.username === username) {
+        conflicts.push("username");
+      }
+
+      errorMessage += conflicts.join(", ");
+
+      return res.status(400).json({
+        success: false,
+        message: errorMessage,
+      });
+    }
+
+    const roleExists = await UserRole.findById(role);
+    if (!roleExists) {
+      return res.status(400).json({
+        success: false,
+        message: "Provided role is invalid",
+      });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({
@@ -33,7 +67,6 @@ exports.createUser = async (req, res) => {
 
 exports.getUsers = async (req, res) => {
   try {
-    // populate role name
     const users = await User.find()
       .select("-password")
       .populate("role", "name");
@@ -77,21 +110,11 @@ exports.updateUser = async (req, res) => {
       case "profile": {
         const { firstName, lastName, role } = req.body;
 
-        if (!firstName || !lastName || !role) {
-          return res.status(400).json({
-            success: false,
-            message:
-              "firstName, lastName, and role are required for profile update",
-          });
-        }
-
-        // Validate that the role exists
-        const UserRole = require("../models/user-role");
         const roleExists = await UserRole.findById(role);
         if (!roleExists) {
           return res.status(400).json({
             success: false,
-            message: "Invalid role ID provided",
+            message: "Provided role is invalid",
           });
         }
 
@@ -111,6 +134,17 @@ exports.updateUser = async (req, res) => {
             .json({ success: false, message: "Invalid password" });
         }
 
+        const existingUser = await User.findOne({
+          username,
+          _id: { $ne: req.params.id },
+        });
+        if (existingUser) {
+          return res.status(400).json({
+            success: false,
+            message: "User already exists with entered username",
+          });
+        }
+
         user.username = username;
         break;
       }
@@ -119,11 +153,21 @@ exports.updateUser = async (req, res) => {
         const { email, password } = req.body;
 
         const isMatch = await bcrypt.compare(password, user.password);
-
         if (!isMatch) {
           return res
             .status(400)
             .json({ success: false, message: "Invalid password" });
+        }
+
+        const existingUser = await User.findOne({
+          email,
+          _id: { $ne: req.params.id },
+        });
+        if (existingUser) {
+          return res.status(400).json({
+            success: false,
+            message: "User already exists with entered email",
+          });
         }
 
         user.email = email;
@@ -153,6 +197,17 @@ exports.updateUser = async (req, res) => {
           return res
             .status(400)
             .json({ success: false, message: "Invalid password" });
+        }
+
+        const existingUser = await User.findOne({
+          phoneNo,
+          _id: { $ne: req.params.id },
+        });
+        if (existingUser) {
+          return res.status(400).json({
+            success: false,
+            message: "User already exists with entered phone number",
+          });
         }
 
         user.phoneNo = phoneNo;

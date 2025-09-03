@@ -13,19 +13,13 @@ exports.createCustomer = async (req, res) => {
       shippingInfo,
     } = req.body;
 
-    // Check for existing customer with same phone number, email, or username
     const existingCustomer = await Customer.findOne({
-      $or: [
-        { phoneNo: phoneNo },
-        { email: email },
-        { username: username }
-      ]
+      $or: [{ phoneNo: phoneNo }, { email: email }, { username: username }],
     });
-
     if (existingCustomer) {
-      let errorMessage = "Customer already exists with ";
+      let errorMessage = "Customer already exists with entered ";
       const conflicts = [];
-      
+
       if (existingCustomer.phoneNo === phoneNo) {
         conflicts.push("phone number");
       }
@@ -35,13 +29,12 @@ exports.createCustomer = async (req, res) => {
       if (existingCustomer.username === username) {
         conflicts.push("username");
       }
-      
+
       errorMessage += conflicts.join(", ");
-      
-      return res.status(400).json({ 
-        success: false, 
+
+      return res.status(400).json({
+        success: false,
         message: errorMessage,
-        field: conflicts.length === 1 ? conflicts[0] : "multiple"
       });
     }
 
@@ -66,47 +59,7 @@ exports.createCustomer = async (req, res) => {
       data,
     });
   } catch (error) {
-    // Handle MongoDB duplicate key errors with user-friendly messages
-    if (error.code === 11000) {
-      const field = Object.keys(error.keyPattern)[0];
-      let message = "This ";
-      
-      switch (field) {
-        case 'phoneNo':
-          message += "phone number is already registered";
-          break;
-        case 'email':
-          message += "email address is already registered";
-          break;
-        case 'username':
-          message += "username is already taken";
-          break;
-        default:
-          message += `${field} already exists`;
-      }
-      
-      return res.status(400).json({ 
-        success: false, 
-        message: message,
-        field: field
-      });
-    }
-    
-    // Handle other validation errors
-    if (error.name === 'ValidationError') {
-      const messages = Object.values(error.errors).map(err => err.message);
-      return res.status(400).json({ 
-        success: false, 
-        message: messages.join(', '),
-        errors: messages
-      });
-    }
-    
-    // Handle other errors
-    res.status(500).json({ 
-      success: false, 
-      message: "An error occurred while creating the customer. Please try again." 
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -149,11 +102,10 @@ exports.updateCustomer = async (req, res) => {
 
     switch (field) {
       case "profile": {
-        const { firstName, lastName, role } = req.body;
+        const { firstName, lastName } = req.body;
 
         customer.firstName = firstName;
         customer.lastName = lastName;
-        customer.role = role;
         break;
       }
 
@@ -165,6 +117,17 @@ exports.updateCustomer = async (req, res) => {
           return res
             .status(400)
             .json({ success: false, message: "Invalid password" });
+        }
+
+        const existingCustomer = await Customer.findOne({
+          username,
+          _id: { $ne: req.params.id },
+        });
+        if (existingCustomer) {
+          return res.status(400).json({
+            success: false,
+            message: "Customer already exists with entered username",
+          });
         }
 
         customer.username = username;
@@ -179,6 +142,17 @@ exports.updateCustomer = async (req, res) => {
           return res
             .status(400)
             .json({ success: false, message: "Invalid password" });
+        }
+
+        const existingCustomer = await Customer.findOne({
+          email,
+          _id: { $ne: req.params.id },
+        });
+        if (existingCustomer) {
+          return res.status(400).json({
+            success: false,
+            message: "Customer already exists with entered email",
+          });
         }
 
         customer.email = email;
@@ -210,6 +184,17 @@ exports.updateCustomer = async (req, res) => {
             .json({ success: false, message: "Invalid password" });
         }
 
+        const existingCustomer = await Customer.findOne({
+          phoneNo,
+          _id: { $ne: req.params.id },
+        });
+        if (existingCustomer) {
+          return res.status(400).json({
+            success: false,
+            message: "Customer already exists with entered phone number",
+          });
+        }
+
         customer.phoneNo = phoneNo;
         break;
       }
@@ -232,47 +217,7 @@ exports.updateCustomer = async (req, res) => {
       data: updatedCustomer,
     });
   } catch (error) {
-    // Handle MongoDB duplicate key errors with user-friendly messages
-    if (error.code === 11000) {
-      const field = Object.keys(error.keyPattern)[0];
-      let message = "This ";
-      
-      switch (field) {
-        case 'phoneNo':
-          message += "phone number is already registered";
-          break;
-        case 'email':
-          message += "email address is already registered";
-          break;
-        case 'username':
-          message += "username is already taken";
-          break;
-        default:
-          message += `${field} already exists`;
-      }
-      
-      return res.status(400).json({ 
-        success: false, 
-        message: message,
-        field: field
-      });
-    }
-    
-    // Handle other validation errors
-    if (error.name === 'ValidationError') {
-      const messages = Object.values(error.errors).map(err => err.message);
-      return res.status(400).json({ 
-        success: false, 
-        message: messages.join(', '),
-        errors: messages
-      });
-    }
-    
-    // Handle other errors
-    res.status(500).json({ 
-      success: false, 
-      message: "An error occurred while updating the customer. Please try again." 
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
