@@ -13,6 +13,7 @@ export interface CreateProductData {
   productImages: string[]; // For now, empty array since no file upload
   price: number;
   discountPrice?: number;
+  quantity?: number;
   status?: string;
   categories: string[]; // category IDs
   attributes: ProductAttribute[];
@@ -26,6 +27,7 @@ export interface Product {
   productImages: string[];
   price: number;
   discountPrice?: number;
+  quantity?: number;
   status?: string;
   categories: Array<{
     _id: string;
@@ -60,6 +62,8 @@ export const productApi = {
       }
 
       const result = await response.json();
+      console.log('Create product API response:', result);
+      console.log('Created product quantity:', result.data.quantity);
       return result.data;
     } catch (error) {
       console.error('Error creating product:', error);
@@ -78,6 +82,8 @@ export const productApi = {
       }
 
       const result = await response.json();
+      console.log('API Response for getProducts:', result);
+      console.log('First product from API:', result.data[0]);
       return result.data;
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -96,6 +102,8 @@ export const productApi = {
       }
 
       const result = await response.json();
+      console.log('API Response for getProductById:', result);
+      console.log('Product quantity from API:', result.data.quantity);
       return result.data;
     } catch (error) {
       console.error('Error fetching product:', error);
@@ -117,10 +125,12 @@ export const productApi = {
       if (productData.discountPrice) {
         formData.append('discountPrice', productData.discountPrice.toString());
       }
-      // Note: Status field is not supported by the current backend
-      // if (productData.status) {
-      //   formData.append('status', productData.status);
-      // }
+      if (productData.quantity !== undefined) {
+        formData.append('quantity', productData.quantity.toString());
+      }
+      if (productData.status) {
+        formData.append('status', productData.status.toLowerCase());
+      }
       
       // Add categories as JSON string
       if (productData.categories) {
@@ -150,6 +160,11 @@ export const productApi = {
       });
       
       formData.append('images', blob, 'placeholder.png');
+
+      console.log('Update product FormData entries:');
+      for (let [key, value] of formData.entries()) {
+        console.log(key, ':', value);
+      }
 
       const response = await fetch(`${API_BASE_URL}/product/${id}`, {
         method: 'PATCH',

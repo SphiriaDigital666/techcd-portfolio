@@ -80,7 +80,7 @@ const ProductDetailsView: React.FC<ProductDetailsViewProps> = ({ product }) => {
             Quantity
           </label>
           <input
-           
+            value={product.quantity || 0}
             className="w-full px-4 py-3 rounded-lg border border-[#172D6D] text-white placeholder-gray-400 text-sm bg-black/20"
             readOnly
           />

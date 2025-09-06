@@ -10,6 +10,7 @@ interface ProductDetailsProps {
     description: string;
     price: string;
     discountPrice: string;
+    quantity: string;
   };
   onProductDataChange: (data: {
     title: string;
@@ -17,6 +18,7 @@ interface ProductDetailsProps {
     description: string;
     price: string;
     discountPrice: string;
+    quantity: string;
   }) => void;
   onFilesChange: (files: Array<{
     id: string;
@@ -129,14 +131,15 @@ const ProductDetails = ({
         </div>
         <div>
           <label className="block font-medium text-[#FFFFFF] text-[17px] mb-2">
-            Quntity
+            Quantity
           </label>
           <input
             type="number"
-            step="0.01"
-          
+            step="1"
+            value={formData.quantity}
+            onChange={(e) => handleInputChange('quantity', e.target.value)}
             className="w-full px-4 py-3 rounded-lg border border-[#172D6D] bg-black/30 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 text-sm"
-            placeholder="0.00"
+            placeholder="0"
           />
         </div>
       </div>

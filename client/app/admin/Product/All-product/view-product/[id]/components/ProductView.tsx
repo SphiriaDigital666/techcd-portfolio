@@ -18,6 +18,8 @@ const ProductView = () => {
       try {
         if (params.id && typeof params.id === 'string') {
           const productData = await productApi.getProductById(params.id)
+          console.log('View product data:', productData);
+          console.log('View product quantity:', productData.quantity);
           setProduct(productData)
         }
       } catch (err) {

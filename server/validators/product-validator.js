@@ -60,10 +60,9 @@ exports.validateCreateProduct = [
     }),
 
   body("quantity")
-    .notEmpty()
-    .withMessage("Quantity is required")
+    .optional()
     .isInt({ min: 0 })
-    .withMessage("Quantity must be a positive number"),
+    .withMessage("Quantity must be a non-negative integer"),
 
   body("attributes")
     .optional()
@@ -164,10 +163,9 @@ exports.validateUpdateProduct = [
     }),
 
   body("quantity")
-    .notEmpty()
-    .withMessage("Quantity is required")
+    .optional()
     .isInt({ min: 0 })
-    .withMessage("Quantity must be a positive number"),
+    .withMessage("Quantity must be a non-negative integer"),
 
   body("attributes")
     .optional()
@@ -201,8 +199,7 @@ exports.validateUpdateProduct = [
     }),
 
   body("status")
-    .notEmpty()
-    .withMessage("Status is required")
+    .optional()
     .toLowerCase()
     .isIn(["draft", "public", "private"])
     .withMessage('Status must be one of "draft", "public" or "private"'),

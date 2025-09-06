@@ -13,6 +13,7 @@ interface ProductFormData {
   description: string;
   price: string;
   discountPrice: string;
+  quantity: string;
   
   // Publishing & Metadata
   status: string;
@@ -43,6 +44,7 @@ const ProductForm = ({ productId }: ProductFormProps) => {
     description: '',
     price: '',
     discountPrice: '',
+    quantity: '',
     status: 'Draft',
     selectedCategories: [],
     attributes: {},
@@ -73,37 +75,23 @@ const ProductForm = ({ productId }: ProductFormProps) => {
         // Try to determine the correct status from available data
         let actualStatus = 'Draft'; // Default fallback
         
+        console.log('Status determination - productData.status:', productData.status);
+        console.log('Status determination - typeof productData.status:', typeof productData.status);
+        
         // Check if status exists in the product data
-        if (productData.status) {
-          actualStatus = productData.status;
+        if (productData.status && productData.status !== '') {
+          // Convert lowercase status from database to proper case for frontend
+          const statusMap: { [key: string]: string } = {
+            'draft': 'Draft',
+            'public': 'Public',
+            'private': 'Private'
+          };
+          actualStatus = statusMap[productData.status.toLowerCase()] || productData.status;
+          console.log('Using status from product data:', actualStatus, '(converted from:', productData.status, ')');
         } else {
-          // Since the view section hardcodes "Public", let's check if there are other indicators
-          // Look for any field that might indicate publication status
-          const possibleStatusFields = [
-            'isPublished', 'published', 'visibility', 'state', 'status', 
-            'isActive', 'active', 'isPublic', 'public', 'isVisible', 'visible'
-          ];
-          
-          let foundStatus = false;
-          for (const field of possibleStatusFields) {
-            if ((productData as any)[field] !== undefined) {
-              const fieldValue = (productData as any)[field];
-              console.log(`Found status field: ${field} = ${fieldValue}`);
-              if (typeof fieldValue === 'boolean') {
-                actualStatus = fieldValue ? 'Public' : 'Draft';
-              } else {
-                actualStatus = fieldValue;
-              }
-              foundStatus = true;
-              break;
-            }
-          }
-          
-          // If no status field found, use the same logic as view section
-          if (!foundStatus) {
-            // The view section hardcodes "Public", so we'll do the same for consistency
-            actualStatus = 'Public';
-          }
+          // Default to Public if no status is found
+          actualStatus = 'Public';
+          console.log('No status found, defaulting to Public');
         }
         
         console.log('Determined status:', actualStatus);
@@ -114,6 +102,7 @@ const ProductForm = ({ productId }: ProductFormProps) => {
           description: productData.description || '',
           price: productData.price?.toString() || '',
           discountPrice: productData.discountPrice?.toString() || '',
+          quantity: productData.quantity?.toString() || '',
           status: actualStatus,
           selectedCategories: productData.categories?.map(cat => cat._id) || [],
           attributes: productData.attributes?.reduce((acc, attr) => {
@@ -145,6 +134,7 @@ const ProductForm = ({ productId }: ProductFormProps) => {
     description: string;
     price: string;
     discountPrice: string;
+    quantity: string;
   }) => {
     setFormData(prev => ({
       ...prev,
@@ -215,8 +205,8 @@ const ProductForm = ({ productId }: ProductFormProps) => {
         description: formData.description,
         price: parseFloat(formData.price) || 0,
         discountPrice: formData.discountPrice ? parseFloat(formData.discountPrice) : undefined,
-        // Note: Status field is not supported by the current backend
-        // status: formData.status, // Commented out because backend doesn't support it
+        quantity: parseInt(formData.quantity || '0'),
+        status: formData.status.toLowerCase(),
         // Note: We're NOT including productImages here to preserve existing images
         // The backend will keep the existing images when productImages is not provided
         categories: formData.selectedCategories,
@@ -312,7 +302,8 @@ const ProductForm = ({ productId }: ProductFormProps) => {
                   shortDescription: formData.shortDescription,
                   description: formData.description,
                   price: formData.price,
-                  discountPrice: formData.discountPrice
+                  discountPrice: formData.discountPrice,
+                  quantity: formData.quantity
                 }}
                 onProductDataChange={handleProductDataChange}
                 onFilesChange={handleGalleryFilesChange}

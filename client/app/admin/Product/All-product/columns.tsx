@@ -94,7 +94,7 @@ export const createColumns = (onDelete: (productId: string, productName: string)
     cell: ({ row }) => {
       const stock = row.original.stock;
       return (
-        <span className={stock === "Out of stock" ? "text-red-500" : ""}>
+        <span className={stock === "Out of Stock" ? "text-red-500 font-semibold" : "text-green-400"}>
           {stock}
         </span>
       );
