@@ -134,6 +134,19 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ onProductDataChange, on
             <p className="text-red-400 text-sm mt-1">{priceError}</p>
           )}
         </div>
+        <div>
+          <label className="block  font-medium text-[#FFFFFF] text-[17px] mb-2">
+            Quantity
+          </label>
+          <input
+            type="number"
+           
+            placeholder="0.00"
+            step="0.01"
+            min="0"
+            className="w-full px-4 py-3  rounded-lg border border-[#172D6D] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 text-sm bg-black/30 backdrop-blur-[500px]"
+          />
+        </div>
       </div>
     </div>
   )

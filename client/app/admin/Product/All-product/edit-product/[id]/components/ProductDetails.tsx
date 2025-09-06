@@ -127,6 +127,18 @@ const ProductDetails = ({
             placeholder="0.00"
           />
         </div>
+        <div>
+          <label className="block font-medium text-[#FFFFFF] text-[17px] mb-2">
+            Quntity
+          </label>
+          <input
+            type="number"
+            step="0.01"
+          
+            className="w-full px-4 py-3 rounded-lg border border-[#172D6D] bg-black/30 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 text-sm"
+            placeholder="0.00"
+          />
+        </div>
       </div>
     </div>
   )

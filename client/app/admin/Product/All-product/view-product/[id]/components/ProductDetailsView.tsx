@@ -75,6 +75,16 @@ const ProductDetailsView: React.FC<ProductDetailsViewProps> = ({ product }) => {
             readOnly
           />
         </div>
+        <div>
+          <label className="block font-medium text-[#FFFFFF] text-[17px] mb-2">
+            Quantity
+          </label>
+          <input
+           
+            className="w-full px-4 py-3 rounded-lg border border-[#172D6D] text-white placeholder-gray-400 text-sm bg-black/20"
+            readOnly
+          />
+        </div>
       </div>
     </div>
   )
