@@ -17,6 +17,12 @@ exports.createProduct = async (req, res) => {
       status,
     } = req.body;
 
+    console.log('=== CREATE PRODUCT DEBUG ===');
+    console.log('Request body received:', req.body);
+    console.log('Quantity from request body:', quantity);
+    console.log('Quantity type:', typeof quantity);
+    console.log('Parsed quantity:', parseInt(quantity));
+
     for (const file of files) {
       await cloudinary.uploader.upload(file.path, function (error, result) {
         if (error) throw error;
@@ -24,19 +30,25 @@ exports.createProduct = async (req, res) => {
       });
     }
 
+    console.log('Creating product with quantity:', quantity);
+    console.log('Creating product with status:', status);
+    
     const product = new Product({
       title,
       smallDescription,
       description,
-      price,
-      discountPrice,
-      quantity,
+      price: parseFloat(price),
+      discountPrice: discountPrice ? parseFloat(discountPrice) : undefined,
+      quantity: quantity ? parseInt(quantity) : 0,
       categories,
       attributes,
       productImages: urls,
       status,
     });
     await product.save();
+
+    console.log('Product saved with quantity:', product.quantity);
+    console.log('Product saved with status:', product.status);
 
     res.status(201).json({
       success: true,
@@ -55,6 +67,11 @@ exports.getProducts = async (req, res) => {
     const products = await Product.find()
       .populate("categories", "name description")
       .populate("attributes.attribute", "name variations");
+
+    console.log('Retrieved products count:', products.length);
+    if (products.length > 0) {
+      console.log('First product quantity:', products[0].quantity);
+    }
 
     res.status(200).json({
       success: true,
@@ -81,6 +98,8 @@ exports.getProductById = async (req, res) => {
         message: "Product not found",
       });
     }
+
+    console.log('getProductById - Product found:', product.title, 'quantity:', product.quantity, 'status:', product.status);
 
     res.status(200).json({
       success: true,
@@ -123,9 +142,9 @@ exports.updateProduct = async (req, res) => {
         title,
         smallDescription,
         description,
-        price,
-        discountPrice,
-        quantity,
+        price: parseFloat(price),
+        discountPrice: discountPrice ? parseFloat(discountPrice) : undefined,
+        quantity: quantity ? parseInt(quantity) : 0,
         categories,
         attributes,
         productImages: urls,

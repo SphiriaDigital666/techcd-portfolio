@@ -10,6 +10,7 @@ interface ProductDetailsProps {
     description: string;
     price: string;
     discountPrice: string;
+    quantity: string;
   }) => void;
   onFilesChange?: (files: Array<{
     id: string;
@@ -27,7 +28,8 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ onProductDataChange, on
     shortDescription: '',
     description: '',
     price: '',
-    discountPrice: ''
+    discountPrice: '',
+    quantity: ''
   });
   
   const [priceError, setPriceError] = useState('');
@@ -140,9 +142,10 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ onProductDataChange, on
           </label>
           <input
             type="number"
-           
-            placeholder="0.00"
-            step="0.01"
+            value={productData.quantity}
+            onChange={(e) => handleInputChange('quantity', e.target.value)}
+            placeholder="0"
+            step="1"
             min="0"
             className="w-full px-4 py-3  rounded-lg border border-[#172D6D] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 text-sm bg-black/30 backdrop-blur-[500px]"
           />

@@ -26,6 +26,8 @@ const AllProductsTable = () => {
     try {
       setLoading(true);
       const productsData = await productApi.getProducts();
+      console.log('Fetched products data:', productsData);
+      console.log('First product quantity:', productsData[0]?.quantity);
       setProducts(productsData);
       setError(null);
     } catch (err: any) {
@@ -44,6 +46,7 @@ const AllProductsTable = () => {
   // Listen for new product additions (you can use localStorage or a custom event)
   useEffect(() => {
     const handleStorageChange = () => {
+      console.log('Product added event received, refreshing products...');
       fetchProducts();
     };
 
@@ -111,14 +114,17 @@ const AllProductsTable = () => {
   };
 
   // Transform API data to match table structure
-  const transformedProducts = products.map((product) => ({
-    id: product._id,
-    productImage: product.productImages.length > 0 ? product.productImages[0] : "/images/sample-img.jpg",
-    productName: product.title,
-    stock: "In Stock", // You can add stock field to your product model later
-    price: `$${product.price.toFixed(2)}`,
-    publish: product.status || "Public", // Show status (Draft/Public/Private) instead of date
-  }));
+  const transformedProducts = products.map((product) => {
+    console.log('Transforming product:', product.title, 'quantity:', product.quantity);
+    return {
+      id: product._id,
+      productImage: product.productImages.length > 0 ? product.productImages[0] : "/images/sample-img.jpg",
+      productName: product.title,
+      stock: product.quantity === 0 ? "Out of Stock" : product.quantity?.toString() || "0",
+      price: `$${product.price.toFixed(2)}`,
+      publish: product.status || "Public", // Show status (Draft/Public/Private) instead of date
+    };
+  });
 
   // Enhanced filtering logic
   const filteredProducts = transformedProducts.filter((product) => {

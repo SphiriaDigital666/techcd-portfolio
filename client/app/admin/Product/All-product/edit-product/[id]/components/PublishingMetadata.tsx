@@ -33,6 +33,8 @@ const PublishingMetadata = ({
 
   // Update local state when initialData changes
   useEffect(() => {
+    console.log('PublishingMetadata - initialData received:', initialData);
+    console.log('PublishingMetadata - status from initialData:', initialData.status);
     setStatus(initialData.status);
     setSelectedCategories(initialData.selectedCategories);
   }, [initialData]);
@@ -58,6 +60,7 @@ const PublishingMetadata = ({
 
   // Handle status change
   const handleStatusChange = (newStatus: string) => {
+    console.log('PublishingMetadata - Status changed to:', newStatus);
     setStatus(newStatus);
     onPublishingDataChange({
       status: newStatus,

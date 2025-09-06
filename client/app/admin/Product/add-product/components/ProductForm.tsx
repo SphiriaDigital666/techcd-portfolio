@@ -13,6 +13,7 @@ interface ProductFormData {
   description: string;
   price: string;
   discountPrice: string;
+  quantity: string;
   
   // Publishing & Metadata
   status: string;
@@ -39,6 +40,7 @@ const ProductForm = () => {
     description: '',
     price: '',
     discountPrice: '',
+    quantity: '',
     status: 'Draft',
     selectedCategories: [],
     attributes: {},
@@ -57,6 +59,7 @@ const ProductForm = () => {
     description: string;
     price: string;
     discountPrice: string;
+    quantity: string;
   }) => {
     setFormData(prev => ({
       ...prev,
@@ -107,6 +110,7 @@ const ProductForm = () => {
       description: '',
       price: '',
       discountPrice: '',
+      quantity: '',
       status: 'Draft',
       selectedCategories: [],
       attributes: {},
@@ -188,7 +192,8 @@ const ProductForm = () => {
       if (formData.discountPrice) {
         formDataToSend.append('discountPrice', formData.discountPrice);
       }
-      formDataToSend.append('status', formData.status);
+      formDataToSend.append('quantity', parseInt(formData.quantity || '0').toString());
+      formDataToSend.append('status', formData.status.toLowerCase());
       formDataToSend.append('categories', JSON.stringify(formData.selectedCategories));
       if (Object.keys(formData.attributes).length > 0) {
         formDataToSend.append('attributes', JSON.stringify(
@@ -207,8 +212,19 @@ const ProductForm = () => {
         formDataToSend.append('productImages', file.file);
       });
 
+      console.log('=== FRONTEND SUBMIT DEBUG ===');
       console.log('Submitting form data with files:', formDataToSend);
       console.log('Files to be sent:', formData.selectedFiles);
+      console.log('Quantity being sent:', formData.quantity);
+      console.log('Quantity type:', typeof formData.quantity);
+      console.log('Parsed quantity:', parseInt(formData.quantity || '0'));
+      console.log('Form data object:', formData);
+      
+      // Log all FormData entries
+      console.log('FormData entries:');
+      for (let [key, value] of formDataToSend.entries()) {
+        console.log(key, ':', value);
+      }
 
       // Call the real API with FormData
       const createdProduct = await productApi.createProduct(formDataToSend);
